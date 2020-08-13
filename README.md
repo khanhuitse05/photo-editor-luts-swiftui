@@ -1,7 +1,7 @@
 
 <img src=Resources/preview.png width=960/>
 
-# Photo editor with SwiftUI and PixelEngine - muukii
+# Photo editor with SwiftUI and muukii/Pixel
 
 - CoreImage
 - CoreGraphics
@@ -40,4 +40,4 @@
 * [x] Sharpen
 * [x] Clarity
 * [x] HLS
-	[About HLS](https://dzone.com/articles/creating-a-selective-hsl-adjustment-filter-in-core)
+	- [About HLS](https://dzone.com/articles/creating-a-selective-hsl-adjustment-filter-in-core)
