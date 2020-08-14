@@ -15,19 +15,19 @@
 
 ## Features
 
-### Adjustment
+### 🍌 Adjustment
 
 * [ ] Crop
 * [ ] Straighten
 * [ ] Perspective
 
-### Filter
+### 🍌 Filter
 * [x] ColorCube 
 	* [x] Intensity
 	- Click again on lut to edit Intensity
 
 
-#### Edits
+### 🍌 Edits
 
 * [x] Brightness
 * [x] Contrast
@@ -40,5 +40,12 @@
 * [x] Fade
 * [x] Sharpen
 * [x] Clarity
-* [x] HLS
+* [x] 🎨 HLS
 	- [About HLS](https://dzone.com/articles/creating-a-selective-hsl-adjustment-filter-in-core)
+	
+## 🚀 TODO
+
+* Adjustment
+* Curves edit
+* Add Effect tool & export all effect
+* Export Spark AR filter
