@@ -3,10 +3,10 @@
 
 # Photo editor with SwiftUI and muukii/Pixel
 
+[<img src=Resources/app-stoer-black.png width=150/>](https://apps.apple.com/us/app/id1525852224/)
+
 - CoreImage
 - CoreGraphics
-- My app with this source code in store: [AppStore](https://apps.apple.com/us/app/id1525852224)
-
 - [Pixel Engine](https://github.com/muukii/Pixel)
 	- as Muukii's repository. He use the old user interface - Storyboard. So I cloned his "Pixel Engine" and upgrade UI to swiftUI
 - User interface: SwiftUI
