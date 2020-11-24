@@ -26,4 +26,4 @@ jobs:
         with:
           path: "Documentation"
         env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.2e2aa6e0e641935d42f572b67f4c2fdf1dfd5a35 }}
