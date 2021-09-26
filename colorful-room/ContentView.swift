@@ -8,11 +8,11 @@
 
 import SwiftUI
 import UIKit
-import PixelEngine
+import PixelEnginePackage
 
 struct ContentView: View {
     
-    @State private var showImagePicker = false
+    @State private var showSheet = false
     
     @State private var showImageEdit = false
     // for pick view
@@ -20,9 +20,11 @@ struct ContentView: View {
     // for edit view
     @State private var inputImage: UIImage?
     
+    
     let imageHeight:Double = 355
     
     var body: some View {
+        
         NavigationView{
             ZStack(alignment: .top){
                 Color.myBackground
@@ -44,27 +46,14 @@ struct ContentView: View {
                             Spacer()
                         }
                         VStack(spacing: 24){
-                            ListTitle(
-                                title: "Free and Premium Filters",
-                                supTitle: "A lot of filter you can use for your picture",
-                                leadingImage: "edit-lut"
-                            )
-                            ListTitle(
-                                title: "Selective Color",
-                                supTitle: "Freedom to custom your filter ",
-                                leadingImage: "hls"
-                            )
-                            ListTitle(
-                                title: "Many Effects are available",
-                                supTitle: "Freedom to custom your filter ",
-                                leadingImage: "edit-effect"
-                            )
-                            ListTitle(
-                                title: "Get all your resources",
-                                supTitle: "Export your picture, Lookup image, all effects, and more",
-                                leadingImage: "icon-lut",
-                                highlight: "AR filter"
-                            )
+                            ForEach(K.introContent, id: \.["title"]){item in
+                                ListTitle(
+                                    title: item["title"],
+                                    supTitle: item["supTitle"],
+                                    leadingImage: item["leadingImage"],
+                                    highlight: item["highlight"]
+                                )
+                            }
                         }
                         Spacer().frame(height: 0)
                         
@@ -85,31 +74,33 @@ struct ContentView: View {
                                 
                             }
                             .onTapGesture {
-                                self.showImagePicker = true
+                                self.showSheet = true
                                 self.showImageEdit = false
                                 self.inputImage = nil
                             }
                         }
                         
                         NavigationLink(destination: SupportView()
-                        .navigationBarTitle("")
-                        .navigationBarHidden(true)){
-                            HStack(alignment: .center, spacing: 16){
-                                Spacer()
-                                Image("emoji-support")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 17)
-                                
-                                Text("SUPPORT OUR TEAM")
-                                Image(systemName: "chevron.right")
-                                Spacer()
-                            }
-                                
-                            .padding()
-                            .foregroundColor(.white)
-                            .font(.system(size: 13))
+                            .navigationBarTitle("")
+                            .navigationBarHidden(true)
+                        ){
+                                HStack(alignment: .center, spacing: 16){
+                                    Spacer()
+                                    Image("emoji-support")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 17)
+                                    
+                                    
+                                    Text("SUPPORT OUR TEAM")
+                                    Image(systemName: "chevron.right")
+                                    Spacer()
+                                }
+                                    
+                                .padding()
+                                .foregroundColor(.white)
+                                .font(.system(size: 13))
                         }
                         NavigationLink(destination: PhotoEditView(image: self.inputImage)
                             .navigationBarTitle("")
@@ -125,12 +116,13 @@ struct ContentView: View {
             
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(isPresented: $showImagePicker, onDismiss: loadImage){
+        .sheet(isPresented: $showSheet, onDismiss: loadImage){
             ImagePicker(image: self.$pickImage)
         }.onAppear(perform: {
             print("onAppear")
-            //            self.pickImage = UIImage(named: "carem")
-            //            self.loadImage()
+            // todo: for development
+//            self.pickImage = UIImage(named: "carem")
+//            self.loadImage()
             
         })
         

@@ -45,11 +45,18 @@ struct ExportView: View {
                 
                 Spacer()
                 VStack{
-                    Image(uiImage: self.shared.image!)
+                    if let origin = self.shared.originExport{
+                    Image(uiImage: origin)
                         .resizable()
                         .scaledToFit()
                         .border(Color.white, width: 1)
                         .padding(.horizontal)
+                    }else{
+                        Rectangle()
+                            .fill(Color.myPanel)
+                            .border(Color.white, width: 1)
+                            .padding(.horizontal)
+                    }
                     
                     
                     Button(action:{

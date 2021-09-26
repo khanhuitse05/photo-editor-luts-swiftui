@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import QCropper
 
 struct EditMenuView: View {
     
@@ -17,16 +18,26 @@ struct EditMenuView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack{
-                if((self.currentView == .filter && self.shared.index != .none) == false  && self.shared.editingLut == false){
+                if((self.currentView == .filter && self.shared.currentEditMenu != .none) == false
+                    && self.shared.editingLut == false){
                     HStack(spacing: 48){
+                        NavigationLink(destination:
+                                        CustomCropperView()
+                                        .navigationBarTitle("")
+                                        .navigationBarHidden(true)
+                        ){
+                            IconButton("adjustment")
+                        }
                         Button(action:{
                             self.currentView = .lut
                         }){
                             IconButton(self.currentView == .lut ? "edit-lut-highlight" : "edit-lut")
                         }
                         Button(action:{
-                            self.currentView = .filter
-                            self.shared.didReceive(action: PECtl.Action.commit)
+                            if(self.shared.loadingLut == false){
+                                self.currentView = .filter
+                                self.shared.didReceive(action: PECtl.Action.commit)
+                            }
                         }){
                             IconButton(self.currentView == .filter ? "edit-color-highlight" : "edit-color")
                         }
@@ -50,8 +61,10 @@ struct EditMenuView: View {
                 }
                 Spacer()
             }
+           
         }
     }
+    
     
 }
 

@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct HLSControl: View {
     
@@ -89,7 +89,7 @@ struct HLSControl: View {
     }
     
     func didReceiveCurrentEdit() {
-        let edit: EditingStack.Edit = PECtl.shared.edit.currentEdit
+        let edit: EditingStack.Edit = PECtl.shared.editState.currentEdit
         guard let hsv:FilterHLS = edit.filters.hls else{
             self.inputShift = FilterHLS.defaultValue
             print("hsv NULL")

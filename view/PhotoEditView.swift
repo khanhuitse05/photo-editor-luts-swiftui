@@ -28,9 +28,10 @@ struct PhotoEditView: View {
     @EnvironmentObject var shared:PECtl
     @Environment(\.presentationMode) var presentationMode
     
+    
     var body: some View {
         NavigationView{
-            ZStack{                
+            ZStack{
                 Color.myBackground
                     .edgesIgnoringSafeArea(.all)
                 VStack{
@@ -44,7 +45,7 @@ struct PhotoEditView: View {
                                 .padding(.top, 8)
                         }
                         Spacer()
-                        if(shared.image != nil){
+                        if(shared.previewImage != nil){
                             NavigationLink(destination: ExportView()){
                                 Text("Export")
                                     .foregroundColor(.white)
@@ -87,6 +88,7 @@ struct PhotoEditView: View {
 
 
 struct PhotoEditView_Previews: PreviewProvider {
+    
     static var previews: some View {
         Group {
             PhotoEditView(image: UIImage(named: "carem"))

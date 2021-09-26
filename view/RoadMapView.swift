@@ -31,7 +31,7 @@ struct RoadMapView: View {
                         .foregroundColor(Color.myGrayLight)
                         .frame(height: 110)
                     
-                    Text("Your great contribution will help our team a lot to continue developing better product.")
+                    Text(K.roadMapDescription)
                         .font(.system(size: 15))
                         .foregroundColor(Color.gray)
                         .padding(.vertical)
@@ -41,10 +41,12 @@ struct RoadMapView: View {
                         .padding(.vertical)
                     
                     Group{
-                        RoadStepView(title: "Lauching MVP - Beta version", content: "Basic editor, include HLS editor, export your picture and LUTs image", date: "August 15, 2020", highLight: true)
-                        RoadStepView(title: "Lauching Production v1.1", content: "You can crop image, import more LUTs templates", date: "September 10 ,2020")
-                        RoadStepView(title: "Add Effect tool & export all effect", content: "You can add effect and export all effects image that you can use for AR filter", date: "December 1 ,2020")
-                        RoadStepView(title: "Export Spark AR filter", content: "You can export Spark AR project file when done editing!", date: "2021")
+                        ForEach(K.roadMapConttent, id: \.["title"]){item in
+                        RoadStepView(title: item["title"] ?? "",
+                                     content: item["body"] ?? "",
+                                     date: item["date"] ?? "",
+                                     highLight: item["highLight"] == "true")
+                        }
                     }
                     
                 }.padding()

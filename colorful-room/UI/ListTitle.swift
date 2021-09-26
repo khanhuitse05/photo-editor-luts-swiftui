@@ -15,11 +15,11 @@ struct ListTitle: View {
     var leadingImage:String
     var highlight:String
     
-    init(title:String, supTitle:String, leadingImage:String, highlight:String = "") {
-        self.title = title
-        self.supTitle = supTitle
-        self.leadingImage = leadingImage
-        self.highlight = highlight
+    init(title:String?, supTitle:String?, leadingImage:String?, highlight:String? = "") {
+        self.title = title ?? ""
+        self.supTitle = supTitle ?? ""
+        self.leadingImage = leadingImage ?? ""
+        self.highlight = highlight ?? ""
     }
     
     var body: some View {

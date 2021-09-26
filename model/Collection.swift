@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import PixelEngine
+import PixelEnginePackage
 import SwiftUI
 
 public class Collection {

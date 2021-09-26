@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "599595E9256BB37B001BD4F7"
+               BuildableName = "LUTsUITests.xctest"
+               BlueprintName = "LUTsUITests"
+               ReferencedContainer = "container:colorful-room.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "599595B8256BB299001BD4F7"
+               BuildableName = "LUTsTests.xctest"
+               BlueprintName = "LUTsTests"
+               ReferencedContainer = "container:colorful-room.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

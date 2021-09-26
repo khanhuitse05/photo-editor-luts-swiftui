@@ -27,7 +27,7 @@ struct RaiseButton: View {
         .padding(.horizontal, 20)
         .frame(minWidth: 160, minHeight: 48)
         .background(Color.myDivider)
-        .cornerRadius(24)
+        .cornerRadius(40)
     }
 }
 

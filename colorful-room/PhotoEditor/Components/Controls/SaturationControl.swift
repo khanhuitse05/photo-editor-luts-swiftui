@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct SaturationControl: View {
     @State var filterIntensity:Double = 0
@@ -31,8 +31,9 @@ struct SaturationControl: View {
     
     func didReceiveCurrentEdit() {
         
-        let edit: EditingStack.Edit = PECtl.shared.edit.currentEdit
-        self.filterIntensity = edit.filters.saturation?.value ?? 0
+        if let edit: EditingStack.Edit = PECtl.shared.editState?.currentEdit{
+            self.filterIntensity = edit.filters.saturation?.value ?? 0
+        }
     }
     
     func valueChanged() {

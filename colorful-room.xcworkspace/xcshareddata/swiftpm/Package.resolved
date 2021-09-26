@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PixelEnginePackage",
+        "repositoryURL": "https://github.com/j1mmyto9/PixelEnginePackage.git",
+        "state": {
+          "branch": null,
+          "revision": "d3eaf69accc4396f807fe8497efe03f4f33c5763",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

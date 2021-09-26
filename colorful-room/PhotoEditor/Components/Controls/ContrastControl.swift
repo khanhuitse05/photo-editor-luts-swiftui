@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct ContrastControl: View {
     @State var filterIntensity:Double = 0
@@ -31,7 +31,7 @@ struct ContrastControl: View {
     
     func didReceiveCurrentEdit() {
         
-        let edit: EditingStack.Edit = PECtl.shared.edit.currentEdit
+        let edit: EditingStack.Edit = PECtl.shared.editState.currentEdit
         self.filterIntensity = edit.filters.contrast?.value ?? 0
     }
     

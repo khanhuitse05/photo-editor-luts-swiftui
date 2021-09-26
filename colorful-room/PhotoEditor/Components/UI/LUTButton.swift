@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct LUTButton: View {
     
@@ -45,7 +45,7 @@ struct LUTButton: View {
     
     func valueChanged() {
         shared.currentCube = cube.filter.identifier
-        shared.didReceive(action: PECtl.Action.setFilter({ $0.colorCube = self.cube.filter }))
+        shared.didReceive(action: PECtl.Action.applyFilter({ $0.colorCube = self.cube.filter }))
     }
     func editAmong(){
         self.shared.editingLut = true
@@ -79,7 +79,7 @@ struct NeutralButton: View {
     }
     func valueChanged() {
         shared.currentCube = ""
-        shared.didReceive(action: PECtl.Action.setFilter({ $0.colorCube = nil }))
+        shared.didReceive(action: PECtl.Action.applyFilter({ $0.colorCube = nil }))
     }
 }
 

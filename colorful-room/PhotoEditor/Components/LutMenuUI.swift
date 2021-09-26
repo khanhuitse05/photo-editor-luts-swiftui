@@ -29,7 +29,6 @@ struct LutMenuUI: View {
                             LutLoadingButton(name: "LUT 1", on: false)
                             LutLoadingButton(name: "LUT 2", on: false)
                             LutLoadingButton(name: "LUT 3", on: false)
-                            LutLoadingButton(name: "LUT 4", on: false)
                             Spacer().frame(width: 0)
                         }
                     }else{
@@ -55,7 +54,7 @@ struct LutMenuUI: View {
                             }else{
                                 HStack(spacing: 12){
                                     //Rectangle().fill(Color.myDivider).frame(width: 1, height: 92)
-                                    ForEach(shared.cubes, id: \.filter.identifier) { cube in
+                                    ForEach(shared.currentCubes, id: \.filter.identifier) { cube in
                                         LUTButton(cube: cube)
                                     }
                                 }
@@ -87,20 +86,20 @@ struct LutMenuUI: View {
                     Spacer()
                     HStack{
                         Button(action: {
-                            self.shared.didReceive(action: PECtl.Action.revert)
                             self.shared.editingLut = false
+                            self.shared.didReceive(action: PECtl.Action.revert)
                         }){
                             Image(systemName: "xmark")
                                 .foregroundColor(.white)
                         }
                         Spacer()
-                        Text(self.shared.edit.currentEdit.filters.colorCube?.name ?? "Lut")
+                        Text(self.shared.editState.currentEdit.filters.colorCube?.name ?? "Lut")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundColor(Color.myGrayLight)
                         Spacer()
                         Button(action: {
-                            self.shared.didReceive(action: PECtl.Action.commit)
                             self.shared.editingLut = false
+                            self.shared.didReceive(action: PECtl.Action.commit)
                         }){
                             Image(systemName: "checkmark")
                                 .foregroundColor(.white)
@@ -109,7 +108,7 @@ struct LutMenuUI: View {
                     .padding(.horizontal)
                     .padding(.bottom, 8)
                 }
-                .background(Color.black)
+                .background(Color.myBackground)
             }
         }
     }

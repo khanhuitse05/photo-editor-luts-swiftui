@@ -11,6 +11,12 @@ import SwiftUI
 struct FilterMenuUI: View {
     
     @EnvironmentObject var shared:PECtl
+    var index:EditMenu {
+        get {
+            return shared.currentEditMenu
+        }
+    }
+    
     
     var body: some View {
         ZStack{
@@ -35,38 +41,34 @@ struct FilterMenuUI: View {
             if shared.currentFilter.edit != .none {
                 VStack{
                     Spacer()
-                    if shared.index == .color {
+                    if index == .color {
                         ColorControl()
-                    }else if shared.index == .contrast {
+                    }else if index == .contrast {
                         ContrastControl()
-                    }else if shared.index == .vignette {
+                    }else if index == .vignette {
                         VignetteControl()
-                    }else if shared.index == .fade {
+                    }else if index == .fade {
                         FadeControl()
-                    }else if shared.index == .highlights {
+                    }else if index == .highlights {
                         HighlightsControl()
-                    }else if shared.index == .hls {
+                    }else if index == .hls {
                         HLSControl()
-                    }else if shared.index == .exposure {
+                    }else if index == .exposure {
                         ExposureControl()
-                    }else if shared.index == .saturation {
+                    }else if index == .saturation {
                         SaturationControl()
-                    }else if shared.index == .shadows {
+                    }else if index == .shadows {
                         ShadowsControl()
-                    }else if shared.index == .sharpen {
+                    }else if index == .sharpen {
                         SharpenControl()
-                    }else if shared.index == .temperature {
+                    }else if index == .temperature {
                         TemperatureControl()
-                    }else if shared.index == .vignette {
+                    }else if index == .vignette {
                         VignetteControl()
-                    }else if shared.index == .tone {
+                    }else if index == .tone {
                         ToneControl()
-                    }else if shared.index == .clarity {
-                        UnsharpMaskControl()
-                    }else if shared.index == .white_balance {
+                    }else if index == .white_balance {
                         WhiteBalanceControl()
-                    }else if shared.index == .gaussianBlur {
-                        GaussianBlurControl()
                     }else{
                         Text("Todo")
                     }
@@ -75,7 +77,7 @@ struct FilterMenuUI: View {
                     HStack{
                         Button(action: {
                             self.shared.didReceive(action: PECtl.Action.revert)
-                            self.shared.currentFilter = noneFilterModel
+                            self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "xmark")
                                 .foregroundColor(.white)
@@ -87,7 +89,7 @@ struct FilterMenuUI: View {
                         Spacer()
                         Button(action: {
                             self.shared.didReceive(action: PECtl.Action.commit)
-                            self.shared.currentFilter = noneFilterModel
+                            self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "checkmark")
                                 .foregroundColor(.white)

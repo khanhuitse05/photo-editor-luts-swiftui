@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct ColorCubeControl: View {
     
@@ -29,13 +29,13 @@ struct ColorCubeControl: View {
     
     func didReceiveCurrentEdit() {
         
-        let edit: EditingStack.Edit = PECtl.shared.edit.currentEdit
+        let edit: EditingStack.Edit = PECtl.shared.editState.currentEdit
         self.filterIntensity = edit.filters.colorCube?.amount ?? 1
     }
     
     func valueChanged() {
         
-        guard let filter: FilterColorCube =  PECtl.shared.edit.currentEdit.filters.colorCube else {
+        guard let filter: FilterColorCube =  PECtl.shared.editState.currentEdit.filters.colorCube else {
             return
         }
         

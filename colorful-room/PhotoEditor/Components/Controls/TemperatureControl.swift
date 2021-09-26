@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import PixelEngine
+import PixelEnginePackage
 
 struct TemperatureControl: View {
     
@@ -32,7 +32,7 @@ struct TemperatureControl: View {
     
     func didReceiveCurrentEdit() {
         
-        let edit: EditingStack.Edit = PECtl.shared.edit.currentEdit
+        let edit: EditingStack.Edit = PECtl.shared.editState.currentEdit
         self.filterIntensity = edit.filters.temperature?.value ?? 0
         
     }
