@@ -1,6 +1,8 @@
 
 <img src=Resources/preview.png width=960/>
 
+<img src=Resources/adjust.png width=240/>
+
 # Photo editor with SwiftUI and muukii/Pixel
 
 [<img src=Resources/app-stoer-black.png width=150/>](https://apps.apple.com/us/app/id1525852224/)
@@ -17,9 +19,9 @@
 
 ### 🍌 Adjustment
 
-* [ ] Crop
-* [ ] Straighten
-* [ ] Perspective
+* [x] Crop
+* [x] Straighten
+* [x] Perspective
 
 ### 🍌 Filter
 * [x] ColorCube 
@@ -45,7 +47,7 @@
 	
 ## 🚀 TODO
 
-* Adjustment
+* Save last photo
 * Curves edit
 * Add Effect tool & export all effect
 * Export Spark AR filter
