@@ -16,7 +16,7 @@ struct LUTButton: View {
     @EnvironmentObject var shared:PECtl
     
     var body: some View {
-        let on = shared.currentCube == cube.filter.identifier
+        let on = shared.lutsCtrl.currentCube == cube.filter.identifier
         
         return Button(action:{
             if(on){
@@ -44,11 +44,11 @@ struct LUTButton: View {
     }
     
     func valueChanged() {
-        shared.currentCube = cube.filter.identifier
-        shared.didReceive(action: PECtl.Action.applyFilter({ $0.colorCube = self.cube.filter }))
+        shared.lutsCtrl.currentCube = cube.filter.identifier
+        shared.didReceive(action: PECtlAction.applyFilter({ $0.colorCube = self.cube.filter }))
     }
     func editAmong(){
-        self.shared.editingLut = true
+        self.shared.lutsCtrl.onSetEditingMode(true)
     }
 }
 
@@ -58,7 +58,7 @@ struct NeutralButton: View {
     @EnvironmentObject var shared:PECtl
     
     var body: some View {
-        let on = shared.currentCube.isEmpty
+        let on = shared.lutsCtrl.currentCube.isEmpty
         
         return Button(action:valueChanged){
             VStack(spacing: 0){
@@ -77,9 +77,10 @@ struct NeutralButton: View {
             }
         }
     }
+    
     func valueChanged() {
-        shared.currentCube = ""
-        shared.didReceive(action: PECtl.Action.applyFilter({ $0.colorCube = nil }))
+        shared.lutsCtrl.selectCube("")
+        shared.didReceive(action: PECtlAction.applyFilter({ $0.colorCube = nil }))
     }
 }
 

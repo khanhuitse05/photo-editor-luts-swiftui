@@ -41,13 +41,13 @@ struct SaturationControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.saturation = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.saturation = nil }))
             return
         }
         
         
         var f = FilterSaturation()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.saturation = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.saturation = f }))
     }
 }

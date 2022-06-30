@@ -80,28 +80,6 @@ struct ContentView: View {
                             }
                         }
                         
-                        NavigationLink(destination: SupportView()
-                            .navigationBarTitle("")
-                            .navigationBarHidden(true)
-                        ){
-                                HStack(alignment: .center, spacing: 16){
-                                    Spacer()
-                                    Image("emoji-support")
-                                        .renderingMode(.original)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 17)
-                                    
-                                    
-                                    Text("SUPPORT OUR TEAM")
-                                    Image(systemName: "chevron.right")
-                                    Spacer()
-                                }
-                                    
-                                .padding()
-                                .foregroundColor(.white)
-                                .font(.system(size: 13))
-                        }
                         NavigationLink(destination: PhotoEditView(image: self.inputImage)
                             .navigationBarTitle("")
                             .navigationBarHidden(true), isActive: self.$showImageEdit) {
@@ -119,10 +97,8 @@ struct ContentView: View {
         .sheet(isPresented: $showSheet, onDismiss: loadImage){
             ImagePicker(image: self.$pickImage)
         }.onAppear(perform: {
-            print("onAppear")
-            // todo: for development
-//            self.pickImage = UIImage(named: "carem")
-//            self.loadImage()
+            // self.pickImage = UIImage(named: "carem")
+            // self.loadImage()
             
         })
         

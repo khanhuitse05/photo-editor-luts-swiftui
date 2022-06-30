@@ -10,18 +10,12 @@ import SwiftUI
 
 struct CollectionButton: View {
     var name:String
-    var key:String
     
     @EnvironmentObject var shared:PECtl
     
     var body: some View {
-        let on:Bool = shared.currentCollection == key
-        return Button(action:{
-            self.shared.currentCollection = self.key
-        }){
-            Text(name)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundColor(on ? Color.myGrayLight : Color.myGrayDark)
-        }
+        Text(name)
+            .font(.system(size: 14, weight: .regular))
+            .foregroundColor(Color.myGrayLight)
     }
 }

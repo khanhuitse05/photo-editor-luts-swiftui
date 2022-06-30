@@ -41,12 +41,12 @@ struct TemperatureControl: View {
         
         let value = self.filterIntensity
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.temperature = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.temperature = nil }))
             return
         }
         
         var f = FilterTemperature()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.temperature = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.temperature = f }))
     }
 }

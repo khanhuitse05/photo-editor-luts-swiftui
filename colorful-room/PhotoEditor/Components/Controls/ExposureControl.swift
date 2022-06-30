@@ -40,12 +40,12 @@ struct ExposureControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.exposure = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.exposure = nil }))
             return
         }
         
         var f = FilterExposure()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.exposure = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.exposure = f }))
     }
 }

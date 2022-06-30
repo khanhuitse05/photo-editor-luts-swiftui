@@ -1,4 +1,5 @@
 
+
 <img src=Resources/preview.png width=960/>
 
 <img src=Resources/adjust.png width=240/>
@@ -26,10 +27,10 @@
 ### 🍌 Filter
 * [x] ColorCube 
 	* [x] Intensity
-	- Click again on lut to edit Intensity
+	* [x] Click again on lut to edit Intensity
 
 
-### 🍌 Edits
+#### 🍌 Edits
 
 * [x] Brightness
 * [x] Contrast
@@ -42,12 +43,15 @@
 * [x] Fade
 * [x] Sharpen
 * [x] Clarity
-* [x] 🎨 HLS
+* [x] HLS
 	- [About HLS](https://dzone.com/articles/creating-a-selective-hsl-adjustment-filter-in-core)
-	
-## 🚀 TODO
 
-* Save last photo
-* Curves edit
-* Add Effect tool & export all effect
-* Export Spark AR filter
+### 🍌 Recipe
+
+* [x] Save Recipe
+* [x] Delete Recipe
+
+### 🚀 Road map
+
+- Add Effect tool
+- Export Spark AR filter

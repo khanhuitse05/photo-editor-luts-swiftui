@@ -161,6 +161,7 @@ struct CustomSliderModifier: ViewModifier {
         case knob
         case defaultDot
     }
+    
     let name: Name
     let size: CGSize
     let offset: CGFloat

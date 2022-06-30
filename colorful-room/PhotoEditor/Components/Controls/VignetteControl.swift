@@ -39,12 +39,12 @@ struct VignetteControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.vignette = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.vignette = nil }))
             return
         }
         
         var f = FilterVignette()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.vignette = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.vignette = f }))
     }
 }

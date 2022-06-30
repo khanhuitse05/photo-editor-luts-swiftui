@@ -57,13 +57,13 @@ struct WhiteBalanceControl: View {
         
         let valueTint = self.tintIntensity
         if (valueTemperature == 0 && valueTint == 0) {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.whiteBalance = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.whiteBalance = nil }))
             return
         }
         
         var f = FilterWhiteBalance()
         f.valueTint = valueTint
         f.valueTemperature = valueTemperature
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.whiteBalance = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.whiteBalance = f }))
     }
 }

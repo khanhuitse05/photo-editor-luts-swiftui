@@ -1,0 +1,13 @@
+
+# Changelog
+## 1.0
+- Basic editor, include HLS editor, export your picture and LUTs image", date: "August 15, 2020
+## 1.2
+- You can crop image, import more LUTs templates
+
+# Roadmap
+## 2.0
+- Add Effect tool & export all effect", content: "You can add effect and export all effects image that you can use for AR filter
+
+## 3.0
+- Export Spark AR filter", content: "You can export Spark AR project file when done editing!

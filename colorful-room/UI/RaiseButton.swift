@@ -21,6 +21,7 @@ struct RaiseButton: View {
         HStack{
             Image(systemName: systemName)
             Text(title)
+            
         }
         .font(.system(size: 14, weight: .medium))
         .foregroundColor(.white)

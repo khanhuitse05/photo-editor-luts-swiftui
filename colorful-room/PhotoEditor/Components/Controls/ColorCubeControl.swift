@@ -42,6 +42,6 @@ struct ColorCubeControl: View {
         let value = self.filterIntensity
         let clone:FilterColorCube = FilterColorCube(name: filter.name, identifier: filter.identifier, filter: filter.filter, amount: value)
        
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.colorCube = clone }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.colorCube = clone }))
     }
 }

@@ -26,7 +26,7 @@ struct FilterMenuUI: View {
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack(spacing: 16){
                         Spacer().frame(width: 0)
-                        ForEach(shared.filters, id: \.name) { filter in
+                        ForEach(Constants.supportFilters, id: \.name) { filter in
                             ButtonView(action: filter)
                         }
                         Spacer().frame(width: 0)
@@ -76,7 +76,7 @@ struct FilterMenuUI: View {
                     Spacer()
                     HStack{
                         Button(action: {
-                            self.shared.didReceive(action: PECtl.Action.revert)
+                            self.shared.didReceive(action: PECtlAction.revert)
                             self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "xmark")
@@ -88,7 +88,7 @@ struct FilterMenuUI: View {
                             .foregroundColor(Color.myGrayLight)
                         Spacer()
                         Button(action: {
-                            self.shared.didReceive(action: PECtl.Action.commit)
+                            self.shared.didReceive(action: PECtlAction.commit)
                             self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "checkmark")
