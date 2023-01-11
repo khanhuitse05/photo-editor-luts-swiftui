@@ -1,0 +1,36 @@
+# 
+# You can find the documentation at https://docs.fastlane.tools
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+xcodeproj = './colorful-room.xcodeproj'
+workspace = './colorful-room.xcworkspace'
+
+default_platform(:ios)
+
+platform :ios do
+  
+  before_all do
+    ENV['FASTLANE_APP_IDENTIFIER'] = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+  end
+
+  desc "Setup and Build for Appstore"
+  private_lane :build do
+    increment_build_number({
+      xcodeproj: xcodeproj,
+      build_number: latest_testflight_build_number(app_identifier: ENV['FASTLANE_APP_IDENTIFIER']) + 1
+    })
+    
+    build_app(workspace: workspace)
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    build
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

@@ -39,13 +39,13 @@ struct ClarityCode: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.unsharpMask = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.unsharpMask = nil }))
             return
         }
         
         var f = FilterUnsharpMask()
         f.intensity = value
         f.radius = 0.12
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.unsharpMask = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.unsharpMask = f }))
     }
 }

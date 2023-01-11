@@ -19,7 +19,7 @@ struct EditMenuView: View {
         GeometryReader { geometry in
             VStack{
                 if((self.currentView == .filter && self.shared.currentEditMenu != .none) == false
-                    && self.shared.editingLut == false){
+                   && self.shared.lutsCtrl.editingLut == false){
                     HStack(spacing: 48){
                         NavigationLink(destination:
                                         CustomCropperView()
@@ -34,15 +34,20 @@ struct EditMenuView: View {
                             IconButton(self.currentView == .lut ? "edit-lut-highlight" : "edit-lut")
                         }
                         Button(action:{
-                            if(self.shared.loadingLut == false){
+                            if(self.shared.lutsCtrl.loadingLut == false){
                                 self.currentView = .filter
-                                self.shared.didReceive(action: PECtl.Action.commit)
+                                self.shared.didReceive(action: PECtlAction.commit)
                             }
                         }){
                             IconButton(self.currentView == .filter ? "edit-color-highlight" : "edit-color")
                         }
                         Button(action:{
-                            self.shared.didReceive(action: PECtl.Action.undo)
+                            self.currentView = .recipe
+                        }){
+                            IconButton(self.currentView == .recipe ? "edit-recipe-highlight" : "edit-recipe")
+                        }
+                        Button(action:{
+                            self.shared.didReceive(action: PECtlAction.undo)
                         }){
                             IconButton("icon-undo")
                         }
@@ -58,6 +63,9 @@ struct EditMenuView: View {
                     if(self.currentView == .lut){
                         LutMenuUI()
                     }
+                    if(self.currentView == .recipe){
+                        RecipeMenuUI()
+                    }
                 }
                 Spacer()
             }
@@ -71,4 +79,5 @@ struct EditMenuView: View {
 public enum EditView{
     case lut
     case filter
+    case recipe
 }

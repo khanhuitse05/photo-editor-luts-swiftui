@@ -14,7 +14,6 @@ struct PhotoEditorView: View {
     
     var body: some View {
         ZStack{
-            
             VStack(spacing: 0){
                 if let image = shared.previewImage{
                     ImagePreviewView(image: image)
@@ -27,7 +26,6 @@ struct PhotoEditorView: View {
                 EditMenuView()
                     .frame(height: 250)
             }
-            
         }
     }
 }

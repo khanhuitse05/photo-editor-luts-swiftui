@@ -38,13 +38,13 @@ struct FadeControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.fade = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.fade = nil }))
             return
         }
         
         
         var f = FilterFade()
         f.intensity = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.fade = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.fade = f }))
     }
 }

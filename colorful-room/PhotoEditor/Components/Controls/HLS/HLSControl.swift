@@ -114,6 +114,6 @@ struct HLSControl: View {
         
         var hsv = FilterHLS()
         hsv.inputShift = self.inputShift
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.hls = hsv }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.hls = hsv }))
     }
 }

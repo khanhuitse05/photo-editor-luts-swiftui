@@ -40,12 +40,12 @@ struct GaussianBlurControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.gaussianBlur = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.gaussianBlur = nil }))
             return
         }
         
         var f = FilterGaussianBlur()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.gaussianBlur = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.gaussianBlur = f }))
     }
 }

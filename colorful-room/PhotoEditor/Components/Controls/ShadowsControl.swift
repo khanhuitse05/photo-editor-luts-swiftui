@@ -40,12 +40,12 @@ struct ShadowsControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.shadows = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.shadows = nil }))
             return
         }
         
         var f = FilterShadows()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.shadows = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.shadows = f }))
     }
 }

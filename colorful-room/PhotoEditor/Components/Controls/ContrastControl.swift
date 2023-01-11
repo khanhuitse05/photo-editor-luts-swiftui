@@ -40,12 +40,12 @@ struct ContrastControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.contrast = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.contrast = nil }))
             return
         }
         
         var f = FilterContrast()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.contrast = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.contrast = f }))
     }
 }

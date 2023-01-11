@@ -43,13 +43,13 @@ struct ColorControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.color = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.color = nil }))
             return
         }
         
         
         var f = FilterColor()
         f.valueBrightness = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.color = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.color = f }))
     }
 }

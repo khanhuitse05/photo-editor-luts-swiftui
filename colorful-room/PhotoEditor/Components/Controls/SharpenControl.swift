@@ -38,12 +38,12 @@ struct SharpenControl: View {
         let value = self.filterIntensity
         
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.sharpen = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.sharpen = nil }))
             return
         }
         
         var f = FilterSharpen()
         f.sharpness = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.sharpen = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.sharpen = f }))
     }
 }

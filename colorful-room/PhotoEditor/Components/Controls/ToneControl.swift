@@ -55,24 +55,24 @@ struct ToneControl: View {
         
         let value = self.highlightIntensity
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.highlights = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.highlights = nil }))
             return
         }
         
         var f = FilterHighlights()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.highlights = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.highlights = f }))
     }
     func valueShadowChanged() {
         
         let value = self.shadowIntensity
         guard value != 0 else {
-            PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.shadows = nil }))
+            PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.shadows = nil }))
             return
         }
         
         var f = FilterShadows()
         f.value = value
-        PECtl.shared.didReceive(action: PECtl.Action.setFilter({ $0.shadows = f }))
+        PECtl.shared.didReceive(action: PECtlAction.setFilter({ $0.shadows = f }))
     }
 }
