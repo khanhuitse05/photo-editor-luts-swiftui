@@ -18,14 +18,17 @@ struct ButtonView: View {
         Button(action: {
             self.shared.currentFilter = self.action
         }){
-            VStack(spacing: 4){
+            VStack(spacing: 0){
                 IconButton(self.action.image, size: 36)
                 Text(self.action.name)
-                    .font(.system(size: 10, weight: .regular))
-                    .foregroundColor(Color.myGrayLight)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
                     .padding(.top)
             }
             .frame(minWidth: 75)
+            .padding(8)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 12))
         }
+        .buttonStyle(.plain)
     }
 }

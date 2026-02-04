@@ -27,28 +27,28 @@ struct PhotoEditView: View {
     var body: some View {
         NavigationStack {
             ZStack{
-                Color.myBackground
+                Color(uiColor: .systemBackground)
                     .ignoresSafeArea(.all)
                 VStack{
                     HStack{
                         Button(action:{
                             self.showImagePicker = true
                         }){
-                            Text("Library")
-                                .foregroundStyle(.white)
-                                .padding(.horizontal)
-                                .padding(.top, 8)
+                            Label("Library", systemImage: "photo.on.rectangle.angled")
+                                .font(.subheadline)
                         }
+                        .buttonStyle(.glass)
                         Spacer()
-                        if(shared.previewImage != nil){
+                        if shared.previewImage != nil {
                             NavigationLink(destination: ExportView()){
-                                Text("Export")
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal)
-                                    .padding(.top, 8)
+                                Label("Export", systemImage: "square.and.arrow.up")
+                                    .font(.subheadline)
                             }
+                            .buttonStyle(.glass)
                         }
                     }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
                     .zIndex(1)
                     PhotoEditorView().frame(maxWidth: .infinity, maxHeight: .infinity)
                     .zIndex(0)

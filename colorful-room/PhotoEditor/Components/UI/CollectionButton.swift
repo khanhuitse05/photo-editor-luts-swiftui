@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct CollectionButton: View {
-    var name:String
+    var name: String
     
     @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         Text(name)
-            .font(.system(size: 14, weight: .regular))
-            .foregroundColor(Color.myGrayLight)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
     }
 }

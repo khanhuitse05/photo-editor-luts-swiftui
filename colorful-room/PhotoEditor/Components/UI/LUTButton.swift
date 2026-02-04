@@ -33,14 +33,14 @@ struct LUTButton: View {
                     .frame(width: 68, height: 68)
                     .clipped()
                 Text(cube.filter.name)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption)
                     .frame(width: 68, height: 24)
-                    .background(on ? Color.myPrimary : Color.myButtonDark)
-                    .foregroundColor(.white)
-                
+                    .foregroundStyle(.primary)
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
             }
             .frame(width: 68)
         }
+        .buttonStyle(.plain)
     }
     
     func valueChanged() {
@@ -70,12 +70,13 @@ struct NeutralButton: View {
                     .clipped()
                 
                 Text("Original")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption)
                     .frame(width: 68, height: 24)
-                    .background(on ? Color.myPrimary : Color.myButtonDark)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.primary)
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
             }
         }
+        .buttonStyle(.plain)
     }
     
     func valueChanged() {
@@ -95,7 +96,7 @@ struct LutLoadingButton: View {
     var body: some View {
         VStack(spacing: 0) {
             Rectangle()
-                .fill(Color.myGrayDark)
+                .fill(Color(uiColor: .tertiarySystemFill))
                 .frame(width: 68, height: 68)
                 .opacity(isAnimating ? 0.4 : 0.8)
                 .animation(
@@ -108,10 +109,10 @@ struct LutLoadingButton: View {
                 }
             
             Text(name)
-                .font(.system(size: 11, weight: .medium))
+                .font(.caption)
                 .frame(width: 68, height: 24)
-                .background(on ? Color.myPrimary : Color.myButtonDark)
-                .foregroundColor(.white)
+                .foregroundStyle(.primary)
+                .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
                 .redacted(reason: .placeholder)
         }
     }

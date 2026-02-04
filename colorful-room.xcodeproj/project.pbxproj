@@ -75,6 +75,7 @@
 		59B31A92271DA892002DADE8 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A83271DA892002DADE8 /* ExportView.swift */; };
 		59B31A94271DA892002DADE8 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A85271DA892002DADE8 /* MyWebView.swift */; };
 		59B31A95271DA892002DADE8 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A87271DA892002DADE8 /* AppTheme.swift */; };
+		59B31A98271DA892002DADF0 /* GlassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A98271DA892002DADF1 /* GlassHelpers.swift */; };
 		59B31A96271DA892002DADE8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A88271DA892002DADE8 /* Utils.swift */; };
 		59B31A97271DA892002DADE8 /* AppContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A89271DA892002DADE8 /* AppContent.swift */; };
 		B99615FFF8B1F2C3A8EE01C7 /* Pods_colorful_room.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2ED19D827B9DE0F5467A29B /* Pods_colorful_room.framework */; };
@@ -170,6 +171,7 @@
 		59B31A83271DA892002DADE8 /* ExportView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		59B31A85271DA892002DADE8 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		59B31A87271DA892002DADE8 /* AppTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		59B31A98271DA892002DADF1 /* GlassHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlassHelpers.swift; sourceTree = "<group>"; };
 		59B31A88271DA892002DADE8 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		59B31A89271DA892002DADE8 /* AppContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppContent.swift; sourceTree = "<group>"; };
 		91676B46D8DB0C5B8B5F9F42 /* Pods-colorful-room.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-colorful-room.release.xcconfig"; path = "Target Support Files/Pods-colorful-room/Pods-colorful-room.release.xcconfig"; sourceTree = "<group>"; };
@@ -445,6 +447,7 @@
 			children = (
 				5909A0BC2792CADF00431609 /* RecipeUtils.swift */,
 				59B31A87271DA892002DADE8 /* AppTheme.swift */,
+				59B31A98271DA892002DADF1 /* GlassHelpers.swift */,
 				59B31A88271DA892002DADE8 /* Utils.swift */,
 				59B31A89271DA892002DADE8 /* AppContent.swift */,
 				5924F5112794062C00BE7705 /* Constants.swift */,
@@ -675,6 +678,7 @@
 				59B31A69271DA842002DADE8 /* HLSControl.swift in Sources */,
 				59B31A72271DA842002DADE8 /* EditMenuView.swift in Sources */,
 				59B31A95271DA892002DADE8 /* AppTheme.swift in Sources */,
+				59B31A98271DA892002DADF0 /* GlassHelpers.swift in Sources */,
 				59B31A71271DA842002DADE8 /* FilterMenuUI.swift in Sources */,
 				59B31A59271DA842002DADE8 /* LUTButton.swift in Sources */,
 				59B31A61271DA842002DADE8 /* SharpenControl.swift in Sources */,
@@ -784,7 +788,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -839,7 +843,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -873,7 +877,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -912,7 +916,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -936,7 +940,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MFVHN56F4T;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -961,7 +965,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MFVHN56F4T;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

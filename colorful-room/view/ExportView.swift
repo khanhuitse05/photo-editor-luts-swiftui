@@ -19,7 +19,7 @@ struct ExportView: View {
     
     var body: some View {
         ZStack{
-            Color.myBackground
+            Color(uiColor: .systemBackground)
                 .ignoresSafeArea(.all)
             VStack{
                 HStack{
@@ -29,19 +29,20 @@ struct ExportView: View {
                         self.dismiss()
                     }){
                         Image(systemName: "xmark")
-                            .foregroundColor(.white)
                     }
+                    .buttonStyle(.glass)
                 }
                 .padding()
                 .padding(.trailing)
                 
                 Text("Export your photo")
-                    .font(.system(size: 26, weight: .semibold))
+                    .font(.title2)
+                    .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
                 Text("You can download all that apply in your filter.\nAlways for FREE")
-                    .font(.system(size: 14))
+                    .font(.subheadline)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.myGray)
+                    .foregroundStyle(.secondary)
                     .padding()
                 
                 Spacer()
@@ -55,7 +56,7 @@ struct ExportView: View {
                                     .modifier(ImageBorder())
                             }else{
                                 Rectangle()
-                                    .fill(Color.myPanel)
+                                    .fill(Color(uiColor: .tertiarySystemFill))
                                     .frame(width: self.shared.originRatio * 320)
                             }
                             
@@ -63,8 +64,11 @@ struct ExportView: View {
                                 self.shared.exportOrigin()
                                 self.showSuccessPopup = true
                             }){
-                                RaiseButton("Save picture")
+                                Label("Save picture", systemImage: "arrow.down.to.line")
+                                    .font(.subheadline)
                             }
+                            .frame(minWidth: 160, minHeight: 48)
+                            .buttonStyle(.glassProminent)
                             .padding(.top, 24)
                         }
                        

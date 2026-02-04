@@ -24,7 +24,7 @@ struct FilterMenuUI: View {
             VStack{
                 Spacer()
                 ScrollView(.horizontal, showsIndicators: false){
-                    HStack(spacing: 16){
+                    HStack(spacing: 8){
                         Spacer().frame(width: 0)
                         ForEach(Constants.supportFilters, id: \.name) { filter in
                             ButtonView(action: filter)
@@ -34,12 +34,12 @@ struct FilterMenuUI: View {
                 }
                 Spacer()
                 Text("Edit Color")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(Color.myGrayLight)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                     .padding(.bottom, 8)
             }
             if shared.currentFilter.edit != .none {
-                VStack{
+                VStack (){
                     Spacer()
                     if index == .color {
                         ColorControl()
@@ -80,24 +80,24 @@ struct FilterMenuUI: View {
                             self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "xmark")
-                                .foregroundColor(.white)
                         }
+                        .buttonStyle(.glass)
                         Spacer()
                         Text(shared.currentFilter.name)
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(Color.myGrayLight)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                         Spacer()
                         Button(action: {
                             self.shared.didReceive(action: PECtlAction.commit)
                             self.shared.currentFilter = FilterModel.noneFilterModel
                         }){
                             Image(systemName: "checkmark")
-                                .foregroundColor(.white)
                         }
+                        .buttonStyle(.glass)
                     }.padding(.bottom, 8)
                 }
                 .padding(.horizontal)
-                .background(Color.myBackground)
+                .glassCard(cornerRadius: 20)
             }
             
         }

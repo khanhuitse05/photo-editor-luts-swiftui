@@ -32,25 +32,27 @@ struct ListTitle: View {
             VStack(alignment: .leading, spacing: 4){
                 HStack(spacing: 8){
                     Text(title)
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.subheadline)
+                        .fontWeight(.medium)
                         .multilineTextAlignment(.leading)
-                    if(highlight.isEmpty == false){
+                    if highlight.isEmpty == false {
                         Text(highlight)
-                            .font(.system(size: 12, weight: .medium))
+                            .font(.caption2)
+                            .fontWeight(.medium)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
-                            .background(Color.myPrimary)
-                            .cornerRadius(2)
+                            .glassEffect(.regular, in: .rect(cornerRadius: 6))
                     }
                     Spacer()
                 }
                 
                 Text(supTitle)
-                    .font(.system(size: 13, weight: .regular))
-                    .foregroundColor(Color.gray)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
             Spacer()
-        }.padding(.horizontal, 24)
+        }
+        .padding(.horizontal, 16)
     }
 }
 

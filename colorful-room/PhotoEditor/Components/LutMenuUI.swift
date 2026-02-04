@@ -32,7 +32,7 @@ struct LutMenuUI: View {
                                     HStack(spacing: 12) {
                                         if collection.cubePreviews.isEmpty == false {
                                             Rectangle()
-                                                .fill(Color.myDivider)
+                                                .fill(Color(uiColor: .separator))
                                                 .frame(width: 1, height: 92)
                                         }
                                         ForEach(collection.cubePreviews, id: \.filter.identifier) { cube in
@@ -91,7 +91,7 @@ struct LutMenuUILoading: View{
             Spacer().frame(width: 0)
             LutLoadingButton(name: "Original", on: true)
             Rectangle()
-                .fill(Color.myDivider)
+                .fill(Color(uiColor: .separator))
                 .frame(width: 1, height: 92)
             LutLoadingButton(name: "LUT 1", on: false)
             LutLoadingButton(name: "LUT 2", on: false)
@@ -118,24 +118,24 @@ struct LutMenuUIEdit: View{
                     self.shared.lutsCtrl.onSetEditingMode(false)
                 }){
                     Image(systemName: "xmark")
-                        .foregroundColor(.white)
                 }
+                .buttonStyle(.glass)
                 Spacer()
                 Text(self.shared.editState.currentEdit.filters.colorCube?.name ?? "Lut")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(Color.myGrayLight)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                 Spacer()
                 Button(action: {
                     self.shared.didReceive(action: PECtlAction.commit)
                     self.shared.lutsCtrl.onSetEditingMode(false)
                 }){
                     Image(systemName: "checkmark")
-                        .foregroundColor(.white)
                 }
+                .buttonStyle(.glass)
             }
             .padding(.horizontal)
             .padding(.bottom, 8)
         }
-        .background(Color.myBackground)
+        .glassCard(cornerRadius: 20)
     }
 }

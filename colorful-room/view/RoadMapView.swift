@@ -14,7 +14,7 @@ struct RoadMapView: View {
     
     var body: some View {
         ZStack(alignment: .top){
-            Color.myBackground
+            Color(uiColor: .systemBackground)
                 .ignoresSafeArea(.all)
             ScrollView(showsIndicators: false){
                 VStack(alignment: .leading, spacing: 8){
@@ -23,21 +23,23 @@ struct RoadMapView: View {
                         Button("Close", action: {
                             self.dismiss()
                         })
-                            .foregroundColor(Color.myGrayLight)
+                            .foregroundStyle(.secondary)
                             .padding()
                     }
                     Text("Product\nRoad map")
-                        .font(.system(size: 36, weight: .semibold ))
-                        .foregroundColor(Color.myGrayLight)
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
                         .frame(height: 110)
                     
                     Text(K.roadMapDescription)
-                        .font(.system(size: 15))
-                        .foregroundColor(Color.gray)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
                         .padding(.vertical)
                     Text("What are we doing?")
-                        .font(.system(size: 15, weight: .semibold ))
-                        .foregroundColor(Color.myGrayLight)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
                         .padding(.vertical)
                     
                     Group{
@@ -82,28 +84,29 @@ struct RoadStepView: View{
                         )
                 }else{
                     Circle()
-                        .fill(Color.myGray)
+                        .fill(Color(uiColor: .tertiaryLabel))
                         .frame(width: 10, height: 10)
                 }
                 Rectangle()
-                    .fill(Color.myGrayDark)
+                    .fill(Color(uiColor: .separator))
                     .frame(width: 1)
             }
             .padding(.horizontal)
             .padding(.vertical, 4)
             VStack(alignment: .leading){
                 Text(self.title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(highLight ? Color.myGrayLight : Color.myGray)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(highLight ? .primary : .secondary)
                     .padding(.bottom, 10)
                 
                 Text(self.content)
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(Color.myGray)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                 
                 Text(self.date.uppercased())
-                    .font(.system(size: 11, weight: .regular))
-                    .foregroundColor(Color.myGrayDark)
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
                     .padding(.vertical, 8)
             }
         }

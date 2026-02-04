@@ -41,17 +41,17 @@ struct FilterSlider : View {
             }.font(.system(size: 11, weight: .regular))
             CustomSlider(value: $value, defaultValue: defaultValue ,range: range) { modifiers in
                 ZStack {
-                    Color.myGray.cornerRadius(1).frame(height: 1).modifier(modifiers.bar)
+                    RoundedRectangle(cornerRadius: 1)
+                        .fill(Color.primary.opacity(0.3))
+                        .frame(height: 2)
+                        .modifier(modifiers.bar)
                     Circle()
-                        .fill(Color.myGrayLight)
+                        .fill(Color(uiColor: .tertiaryLabel))
                         .frame(height: 5)
                         .modifier(modifiers.defaultDot)
-                    ZStack {
-                        Circle()
-                            .fill(Color.myBackground)
-                       Circle().stroke(Color.myGrayLight, lineWidth: 1)
-                        
-                    }.modifier(modifiers.knob)
+                    Circle()
+                        .modifier(modifiers.knob)
+                        .glassEffect(.regular.interactive(), in: .circle)
                 }
             }.frame(height: 20)
         }

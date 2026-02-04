@@ -33,7 +33,7 @@ struct RecipeMenuUI: View {
                         
                             // todo: saved recipe
                             Rectangle()
-                                .fill(Color.myDivider)
+                                .fill(Color(uiColor: .separator))
                                 .frame(width: 1, height: 92)
                         }
                         ForEach(Array(shared.recipesCtrl.recipes.enumerated()), id: \.offset) { index, item in

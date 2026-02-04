@@ -23,7 +23,7 @@ struct RecipeButton: View {
                 VStack(spacing: 0){
                     if(data.preview == nil){
                     Rectangle()
-                        .fill(Color.myGrayDark)
+                        .fill(Color(uiColor: .tertiarySystemFill))
                         .frame(width: 68, height: 60)
                     }else{
                     Image(uiImage: data.preview!)
@@ -35,15 +35,17 @@ struct RecipeButton: View {
                     }
                     
                     Text(data.data.recipeName ?? "Recipe \(index)")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.caption)
                         .frame(width: 68, height: 24)
-                        .background(on ? Color.myPrimary : Color.myButtonDark)
-                        .foregroundColor(.white)
+                        .foregroundStyle(.primary)
+                        .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
                 }
                 Button(action: deleteItem){
                     Image(systemName: "xmark")
-                        .foregroundColor(.white)
-                }.frame(width: 60, height: 76, alignment: .topTrailing)
+                        .font(.system(size: 12, weight: .semibold))
+                }
+                .buttonStyle(.glass)
+                .frame(width: 60, height: 76, alignment: .topTrailing)
             }
         }
     }
@@ -65,15 +67,16 @@ struct RecipeEmptyButton: View {
         return Button(action: action){
             VStack(spacing: 0){
                 Rectangle()
-                    .fill(Color.myGrayDark)
-                    .frame(width: 68, height: 60)
+                    .fill(Color(uiColor: .tertiarySystemFill))
+                    .frame(width: 68, height: 68)
                 
                 Text(name)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.caption)
                     .frame(width: 68, height: 24)
-                    .background(on ? Color.myPrimary : Color.myButtonDark)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.primary)
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
             }
         }
+        .buttonStyle(.plain)
     }
 }

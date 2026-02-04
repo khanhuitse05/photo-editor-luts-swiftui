@@ -18,17 +18,9 @@ struct RaiseButton: View {
     }
     
     var body: some View {
-        HStack{
-            Image(systemName: systemName)
-            Text(title)
-            
-        }
-        .font(.system(size: 14, weight: .medium))
-        .foregroundColor(.white)
-        .padding(.horizontal, 20)
-        .frame(minWidth: 160, minHeight: 48)
-        .background(Color.myDivider)
-        .cornerRadius(40)
+        Label(title, systemImage: systemName)
+            .font(.subheadline)
+            .frame(minWidth: 160, minHeight: 48)
     }
 }
 

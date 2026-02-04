@@ -21,7 +21,7 @@ struct PhotoEditorView: View {
                         .clipped()
                 }else{
                     Rectangle()
-                        .fill(Color.myGrayDark)
+                        .fill(Color(uiColor: .tertiarySystemFill))
                 }
                 EditMenuView()
                     .frame(height: 250)

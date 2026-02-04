@@ -17,6 +17,7 @@ struct colorful_roomApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(PECtl.shared)
                 .environmentObject(Data.shared)
+                .tint(Color("accent"))
         }
     }
 }

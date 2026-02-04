@@ -20,17 +20,25 @@ struct EditMenuView: View {
             VStack {
                 if ((currentView == .filter && shared.currentEditMenu != .none) == false
                     && shared.lutsCtrl.editingLut == false) {
-                    HStack(spacing: 48) {
+                    HStack {
                         NavigationLink(destination: CustomCropperView()
                             .toolbar(.hidden, for: .navigationBar)
                         ) {
                             IconButton("adjustment")
                         }
+                        .buttonStyle(.glass)
+
+                        Spacer()
+
                         Button {
                             currentView = .lut
                         } label: {
                             IconButton(currentView == .lut ? "edit-lut-highlight" : "edit-lut")
                         }
+                        .buttonStyle(.glass)
+
+                        Spacer()
+
                         Button {
                             if !shared.lutsCtrl.loadingLut {
                                 currentView = .filter
@@ -39,19 +47,31 @@ struct EditMenuView: View {
                         } label: {
                             IconButton(currentView == .filter ? "edit-color-highlight" : "edit-color")
                         }
+                        .buttonStyle(.glass)
+
+                        Spacer()
+
                         Button {
                             currentView = .recipe
                         } label: {
                             IconButton(currentView == .recipe ? "edit-recipe-highlight" : "edit-recipe")
                         }
+                        .buttonStyle(.glass)
+
+                        Spacer()
+
                         Button {
                             shared.didReceive(action: PECtlAction.undo)
                         } label: {
-                            IconButton("icon-undo")
+                            Image(systemName: "arrow.uturn.backward")
+                                .font(.system(size: 20))
                         }
+                        .buttonStyle(.glass)
                     }
-                    .frame(width: geometry.size.width, height: 50)
-                    .background(Color.myPanel)
+                    .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 16))
                 }
                 Spacer()
                 menuContent

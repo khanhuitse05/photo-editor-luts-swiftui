@@ -21,69 +21,100 @@ struct ContentView: View {
     @State private var inputImage: UIImage?
     
     
-    let imageHeight:Double = 355
-    
     var body: some View {
         
         NavigationStack {
-            ZStack(alignment: .top) {
-                Color.myBackground
-                    .ignoresSafeArea(.all)
-                SwiftUI.Image("intro-image")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(height: CGFloat(imageHeight))
-                    .ignoresSafeArea(edges: .top)
-                
-                VStack(alignment: .center, spacing: 24) {
-                    Spacer()
-                    HStack {
-                        Text("Create your\ncool filter")
-                            .font(.system(size: 32, weight: .semibold))
-                            .fontWeight(.semibold)
-                            .padding(.leading, 22)
+            GeometryReader { geometry in
+                ZStack(alignment: .center) {
+                    SwiftUI.Image("intro-image")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .clipped()
+                        .ignoresSafeArea(.all)
+                    
+                    
+                    VStack {
                         Spacer()
-                    }
-                    VStack(spacing: 24) {
-                        ForEach(K.introContent, id: \.["title"]) { item in
-                            ListTitle(
-                                title: item["title"],
-                                supTitle: item["supTitle"],
-                                leadingImage: item["leadingImage"],
-                                highlight: item["highlight"]
-                            )
-                        }
-                    }
-                    Spacer().frame(height: 0)
-                    
-                    Button {
-                        showSheet = true
-                        showImageEdit = false
-                        inputImage = nil
-                    } label: {
-                        ZStack {
-                            Rectangle()
-                                .fill(Color.white)
-                                .frame(height: 52)
+                        
+                        VStack(alignment: .center, spacing: 24) {
+                            Text("Make It Pop")
+                                .font(.system(size: 40, weight: .bold, design: .rounded))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [Color.myAccent.opacity(0.6), Color.myAccent.opacity(0.2)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity)
-                            HStack(alignment: .center, spacing: 10) {
-                                SwiftUI.Image("icon-photo-add")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(Color.black)
-                                    .frame(width: 18, height: 18)
-                                Text("CHOOSE YOUR PICTURE")
-                                    .font(.headline)
-                                    .foregroundStyle(Color.black)
+                                .padding(.vertical, 16)
+                                .padding(.horizontal, 16)
+                                .shadow(color: Color.myAccent.opacity(0.3), radius: 8, x: 0, y: 4)
+                                .overlay {
+                                    Text("Make It Pop")
+                                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                                        .foregroundStyle(
+                                            LinearGradient(
+                                                colors: [.white.opacity(0.4), .clear],
+                                                startPoint: .top,
+                                                endPoint: .center
+                                            )
+                                        )
+                                        .blendMode(.overlay)
+                                }
+                            VStack(spacing: 4) {
+                                ForEach(K.introContent, id: \.["title"]) { item in
+                                    ListTitle(
+                                        title: item["title"],
+                                        supTitle: item["supTitle"],
+                                        leadingImage: item["leadingImage"],
+                                        highlight: item["highlight"]
+                                    )
+                                    .padding(.vertical, 8)
+                                    .glassCard(cornerRadius: 12)
+                                }
                             }
+                            .padding(.horizontal, 16)
+                            Spacer().frame(height: 0)
+                            
+                            Button {
+                                showSheet = true
+                                showImageEdit = false
+                                inputImage = nil
+                            } label: {
+                                Label("Choose Your Picture", systemImage: "photo.badge.plus")
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Color.white)
+                            }
+                            .padding(.horizontal, 32)
+                            .padding(.vertical, 16)
+                            .glassEffect(.regular.tint(Color.myAccent.opacity(0.6)).interactive(), in: .rect(cornerRadius: 16))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(
+                                        LinearGradient(
+                                            colors: [.white.opacity(0.3), .clear],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        lineWidth: 1
+                                    )
+                            }
+                            .shadow(color: Color.myAccent.opacity(0.2), radius: 12, x: 0, y: 4)
+                            .padding(.horizontal, 30)
+                            
+                            Spacer().frame(height: 0)
                         }
+                        .padding(.vertical, 24)
+                        .frame(width: geometry.size.width)
                     }
-                    .padding(.horizontal, 30)
-                    .buttonStyle(.plain)
-                    
-                    Spacer().frame(height: 0)
                 }
+                .frame(width: geometry.size.width, height: geometry.size.height)
             }
+            .ignoresSafeArea(.all)
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showImageEdit) {
                 PhotoEditView(image: inputImage)
