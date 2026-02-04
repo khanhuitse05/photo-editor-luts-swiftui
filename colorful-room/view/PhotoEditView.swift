@@ -25,8 +25,8 @@ struct PhotoEditView: View {
     
     
     @State private var showImagePicker = false
-    @State private var pickImage:UIImage?
-    @EnvironmentObject var shared:PECtl
+    @State private var pickImage: UIImage?
+    @Environment(PECtl.self) var shared: PECtl
     @Environment(\.dismiss) var dismiss
     
     
@@ -92,7 +92,7 @@ struct PhotoEditView_Previews: PreviewProvider {
             PhotoEditView(image: UIImage(named: "carem"))
                 .background(Color(UIColor.systemBackground))
                 .environment(\.colorScheme, .dark)
-                .environmentObject(PECtl.shared)
+                .environment(PECtl.shared)
         }
     }
 }

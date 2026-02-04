@@ -15,7 +15,7 @@ struct colorful_roomApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(PECtl.shared)
+                .environment(PECtl.shared)
                 .environmentObject(Data.shared)
         }
     }

@@ -11,7 +11,7 @@ import QCropper
 
 struct EditMenuView: View {
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     @State var currentView:EditView = .lut
     

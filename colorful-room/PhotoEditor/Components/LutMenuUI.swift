@@ -10,7 +10,7 @@ import SwiftUI
 
 struct LutMenuUI: View {
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         ZStack{
@@ -102,7 +102,7 @@ struct LutMenuUILoading: View{
 ///
 struct LutMenuUIEdit: View{
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View{
         VStack{

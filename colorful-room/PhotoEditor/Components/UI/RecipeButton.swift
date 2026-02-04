@@ -15,7 +15,7 @@ struct RecipeButton: View {
     var index:Int
     
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         return Button(action: valueChanged){

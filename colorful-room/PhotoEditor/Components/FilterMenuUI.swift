@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FilterMenuUI: View {
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     var index:EditMenu {
         get {
             return shared.currentEditMenu

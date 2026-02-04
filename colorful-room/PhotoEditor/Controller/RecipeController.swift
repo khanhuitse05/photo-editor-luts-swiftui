@@ -6,15 +6,16 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 import PixelEnginePackage
 import CoreData
 
-class RecipeController : ObservableObject{
+@MainActor
+@Observable
+class RecipeController {
     
     // Recipe
-    @Published var recipes: [Recipe] = []
+    var recipes: [Recipe] = []
     
     var sourceImage:CIImage?
     
@@ -35,11 +36,12 @@ class RecipeController : ObservableObject{
     
     func setImage(image:CIImage){
         self.sourceImage = image
-        Task.detached(priority: .background) { [weak self] in
-            guard let self = self else { return }
+        // Work on a snapshot of the recipes array off the main actor to
+        // avoid touching main-actor-isolated state from a detached task.
+        let recipesSnapshot = self.recipes
+        Task.detached(priority: .background) {
             print("init Recipe")
-            
-            for e in self.recipes {
+            for e in recipesSnapshot {
                 e.setImage(image: image)
             }
         }

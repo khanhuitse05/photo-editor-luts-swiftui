@@ -7,13 +7,14 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 import PixelEnginePackage
 import QCropper
 import CoreData
 
-class PECtl : ObservableObject{
+@MainActor
+@Observable
+class PECtl {
     
     static var shared = PECtl()
     
@@ -22,38 +23,33 @@ class PECtl : ObservableObject{
     }
     
     // origin image: pick from gallery or camera
-    var originUI:UIImage!
+    var originUI: UIImage!
     // cache origin: conver from UI to CI
-    var originCI:CIImage!
+    var originCI: CIImage!
     // crop controller
-    var cropperCtrl:CropperController = CropperController()
+    var cropperCtrl: CropperController = CropperController()
     // luts controller
-    @NestedObservableObject
-    var lutsCtrl:LutsController = LutsController()
+    var lutsCtrl: LutsController = LutsController()
     // recipes controller
-    @NestedObservableObject
-    var recipesCtrl:RecipeController = RecipeController()
+    var recipesCtrl: RecipeController = RecipeController()
     
     
     var editState: EditingStack!
     
-    var currentEditMenu:EditMenu{
-        get{
+    var currentEditMenu: EditMenu {
+        get {
             return currentFilter.edit
         }
     }
     
     // Image preview: will update after edited
-    @Published
-    var previewImage:UIImage?
+    var previewImage: UIImage?
     
     // Getter
-    @Published
-    var currentRecipe:RecipeObject?
+    var currentRecipe: RecipeObject?
     
     // 
-    @Published
-    var currentFilter:FilterModel = FilterModel.noneFilterModel
+    var currentFilter: FilterModel = FilterModel.noneFilterModel
     
     // Check to show save recipe button
     var hasRecipeToSave: Bool{
@@ -135,7 +131,7 @@ class PECtl : ObservableObject{
     }
     
     
-    var count:Int  = 0
+    var count: Int = 0
     func setFilterDelay(filters: (inout EditingStack.Edit.Filters) -> Void) {
         currentRecipe = nil
         self.count = self.count + 1
@@ -144,11 +140,18 @@ class PECtl : ObservableObject{
         Task.detached(priority: .background) { [weak self] in
             guard let self = self else { return }
             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
-            // escaping closure captures non-escaping parameter
-            if (self.count == currentCount){
-                self.count  = 0
+            // Check if this is still the latest request by accessing count on MainActor
+            let isLatestRequest = await MainActor.run {
+                if self.count == currentCount {
+                    self.count = 0
+                    return true
+                }
+                return false
+            }
+            
+            if isLatestRequest {
                 await self.apply()
-            }else if (currentCount % 20 == 0){
+            } else if currentCount % 20 == 0 {
                 await self.apply()
             }
         }

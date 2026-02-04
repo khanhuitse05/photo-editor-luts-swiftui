@@ -15,7 +15,7 @@ struct CustomCropperView: UIViewControllerRepresentable {
     
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<CustomCropperView>) -> CropperViewController {

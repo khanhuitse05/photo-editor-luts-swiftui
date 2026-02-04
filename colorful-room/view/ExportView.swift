@@ -99,6 +99,6 @@ struct ExportView_Previews: PreviewProvider {
         return ExportView()
             .background(Color(UIColor.systemBackground))
             .environment(\.colorScheme, .dark)
-            .environmentObject(shared)
+            .environment(shared)
     }
 }

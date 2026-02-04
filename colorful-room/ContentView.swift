@@ -119,7 +119,7 @@ struct ContentView_Previews: PreviewProvider {
             ContentView()
                 .background(Color(UIColor.systemBackground))
                 .environment(\.colorScheme, .dark)
-                .environmentObject(PECtl.shared)
+                .environment(PECtl.shared)
                 .environmentObject(Data.shared)
         }
     }

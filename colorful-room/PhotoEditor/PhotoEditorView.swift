@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PhotoEditorView: View {
     
-    @EnvironmentObject  var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         ZStack{

@@ -5,21 +5,22 @@
 //  Created by Ping9 on 28/06/2022.
 //
 import Foundation
-import Combine
 import SwiftUI
 import PixelEnginePackage
 import CoreData
 
-class LutsController : ObservableObject{
+@MainActor
+@Observable
+class LutsController {
     
-    @Published var loadingLut:Bool = false
+    var loadingLut: Bool = false
     
     // Cube
-    var collections:[Collection] = []
-    var cubeSourceCG:CGImage?
+    var collections: [Collection] = []
+    var cubeSourceCG: CGImage?
     
-    @Published var currentCube:String = ""
-    @Published var editingLut:Bool = false
+    var currentCube: String = ""
+    var editingLut: Bool = false
     
     var showLoading:Bool{
         get{
@@ -27,22 +28,34 @@ class LutsController : ObservableObject{
         }
     }
     
-    func setImage(image:CIImage){
+    func setImage(image: CIImage) {
         currentCube = ""
-        /// setImage
-        self.cubeSourceCG = nil
+        /// setImage – prepare state on the main actor
+        cubeSourceCG = nil
         loadingLut = true
-        collections = Data.shared.collections
         
-        Task.detached(priority: .background) { [weak self] in
-            guard let self = self else { return }
+        // Take a non-optional snapshot of the current collections to work on off the main actor.
+        guard let collectionsSnapshot = Data.shared.collections else {
+            loadingLut = false
+            return
+        }
+        collections = collectionsSnapshot
+        
+        Task.detached(priority: .background) {
             print("init Cube")
-            self.cubeSourceCG = sharedContext.createCGImage(image, from: image.extent)!
-            
-            for e in self.collections {
-                e.setImage(image: image)
+            guard let newCubeSourceCG = sharedContext.createCGImage(image, from: image.extent) else {
+                await MainActor.run {
+                    self.loadingLut = false
+                }
+                return
             }
+            
+            for collection in collectionsSnapshot {
+                collection.setImage(image: image)
+            }
+            
             await MainActor.run {
+                self.cubeSourceCG = newCubeSourceCG
                 self.loadingLut = false
             }
         }

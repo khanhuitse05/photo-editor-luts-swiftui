@@ -13,7 +13,7 @@ struct LUTButton: View {
     
     var cube:PreviewFilterColorCube
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         let on = shared.lutsCtrl.currentCube == cube.filter.identifier
@@ -55,7 +55,7 @@ struct LUTButton: View {
 struct NeutralButton: View {
     
     var image: UIImage
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         let on = shared.lutsCtrl.currentCube.isEmpty
@@ -90,19 +90,30 @@ struct LutLoadingButton: View {
     var name:String
     var on:Bool
     
+    @State private var isAnimating = false
+    
     var body: some View {
-        return VStack(spacing: 0){
+        VStack(spacing: 0) {
             Rectangle()
                 .fill(Color.myGrayDark)
                 .frame(width: 68, height: 68)
+                .opacity(isAnimating ? 0.4 : 0.8)
+                .animation(
+                    .easeInOut(duration: 0.8)
+                        .repeatForever(autoreverses: true),
+                    value: isAnimating
+                )
+                .onAppear {
+                    isAnimating = true
+                }
             
             Text(name)
                 .font(.system(size: 11, weight: .medium))
                 .frame(width: 68, height: 24)
                 .background(on ? Color.myPrimary : Color.myButtonDark)
                 .foregroundColor(.white)
+                .redacted(reason: .placeholder)
         }
     }
-    
-    
+
 }

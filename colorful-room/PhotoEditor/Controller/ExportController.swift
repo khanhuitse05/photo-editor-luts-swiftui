@@ -6,28 +6,24 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 import PixelEnginePackage
 import QCropper
 import CoreData
 
-
-class ExportController : ObservableObject{
+@MainActor
+@Observable
+class ExportController {
     
     // Export
-    @Published var originExport:UIImage?
+    var originExport: UIImage?
     
     var originRatio: Double {
-        get{
-            PECtl.shared.originUI.size.width/PECtl.shared.originUI.size.height;
-        }
+        PECtl.shared.originUI.size.width / PECtl.shared.originUI.size.height
     }
     
     var controller: PECtl {
-        get {
-            PECtl.shared
-        }
+        PECtl.shared
     }
     
     @MainActor

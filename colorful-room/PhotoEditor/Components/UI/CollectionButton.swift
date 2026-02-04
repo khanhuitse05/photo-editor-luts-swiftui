@@ -11,7 +11,7 @@ import SwiftUI
 struct CollectionButton: View {
     var name:String
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         Text(name)

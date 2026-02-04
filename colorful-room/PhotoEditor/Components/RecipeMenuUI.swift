@@ -11,7 +11,7 @@ import PixelEnginePackage
 
 struct RecipeMenuUI: View {
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     @State var filterIntensity:Double = 0
     

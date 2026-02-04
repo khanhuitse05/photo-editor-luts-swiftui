@@ -12,7 +12,7 @@ struct ButtonView: View {
     
     var action:FilterModel
     
-    @EnvironmentObject var shared:PECtl
+    @Environment(PECtl.self) var shared: PECtl
     
     var body: some View {
         Button(action: {
