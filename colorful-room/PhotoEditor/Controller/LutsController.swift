@@ -22,10 +22,9 @@ class LutsController {
     var currentCube: String = ""
     var editingLut: Bool = false
     
-    var showLoading:Bool{
-        get{
-            return loadingLut || cubeSourceCG == nil
-        }
+    var showLoading: Bool {
+        // Only show loading while we're actively loading AND have no cube image yet.
+        loadingLut && cubeSourceCG == nil
     }
     
     func setImage(image: CIImage) {

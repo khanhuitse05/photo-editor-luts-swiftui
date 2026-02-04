@@ -10,24 +10,18 @@ import SwiftUI
 
 
 struct PhotoEditView: View {
-    init(image initImage:UIImage?){
-        
-        print("Photo edit: init")
-        guard let image = initImage else {
-            return
-        }
-        
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 300_000_000) // 300ms
-            PECtl.shared.setImage(image: image)
-        }
-    }
+    private let initialImage: UIImage?
     
-    
+    @State private var didLoadInitialImage = false
     @State private var showImagePicker = false
     @State private var pickImage: UIImage?
     @Environment(PECtl.self) var shared: PECtl
     @Environment(\.dismiss) var dismiss
+    
+    init(image initImage: UIImage?) {
+        print("Photo edit: init")
+        self.initialImage = initImage
+    }
     
     
     var body: some View {
@@ -41,7 +35,7 @@ struct PhotoEditView: View {
                             self.showImagePicker = true
                         }){
                             Text("Library")
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .padding(.horizontal)
                                 .padding(.top, 8)
                         }
@@ -49,7 +43,7 @@ struct PhotoEditView: View {
                         if(shared.previewImage != nil){
                             NavigationLink(destination: ExportView()){
                                 Text("Export")
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding(.horizontal)
                                     .padding(.top, 8)
                             }
@@ -65,8 +59,18 @@ struct PhotoEditView: View {
         .sheet(isPresented: $showImagePicker, onDismiss: self.loadImage){
             ZStack{
                 ImagePicker(image: self.$pickImage)
+            }   
+        }
+        .task {
+            guard !didLoadInitialImage else { return }
+            didLoadInitialImage = true
+            guard let image = initialImage else { return }
+            do {
+                try await Task.sleep(nanoseconds: 300_000_000) // 300ms
+            } catch {
+                print("PhotoEditView initial sleep error: \(error)")
             }
-            
+            shared.setImage(image: image)
         }
     }
     

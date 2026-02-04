@@ -18,18 +18,19 @@ struct LutMenuUI: View {
                 VStack{
                     Spacer()
                     
-                    ScrollView(.horizontal, showsIndicators: false){
-                        if(shared.lutsCtrl.showLoading){
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        if shared.lutsCtrl.showLoading || shared.lutsCtrl.cubeSourceCG == nil {
+                            // Still preparing the neutral cube image or collections – show placeholders.
                             LutMenuUILoading()
-                        }else{
-                            HStack(spacing: 12){
+                        } else if let cubeSourceCG = shared.lutsCtrl.cubeSourceCG {
+                            HStack(spacing: 12) {
                                 Spacer().frame(width: 0)
                                 // neutral
-                                NeutralButton(image: UIImage(cgImage: shared.lutsCtrl.cubeSourceCG!)).id("neutral")
+                                NeutralButton(image: UIImage(cgImage: cubeSourceCG)).id("neutral")
                                 // cube by collections
                                 ForEach(shared.lutsCtrl.collections, id: \.identifier) { collection in
-                                    HStack(spacing: 12){
-                                        if(collection.cubePreviews.isEmpty == false){
+                                    HStack(spacing: 12) {
+                                        if collection.cubePreviews.isEmpty == false {
                                             Rectangle()
                                                 .fill(Color.myDivider)
                                                 .frame(width: 1, height: 92)
@@ -37,7 +38,8 @@ struct LutMenuUI: View {
                                         ForEach(collection.cubePreviews, id: \.filter.identifier) { cube in
                                             LUTButton(cube: cube)
                                         }
-                                    }.id("\(collection.identifier)-cube")
+                                    }
+                                    .id("\(collection.identifier)-cube")
                                 }
                                 Spacer().frame(width: 0)
                             }

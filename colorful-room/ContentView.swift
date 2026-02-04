@@ -26,7 +26,7 @@ struct ContentView: View {
     var body: some View {
         
         NavigationStack {
-            ZStack(alignment: .top){
+            ZStack(alignment: .top) {
                 Color.myBackground
                     .ignoresSafeArea(.all)
                 SwiftUI.Image("intro-image")
@@ -35,63 +35,59 @@ struct ContentView: View {
                     .frame(height: CGFloat(imageHeight))
                     .ignoresSafeArea(edges: .top)
                 
-                GeometryReader { geo in
-                    VStack(alignment: .center, spacing: 24){
+                VStack(alignment: .center, spacing: 24) {
+                    Spacer()
+                    HStack {
+                        Text("Create your\ncool filter")
+                            .font(.system(size: 32, weight: .semibold))
+                            .fontWeight(.semibold)
+                            .padding(.leading, 22)
                         Spacer()
-                        HStack{
-                            Text("Create your\ncool filter")
-                                .font(.system(size: 32, weight: .semibold))
-                                .fontWeight(.semibold)
-                                .padding(.leading, 22)
-                            Spacer()
+                    }
+                    VStack(spacing: 24) {
+                        ForEach(K.introContent, id: \.["title"]) { item in
+                            ListTitle(
+                                title: item["title"],
+                                supTitle: item["supTitle"],
+                                leadingImage: item["leadingImage"],
+                                highlight: item["highlight"]
+                            )
                         }
-                        VStack(spacing: 24){
-                            ForEach(K.introContent, id: \.["title"]){item in
-                                ListTitle(
-                                    title: item["title"],
-                                    supTitle: item["supTitle"],
-                                    leadingImage: item["leadingImage"],
-                                    highlight: item["highlight"]
-                                )
-                            }
-                        }
-                        Spacer().frame(height: 0)
-                        
-                        ZStack{
+                    }
+                    Spacer().frame(height: 0)
+                    
+                    Button {
+                        showSheet = true
+                        showImageEdit = false
+                        inputImage = nil
+                    } label: {
+                        ZStack {
                             Rectangle()
                                 .fill(Color.white)
-                                .frame(width: geo.size.width - 60, height: 52)
-                            HStack(alignment: .center, spacing: 10){
-                                
+                                .frame(height: 52)
+                                .frame(maxWidth: .infinity)
+                            HStack(alignment: .center, spacing: 10) {
                                 SwiftUI.Image("icon-photo-add")
                                     .resizable()
                                     .scaledToFit()
-                                    .foregroundColor(Color.black)
+                                    .foregroundStyle(Color.black)
                                     .frame(width: 18, height: 18)
                                 Text("CHOOSE YOUR PICTURE")
                                     .font(.headline)
-                                    .foregroundColor(Color.black)
-                                
-                            }
-                            .onTapGesture {
-                                self.showSheet = true
-                                self.showImageEdit = false
-                                self.inputImage = nil
+                                    .foregroundStyle(Color.black)
                             }
                         }
-                        
-                        NavigationLink(
-                            destination: PhotoEditView(image: self.inputImage),
-                            isActive: self.$showImageEdit
-                        ) {
-                            EmptyView()
-                        }
-                        .hidden()
-                        
                     }
+                    .padding(.horizontal, 30)
+                    .buttonStyle(.plain)
+                    
+                    Spacer().frame(height: 0)
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(isPresented: $showImageEdit) {
+                PhotoEditView(image: inputImage)
+            }
         }
         .sheet(isPresented: $showSheet, onDismiss: loadImage){
             ImagePicker(image: self.$pickImage)
