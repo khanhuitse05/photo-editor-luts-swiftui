@@ -25,15 +25,15 @@ struct ContentView: View {
     
     var body: some View {
         
-        NavigationView{
+        NavigationStack {
             ZStack(alignment: .top){
                 Color.myBackground
-                    .edgesIgnoringSafeArea(.all)
-                Image("intro-image")
+                    .ignoresSafeArea(.all)
+                SwiftUI.Image("intro-image")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(height: CGFloat(imageHeight))
-                    .edgesIgnoringSafeArea(.top)
+                    .ignoresSafeArea(edges: .top)
                 
                 GeometryReader { geo in
                     VStack(alignment: .center, spacing: 24){
@@ -63,7 +63,7 @@ struct ContentView: View {
                                 .frame(width: geo.size.width - 60, height: 52)
                             HStack(alignment: .center, spacing: 10){
                                 
-                                Image("icon-photo-add")
+                                SwiftUI.Image("icon-photo-add")
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundColor(Color.black)
@@ -80,20 +80,19 @@ struct ContentView: View {
                             }
                         }
                         
-                        NavigationLink(destination: PhotoEditView(image: self.inputImage)
-                            .navigationBarTitle("")
-                            .navigationBarHidden(true), isActive: self.$showImageEdit) {
-                                EmptyView()
-                        }.hidden()
+                        NavigationLink(
+                            destination: PhotoEditView(image: self.inputImage),
+                            isActive: self.$showImageEdit
+                        ) {
+                            EmptyView()
+                        }
+                        .hidden()
                         
                     }
                 }
             }
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
-            
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showSheet, onDismiss: loadImage){
             ImagePicker(image: self.$pickImage)
         }.onAppear(perform: {

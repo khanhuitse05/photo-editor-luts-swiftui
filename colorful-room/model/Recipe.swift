@@ -8,9 +8,7 @@
 import Foundation
 import PixelEnginePackage
 import SwiftUI
-import Foundation
 import CoreImage
-import SwiftUI
 
 public class Recipe {
     

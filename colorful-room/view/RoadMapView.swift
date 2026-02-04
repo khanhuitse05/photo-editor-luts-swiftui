@@ -10,18 +10,18 @@ import SwiftUI
 
 struct RoadMapView: View {
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack(alignment: .top){
             Color.myBackground
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
             ScrollView(showsIndicators: false){
                 VStack(alignment: .leading, spacing: 8){
                     HStack{
                         Spacer()
                         Button("Close", action: {
-                            self.presentationMode.wrappedValue.dismiss()
+                            self.dismiss()
                         })
                             .foregroundColor(Color.myGrayLight)
                             .padding()

@@ -88,8 +88,8 @@ class PECtl : ObservableObject{
         
         cropperCtrl = CropperController()
 
-        DispatchQueue.global(qos: .background).async{
-            self.apply()
+        Task.detached(priority: .background) {
+            await self.apply()
         }
     }
     
@@ -108,19 +108,25 @@ class PECtl : ObservableObject{
             self.currentRecipe = nil
             self.editState.set(filters: closure)
             self.editState.commit()
-            self.apply()
+            Task { @MainActor in
+                self.apply()
+            }
             
         case .undo:
             if(editState?.canUndo == true){
                 self.editState.undo()
                 let name = self.editState.currentEdit.filters.colorCube?.identifier ?? ""
                 self.lutsCtrl.selectCube(name)
-                self.apply()
+                Task { @MainActor in
+                    self.apply()
+                }
             }
 
         case .revert:
             self.editState.revert()
-            self.apply()
+            Task { @MainActor in
+                self.apply()
+            }
         
         case .applyRecipe(let recipeObject):
             self.onApplyRecipe(recipeObject)
@@ -135,28 +141,28 @@ class PECtl : ObservableObject{
         self.count = self.count + 1
         let currentCount = self.count
         self.editState.set(filters: filters)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 0.3, execute: {
+        Task.detached(priority: .background) { [weak self] in
+            guard let self = self else { return }
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
             // escaping closure captures non-escaping parameter
             if (self.count == currentCount){
                 self.count  = 0
-                self.apply()
+                await self.apply()
             }else if (currentCount % 20 == 0){
-                self.apply()
+                await self.apply()
             }
-        })
+        }
     }
     
     
+    @MainActor
     func apply() {
         guard let preview:CIImage = self.editState.previewImage else{
             return
         }
-        DispatchQueue.main.async {
-            if let cgimg = sharedContext.createCGImage(preview, from: preview.extent) {
-                self.previewImage = UIImage(cgImage: cgimg)
-            }
+        if let cgimg = sharedContext.createCGImage(preview, from: preview.extent) {
+            self.previewImage = UIImage(cgImage: cgimg)
         }
-        
     }
     
     ///
@@ -167,7 +173,9 @@ class PECtl : ObservableObject{
         
         self.editState.set(filters: RecipeUtils.applyRecipe(data, colorCube: colorCube))
         self.editState.commit()
-        self.apply()
+        Task { @MainActor in
+            self.apply()
+        }
     }
     
 }

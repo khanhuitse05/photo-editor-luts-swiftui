@@ -35,7 +35,8 @@ class RecipeController : ObservableObject{
     
     func setImage(image:CIImage){
         self.sourceImage = image
-        DispatchQueue.global(qos: .background).async{
+        Task.detached(priority: .background) { [weak self] in
+            guard let self = self else { return }
             print("init Recipe")
             
             for e in self.recipes {

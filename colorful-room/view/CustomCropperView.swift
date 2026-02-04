@@ -14,7 +14,7 @@ import QCropper
 struct CustomCropperView: UIViewControllerRepresentable {
     
     
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var shared:PECtl
     
     
@@ -43,10 +43,10 @@ class CropperViewCoordinator: NSObject, UINavigationControllerDelegate, CropperV
     
     func cropperDidConfirm(_ cropper: CropperViewController, state: CropperState?) {
         PECtl.shared.cropperCtrl.setState(state)
-        parent.presentationMode.wrappedValue.dismiss()
+        parent.dismiss()
     }
     
     func cropperDidCancel(_ cropper: CropperViewController) {
-        parent.presentationMode.wrappedValue.dismiss()
+        parent.dismiss()
     }
 }

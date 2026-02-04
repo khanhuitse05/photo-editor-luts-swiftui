@@ -30,22 +30,20 @@ class ExportController : ObservableObject{
         }
     }
     
+    @MainActor
     func prepareExport() {
         if(originExport == nil){
             controller.didReceive(action: .commit)
-            DispatchQueue.main.async {
-                if let cropperState = self.controller.cropperCtrl.state{
-                    let originRender = self.controller.originUI.cropped(withCropperState: cropperState)
-                    let source = StaticImageSource(source: convertUItoCI(from: originRender!))
-                    self.originExport =  self.controller.editState.makeCustomRenderer(source: source)
-                        .render(resolution: .full)
-                }else{
-                    self.originExport = self.controller.editState.makeRenderer().render(resolution: .full)
-                }
-               
-                
-                let source = StaticImageSource(source: convertUItoCI(from: Data.shared.neutralLUT))
+            if let cropperState = self.controller.cropperCtrl.state{
+                let originRender = self.controller.originUI.cropped(withCropperState: cropperState)
+                let source = StaticImageSource(source: convertUItoCI(from: originRender!))
+                self.originExport =  self.controller.editState.makeCustomRenderer(source: source)
+                    .render(resolution: .full)
+            }else{
+                self.originExport = self.controller.editState.makeRenderer().render(resolution: .full)
             }
+           
+            let source = StaticImageSource(source: convertUItoCI(from: Data.shared.neutralLUT))
         }
     }
     

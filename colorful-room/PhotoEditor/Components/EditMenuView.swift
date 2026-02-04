@@ -21,10 +21,8 @@ struct EditMenuView: View {
                 if((self.currentView == .filter && self.shared.currentEditMenu != .none) == false
                    && self.shared.lutsCtrl.editingLut == false){
                     HStack(spacing: 48){
-                        NavigationLink(destination:
-                                        CustomCropperView()
-                                        .navigationBarTitle("")
-                                        .navigationBarHidden(true)
+                        NavigationLink(destination: CustomCropperView()
+                            .toolbar(.hidden, for: .navigationBar)
                         ){
                             IconButton("adjustment")
                         }

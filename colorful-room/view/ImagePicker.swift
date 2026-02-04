@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
     
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @Binding var image:UIImage?
     
     
@@ -41,7 +41,7 @@ class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImageP
             parent.image = uiImage
         }
         print("picker image dismiss")
-        parent.presentationMode.wrappedValue.dismiss()
+        parent.dismiss()
     }
     
     

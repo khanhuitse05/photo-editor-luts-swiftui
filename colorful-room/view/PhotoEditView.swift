@@ -17,7 +17,8 @@ struct PhotoEditView: View {
             return
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)){
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 300_000_000) // 300ms
             PECtl.shared.setImage(image: image)
         }
     }
@@ -26,14 +27,14 @@ struct PhotoEditView: View {
     @State private var showImagePicker = false
     @State private var pickImage:UIImage?
     @EnvironmentObject var shared:PECtl
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     
     var body: some View {
-        NavigationView{
+        NavigationStack {
             ZStack{
                 Color.myBackground
-                    .edgesIgnoringSafeArea(.all)
+                    .ignoresSafeArea(.all)
                 VStack{
                     HStack{
                         Button(action:{
@@ -59,11 +60,8 @@ struct PhotoEditView: View {
                     .zIndex(0)
                 }
             }
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
-            
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showImagePicker, onDismiss: self.loadImage){
             ZStack{
                 ImagePicker(image: self.$pickImage)

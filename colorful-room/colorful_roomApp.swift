@@ -10,10 +10,6 @@ import SwiftUI
 @main
 struct colorful_roomApp: App {
     let persistenceController = PersistenceController.shared
-    
-    // register initial UserDefaults values every launch
-    init() {
-    }
 
     var body: some Scene {
         WindowGroup {

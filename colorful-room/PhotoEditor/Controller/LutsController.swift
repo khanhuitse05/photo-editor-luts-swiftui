@@ -34,14 +34,15 @@ class LutsController : ObservableObject{
         loadingLut = true
         collections = Data.shared.collections
         
-        DispatchQueue.global(qos: .background).async{
+        Task.detached(priority: .background) { [weak self] in
+            guard let self = self else { return }
             print("init Cube")
             self.cubeSourceCG = sharedContext.createCGImage(image, from: image.extent)!
             
             for e in self.collections {
                 e.setImage(image: image)
             }
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.loadingLut = false
             }
         }

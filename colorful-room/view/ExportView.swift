@@ -15,18 +15,18 @@ struct ExportView: View {
     @State private var showSuccessPopup = false
     
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack{
             Color.myBackground
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(.all)
             VStack{
                 HStack{
                     Spacer()
                     Button(action:{
                         self.shared.resetExport()
-                        self.presentationMode.wrappedValue.dismiss()
+                        self.dismiss()
                     }){
                         Image(systemName: "xmark")
                             .foregroundColor(.white)
@@ -78,9 +78,7 @@ struct ExportView: View {
                 Spacer().frame(height: 16)
             }
         }
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarHidden(true)
-        .navigationViewStyle(StackNavigationViewStyle())
+        .toolbar(.hidden, for: .navigationBar)
         .alert(isPresented: $showSuccessPopup) {
             Alert(title: Text("Success"), message: Text("Your export success"), dismissButton: .default(Text("Close"), action: {
                

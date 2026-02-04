@@ -1,0 +1,15 @@
+{
+  "originHash" : "99a011ea790d7e0a7b7aee03c3119719821a76baeb04eeb95f52a1a793d191e9",
+  "pins" : [
+    {
+      "identity" : "pixelenginepackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/j1mmyto9/PixelEnginePackage",
+      "state" : {
+        "revision" : "d3eaf69accc4396f807fe8497efe03f4f33c5763",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

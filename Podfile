@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '13.5'
+platform :ios, '17.6'
 
 
 target 'colorful-room' do
