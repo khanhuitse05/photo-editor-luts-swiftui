@@ -11,16 +11,19 @@ import SwiftUI
 
 struct PhotoEditView: View {
     private let initialImage: UIImage?
+    private let recentEditEntry: RecentEditEntry?
 
     @State private var didLoadInitialImage = false
     @State private var showImagePicker = false
     @State private var showBatchEdit = false
+    @State private var showHistory = false
     @State private var pickImage: UIImage?
     @Environment(PECtl.self) var shared: PECtl
     @Environment(\.dismiss) var dismiss
 
-    init(image initImage: UIImage?) {
+    init(image initImage: UIImage?, recentEditEntry: RecentEditEntry? = nil) {
         self.initialImage = initImage
+        self.recentEditEntry = recentEditEntry
     }
 
 
@@ -44,6 +47,18 @@ struct PhotoEditView: View {
                         Spacer()
 
                         if shared.previewImage != nil {
+                            // History button
+                            Button {
+                                HapticManager.impact(.light)
+                                showHistory = true
+                            } label: {
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .font(.subheadline)
+                            }
+                            .buttonStyle(.glass)
+                            .accessibilityLabel("History")
+                            .accessibilityHint("View recent editing sessions")
+                            
                             // Batch edit
                             Button {
                                 HapticManager.impact(.light)
@@ -83,6 +98,21 @@ struct PhotoEditView: View {
             BatchEditView()
                 .environment(shared)
         }
+        .sheet(isPresented: $showHistory) {
+            RecentEditsView { entry in
+                // Load the image and restore filters
+                if let image = RecentEditsManager.shared.loadImage(for: entry) {
+                    shared.setImage(image: image)
+                    // Wait for setImage to complete, then restore filters
+                    Task {
+                        // Give setImage time to rebuild the editing stack
+                        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+                        let filterClosure = RecentEditsManager.shared.restoreFilters(from: entry)
+                        shared.didReceive(action: .applyFilter(filterClosure))
+                    }
+                }
+            }
+        }
         .task {
             guard !didLoadInitialImage else { return }
             didLoadInitialImage = true
@@ -93,6 +123,25 @@ struct PhotoEditView: View {
                 // Task cancelled — proceed immediately
             }
             shared.setImage(image: image)
+            
+            // If we have a recentEditEntry, restore filters after image loads
+            if let entry = recentEditEntry {
+                // Wait for setImage to complete, then restore filters
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1s
+                let filterClosure = RecentEditsManager.shared.restoreFilters(from: entry)
+                shared.didReceive(action: .applyFilter(filterClosure))
+            }
+        }
+        .onDisappear {
+            // Auto-save current editing session if edits exist
+            if let originUI = shared.originUI,
+               let editState = shared.editState,
+               editState.canUndo {
+                RecentEditsManager.shared.saveEdit(
+                    image: originUI,
+                    filters: editState.currentEdit.filters
+                )
+            }
         }
     }
 

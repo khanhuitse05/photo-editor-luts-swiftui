@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		BB0001FA00000201000001A1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000001A1 /* FavoritesManager.swift */; };
 		BB0001FA00000201000005A5 /* BatchEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000005A5 /* BatchEditView.swift */; };
+		BB0001FA00000201000006A1 /* RecentEditsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000006A1 /* RecentEditsManager.swift */; };
+		BB0001FA00000201000007A1 /* RecentEditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000007A1 /* RecentEditsView.swift */; };
 		AA00010220260206000UX001 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010120260206000UX001 /* HapticManager.swift */; };
 		5909A0BD2792CADF00431609 /* RecipeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5909A0BC2792CADF00431609 /* RecipeUtils.swift */; };
 		5924F5122794062C00BE7705 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924F5112794062C00BE7705 /* Constants.swift */; };
@@ -107,6 +109,8 @@
 		5909A0BC2792CADF00431609 /* RecipeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUtils.swift; sourceTree = "<group>"; };
 		BB0001FA00000101000001A1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 		BB0001FA00000101000005A5 /* BatchEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchEditView.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000006A1 /* RecentEditsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsManager.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000007A1 /* RecentEditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsView.swift; sourceTree = "<group>"; };
 		5924F5112794062C00BE7705 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5924F514279408AE00BE7705 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		5924F516279408BC00BE7705 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
@@ -445,6 +449,7 @@
 				59B31A83271DA892002DADE8 /* ExportView.swift */,
 				59B31A85271DA892002DADE8 /* MyWebView.swift */,
 				BB0001FA00000101000005A5 /* BatchEditView.swift */,
+				BB0001FA00000101000007A1 /* RecentEditsView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -462,6 +467,7 @@
 				59752CFE286AF4B1001F919C /* NestedObservableObject.swift */,
 				AA00010120260206000UX001 /* HapticManager.swift */,
 				BB0001FA00000101000001A1 /* FavoritesManager.swift */,
+				BB0001FA00000101000006A1 /* RecentEditsManager.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -713,6 +719,8 @@
 				592B4E5127132BF400BBF5BA /* colorful_roomApp.swift in Sources */,
 				BB0001FA00000201000001A1 /* FavoritesManager.swift in Sources */,
 				BB0001FA00000201000005A5 /* BatchEditView.swift in Sources */,
+				BB0001FA00000201000006A1 /* RecentEditsManager.swift in Sources */,
+				BB0001FA00000201000007A1 /* RecentEditsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

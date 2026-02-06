@@ -112,6 +112,23 @@ struct ContentView: View {
                             .accessibilityLabel("Choose Your Picture")
                             .accessibilityHint("Opens the photo library to select a picture to edit")
 
+                            // Continue Editing button
+                            if RecentEditsManager.shared.hasRecent {
+                                Button {
+                                    if let mostRecent = RecentEditsManager.shared.entries.first,
+                                       let continueImage = RecentEditsManager.shared.loadImage(for: mostRecent) {
+                                        inputImage = continueImage
+                                        showImageEdit = true
+                                    }
+                                } label: {
+                                    Label("Continue Editing", systemImage: "arrow.clockwise")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                        .foregroundStyle(Color.white.opacity(0.9))
+                                }
+                                .padding(.horizontal, 32)
+                            }
+
                             Spacer().frame(height: 0)
                         }
                         .padding(.vertical, 24)
@@ -123,7 +140,10 @@ struct ContentView: View {
             .ignoresSafeArea(.all)
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showImageEdit) {
-                PhotoEditView(image: inputImage)
+                PhotoEditView(
+                    image: inputImage,
+                    recentEditEntry: RecentEditsManager.shared.hasRecent ? RecentEditsManager.shared.entries.first : nil
+                )
             }
         }
         .sheet(isPresented: $showSheet, onDismiss: loadImage) {
