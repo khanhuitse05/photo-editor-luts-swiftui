@@ -35,6 +35,13 @@ class PECtl {
     
     var editState: EditingStack!
     
+    // Redo stack: stores filter snapshots that were undone
+    var redoStack: [EditingStack.Edit.Filters] = []
+    
+    var canRedo: Bool {
+        return !redoStack.isEmpty
+    }
+    
     var currentEditMenu: EditMenu {
         get {
             return currentFilter.edit
@@ -66,6 +73,7 @@ class PECtl {
         if(lutsCtrl.loadingLut == true){
             return
         }
+        redoStack.removeAll()
         currentFilter = FilterModel.noneFilterModel
         self.originUI = image
         
@@ -104,11 +112,13 @@ class PECtl {
     func didReceive(action: PECtlAction) {
         switch action {
         case .setFilter(let closure):
+            redoStack.removeAll() // New edit clears redo
             setFilterDelay(filters: closure)
         case .commit:
             editState?.commit()
             
         case .applyFilter(let closure):
+            redoStack.removeAll() // New edit clears redo
             self.currentRecipe = nil
             self.editState.set(filters: closure)
             self.editState.commit()
@@ -118,6 +128,9 @@ class PECtl {
             
         case .undo:
             if(editState?.canUndo == true){
+                // Save current filters to redo stack before undoing
+                let currentFilters = self.editState.currentEdit.filters
+                redoStack.append(currentFilters)
                 self.editState.undo()
                 let name = self.editState.currentEdit.filters.colorCube?.identifier ?? ""
                 self.lutsCtrl.selectCube(name)
@@ -126,13 +139,26 @@ class PECtl {
                 }
             }
 
+        case .redo:
+            if let filtersToRedo = redoStack.popLast() {
+                self.editState.set(filters: { $0 = filtersToRedo })
+                self.editState.commit()
+                let name = filtersToRedo.colorCube?.identifier ?? ""
+                self.lutsCtrl.selectCube(name)
+                Task { @MainActor in
+                    self.apply()
+                }
+            }
+
         case .revert:
+            redoStack.removeAll()
             self.editState.revert()
             Task { @MainActor in
                 self.apply()
             }
         
         case .applyRecipe(let recipeObject):
+            redoStack.removeAll() // New edit clears redo
             self.onApplyRecipe(recipeObject)
             
         }

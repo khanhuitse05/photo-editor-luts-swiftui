@@ -14,6 +14,7 @@ struct PhotoEditView: View {
 
     @State private var didLoadInitialImage = false
     @State private var showImagePicker = false
+    @State private var showBatchEdit = false
     @State private var pickImage: UIImage?
     @Environment(PECtl.self) var shared: PECtl
     @Environment(\.dismiss) var dismiss
@@ -29,7 +30,7 @@ struct PhotoEditView: View {
                 Color(uiColor: .systemBackground)
                     .ignoresSafeArea(.all)
                 VStack {
-                    HStack {
+                    HStack(spacing: 12) {
                         Button(action: {
                             self.showImagePicker = true
                         }) {
@@ -39,8 +40,22 @@ struct PhotoEditView: View {
                         .buttonStyle(.glass)
                         .accessibilityLabel("Photo Library")
                         .accessibilityHint("Opens photo library to pick a different image")
+
                         Spacer()
+
                         if shared.previewImage != nil {
+                            // Batch edit
+                            Button {
+                                HapticManager.impact(.light)
+                                showBatchEdit = true
+                            } label: {
+                                Image(systemName: "rectangle.stack.badge.play")
+                                    .font(.subheadline)
+                            }
+                            .buttonStyle(.glass)
+                            .accessibilityLabel("Batch Edit")
+                            .accessibilityHint("Apply current edits to multiple photos at once")
+
                             NavigationLink(destination: ExportView()) {
                                 Label("Export", systemImage: "square.and.arrow.up")
                                     .font(.subheadline)
@@ -63,6 +78,10 @@ struct PhotoEditView: View {
             ZStack {
                 ImagePicker(image: self.$pickImage)
             }
+        }
+        .sheet(isPresented: $showBatchEdit) {
+            BatchEditView()
+                .environment(shared)
         }
         .task {
             guard !didLoadInitialImage else { return }

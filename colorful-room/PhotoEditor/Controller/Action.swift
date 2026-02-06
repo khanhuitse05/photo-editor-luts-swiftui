@@ -16,5 +16,6 @@ public enum PECtlAction {
     case commit
     case revert
     case undo
+    case redo
     case applyRecipe(RecipeObject)
 }

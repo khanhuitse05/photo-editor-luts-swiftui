@@ -82,8 +82,21 @@ struct EditMenuView: View {
                                 .font(.system(size: 20))
                         }
                         .buttonStyle(.glass)
+                        .disabled(shared.editState?.canUndo != true)
                         .accessibilityLabel("Undo")
                         .accessibilityHint("Undoes the last edit")
+
+                        Button {
+                            HapticManager.impact(.medium)
+                            shared.didReceive(action: PECtlAction.redo)
+                        } label: {
+                            Image(systemName: "arrow.uturn.forward")
+                                .font(.system(size: 20))
+                        }
+                        .buttonStyle(.glass)
+                        .disabled(!shared.canRedo)
+                        .accessibilityLabel("Redo")
+                        .accessibilityHint("Redoes the last undone edit")
                     }
                     .frame(maxWidth: .infinity, minHeight: DesignTokens.toolbarHeight, maxHeight: DesignTokens.toolbarHeight)
                     .padding(.vertical, 8)

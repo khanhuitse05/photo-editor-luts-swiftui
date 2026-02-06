@@ -15,8 +15,11 @@ struct LUTButton: View {
     
     @Environment(PECtl.self) var shared: PECtl
     
+    private var favManager: FavoritesManager { FavoritesManager.shared }
+    
     var body: some View {
         let on = shared.lutsCtrl.currentCube == cube.filter.identifier
+        let isFav = favManager.isFavorite(cube.filter.identifier)
         
         return Button(action:{
             if(on){
@@ -26,12 +29,20 @@ struct LUTButton: View {
             }
         }){
             VStack(spacing: 0){
-                Image(uiImage: UIImage(cgImage: cube.cgImage))
-                    .renderingMode(.original)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
-                    .clipped()
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: UIImage(cgImage: cube.cgImage))
+                        .renderingMode(.original)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
+                        .clipped()
+                    if isFav {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.red)
+                            .padding(3)
+                    }
+                }
                 Text(cube.filter.name)
                     .font(.caption)
                     .frame(width: DesignTokens.lutThumbnailSize, height: 24)
@@ -41,6 +52,17 @@ struct LUTButton: View {
             .frame(width: DesignTokens.lutThumbnailSize)
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button {
+                HapticManager.selection()
+                favManager.toggleFavorite(cube.filter.identifier)
+            } label: {
+                Label(
+                    isFav ? "Remove from Favorites" : "Add to Favorites",
+                    systemImage: isFav ? "heart.slash" : "heart"
+                )
+            }
+        }
         .accessibilityLabel("\(cube.filter.name) filter")
         .accessibilityHint(on ? "Tap to adjust intensity" : "Tap to apply this LUT filter")
         .accessibilityAddTraits(on ? .isSelected : [])

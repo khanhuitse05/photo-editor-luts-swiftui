@@ -7,10 +7,20 @@
 //
 
 import SwiftUI
+import PixelEnginePackage
 
 struct LutMenuUI: View {
     
     @Environment(PECtl.self) var shared: PECtl
+    
+    private var favManager: FavoritesManager { FavoritesManager.shared }
+    
+    /// Gather all cube previews from all collections that match the given identifiers.
+    private var favoriteCubes: [PreviewFilterColorCube] {
+        let allPreviews = shared.lutsCtrl.collections.flatMap { $0.cubePreviews }
+        let lookup = Dictionary(allPreviews.map { ($0.filter.identifier, $0) }, uniquingKeysWith: { first, _ in first })
+        return Array(favManager.favoriteIdentifiers).compactMap { lookup[$0] }
+    }
     
     var body: some View {
         ZStack{
@@ -27,6 +37,21 @@ struct LutMenuUI: View {
                                 Spacer().frame(width: 0)
                                 // neutral
                                 NeutralButton(image: UIImage(cgImage: cubeSourceCG)).id("neutral")
+
+                                // Favorites section
+                                if !favoriteCubes.isEmpty {
+                                    HStack(spacing: 12) {
+                                        Rectangle()
+                                            .fill(Color(uiColor: .separator))
+                                            .frame(width: 1, height: DesignTokens.lutButtonHeight)
+                                            .accessibilityHidden(true)
+                                        ForEach(favoriteCubes, id: \.filter.identifier) { cube in
+                                            LUTButton(cube: cube)
+                                        }
+                                    }
+                                    .id("favorites-cube")
+                                }
+
                                 // cube by collections
                                 ForEach(shared.lutsCtrl.collections, id: \.identifier) { collection in
                                     HStack(spacing: 12) {
@@ -52,6 +77,10 @@ struct LutMenuUI: View {
                             Spacer().frame(width: 0)
                         
                             collectionButtonView(key: "", name: "All Luts", reader:reader)
+
+                            if !favoriteCubes.isEmpty {
+                                collectionButtonView(key: "favorites", name: "Favorites", reader: reader)
+                            }
                             //
                             ForEach(shared.lutsCtrl.collections, id: \.identifier) { collection in
                                 collectionButtonView(key: collection.identifier, name: collection.name,reader:reader)
