@@ -33,7 +33,8 @@ struct LutMenuUI: View {
                                         if collection.cubePreviews.isEmpty == false {
                                             Rectangle()
                                                 .fill(Color(uiColor: .separator))
-                                                .frame(width: 1, height: 92)
+                                                .frame(width: 1, height: DesignTokens.lutButtonHeight)
+                                                .accessibilityHidden(true)
                                         }
                                         ForEach(collection.cubePreviews, id: \.filter.identifier) { cube in
                                             LUTButton(cube: cube)
@@ -92,7 +93,8 @@ struct LutMenuUILoading: View{
             LutLoadingButton(name: "Original", on: true)
             Rectangle()
                 .fill(Color(uiColor: .separator))
-                .frame(width: 1, height: 92)
+                .frame(width: 1, height: DesignTokens.lutButtonHeight)
+                .accessibilityHidden(true)
             LutLoadingButton(name: "LUT 1", on: false)
             LutLoadingButton(name: "LUT 2", on: false)
             LutLoadingButton(name: "LUT 3", on: false)
@@ -120,6 +122,8 @@ struct LutMenuUIEdit: View{
                     Image(systemName: "xmark")
                 }
                 .buttonStyle(.glass)
+                .accessibilityLabel("Cancel")
+                .accessibilityHint("Reverts the LUT intensity change")
                 Spacer()
                 Text(self.shared.editState.currentEdit.filters.colorCube?.name ?? "Lut")
                     .font(.subheadline)
@@ -132,6 +136,8 @@ struct LutMenuUIEdit: View{
                     Image(systemName: "checkmark")
                 }
                 .buttonStyle(.glass)
+                .accessibilityLabel("Apply")
+                .accessibilityHint("Applies the LUT intensity change")
             }
             .padding(.horizontal)
             .padding(.bottom, 8)

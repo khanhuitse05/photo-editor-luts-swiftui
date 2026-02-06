@@ -23,10 +23,12 @@ public class Collection {
         if let cubeSourceCI: CIImage = image
         {
             for item in cubeInfos {
-                let cube = FilterColorCube(name: item.name, identifier: item.identifier, lutImage: UIImage(named: item.lutImage)!, dimension: 64);
+                guard let lutImage = UIImage(named: item.lutImage) else {
+                    continue // Skip items with missing assets instead of crashing
+                }
+                let cube = FilterColorCube(name: item.name, identifier: item.identifier, lutImage: lutImage, dimension: 64)
                 let preview = PreviewFilterColorCube(sourceImage: cubeSourceCI, filter: cube)
                 cubePreviews.append(preview)
-                
             }
         }
     }
@@ -65,8 +67,11 @@ public struct FilterColorCubeInfo : Equatable {
         self.lutImage = lutImage
     }
     
-    func getFilter()-> FilterColorCube{
-        return FilterColorCube(name: name, identifier: identifier, lutImage: UIImage(named: lutImage)!, dimension: 64)
+    func getFilter() -> FilterColorCube? {
+        guard let image = UIImage(named: lutImage) else {
+            return nil
+        }
+        return FilterColorCube(name: name, identifier: identifier, lutImage: image, dimension: 64)
     }
     
 }

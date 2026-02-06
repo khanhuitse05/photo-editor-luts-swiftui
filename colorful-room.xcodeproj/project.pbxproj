@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA00010220260206000UX001 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010120260206000UX001 /* HapticManager.swift */; };
 		5909A0BD2792CADF00431609 /* RecipeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5909A0BC2792CADF00431609 /* RecipeUtils.swift */; };
 		5924F5122794062C00BE7705 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924F5112794062C00BE7705 /* Constants.swift */; };
 		5924F515279408AE00BE7705 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924F514279408AE00BE7705 /* Action.swift */; };
@@ -99,6 +100,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA00010120260206000UX001 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		17E3225507F432BBE67DCA2C /* Pods-colorful-room.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-colorful-room.debug.xcconfig"; path = "Target Support Files/Pods-colorful-room/Pods-colorful-room.debug.xcconfig"; sourceTree = "<group>"; };
 		5909A0BC2792CADF00431609 /* RecipeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUtils.swift; sourceTree = "<group>"; };
 		5924F5112794062C00BE7705 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				5924F5112794062C00BE7705 /* Constants.swift */,
 				5924F518279413EA00BE7705 /* StorageUtils.swift */,
 				59752CFE286AF4B1001F919C /* NestedObservableObject.swift */,
+				AA00010120260206000UX001 /* HapticManager.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -646,6 +649,7 @@
 				59B31A66271DA842002DADE8 /* VignetteControl.swift in Sources */,
 				5924F517279408BC00BE7705 /* ExportController.swift in Sources */,
 				5924F5122794062C00BE7705 /* Constants.swift in Sources */,
+				AA00010220260206000UX001 /* HapticManager.swift in Sources */,
 				59B31A58271DA842002DADE8 /* CustomSlider.swift in Sources */,
 				59B31A92271DA892002DADE8 /* ExportView.swift in Sources */,
 				59B31A5E271DA842002DADE8 /* RecipeMenuUI.swift in Sources */,

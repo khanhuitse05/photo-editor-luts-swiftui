@@ -43,6 +43,7 @@ class CropperViewCoordinator: NSObject, UINavigationControllerDelegate, CropperV
     
     func cropperDidConfirm(_ cropper: CropperViewController, state: CropperState?) {
         PECtl.shared.cropperCtrl.setState(state)
+        PECtl.shared.onCropStateChanged()
         parent.dismiss()
     }
     

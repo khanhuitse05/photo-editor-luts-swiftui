@@ -92,7 +92,6 @@ struct HLSControl: View {
         let edit: EditingStack.Edit = PECtl.shared.editState.currentEdit
         guard let hsv:FilterHLS = edit.filters.hls else{
             self.inputShift = FilterHLS.defaultValue
-            print("hsv NULL")
             colorChange()
             return
         }
@@ -102,7 +101,6 @@ struct HLSControl: View {
     }
     
     func colorChange(){
-        print("colorChange")
         let currentShift:CIVector = self.inputShift[current]
         hue = Double(currentShift.x)
         saturation = Double(currentShift.y)

@@ -8,6 +8,9 @@
 import Foundation
 import Combine
 import SwiftUI
+import os
+
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful-room", category: "StorageUtils")
 
 class StorageUtils{
     
@@ -28,7 +31,7 @@ class StorageUtils{
         do {
             try data.write(to: fileURL)
         } catch let error {
-            print("error saving file with error", error)
+            logger.error("Error saving file: \(error.localizedDescription)")
         }
     }
     

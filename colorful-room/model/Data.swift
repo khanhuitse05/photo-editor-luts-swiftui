@@ -9,25 +9,33 @@
 import Foundation
 import SwiftUI
 import PixelEnginePackage
+import os
 
-class Data: ObservableObject {
-    
-    static var shared = Data();
-    
-    init(){
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful-room", category: "Data")
+
+@Observable
+class Data {
+
+    static var shared = Data()
+
+    init() {
         autoreleasepool {
-            neutralLUT = UIImage(named: "lut-normal")!
+            guard let lutImage = UIImage(named: "lut-normal") else {
+                logger.error("Missing asset: lut-normal. Neutral LUT will be unavailable.")
+                return
+            }
+            neutralLUT = lutImage
             neutralCube = FilterColorCube(
                 name: "Neutral",
                 identifier: "neutral",
                 lutImage: neutralLUT,
                 dimension: 64
             )
-            
+
             // basic
             let basic = Collection(name: "Basic", identifier: "Basic", cubeInfos: [])
-            for i in 1...10{
-                let cube =  FilterColorCubeInfo(
+            for i in 1...10 {
+                let cube = FilterColorCubeInfo(
                     name: "A\(i)",
                     identifier: "basic-\(i)",
                     lutImage: "lut-\(i)"
@@ -36,8 +44,8 @@ class Data: ObservableObject {
             }
             // Cinematic
             let cinematic = Collection(name: "Cinematic", identifier: "Cinematic", cubeInfos: [])
-            for i in 1...10{
-                let cube =  FilterColorCubeInfo(
+            for i in 1...10 {
+                let cube = FilterColorCubeInfo(
                     name: "C\(i)",
                     identifier: "Cinematic-\(i)",
                     lutImage: "cinematic-\(i)"
@@ -46,8 +54,8 @@ class Data: ObservableObject {
             }
             // Film
             let film = Collection(name: "Film", identifier: "Film", cubeInfos: [])
-            for i in 1...3{
-                let cube =  FilterColorCubeInfo(
+            for i in 1...3 {
+                let cube = FilterColorCubeInfo(
                     name: "Film\(i)",
                     identifier: "Film-\(i)",
                     lutImage: "film-\(i)"
@@ -56,8 +64,8 @@ class Data: ObservableObject {
             }
             // Selfie Good Skin
             let selfie = Collection(name: "Selfie", identifier: "Selfie", cubeInfos: [])
-            for i in 1...12{
-                let cube =  FilterColorCubeInfo(
+            for i in 1...12 {
+                let cube = FilterColorCubeInfo(
                     name: "Selfie\(i)",
                     identifier: "Selfie-\(i)",
                     lutImage: "selfie-\(i)"
@@ -66,27 +74,37 @@ class Data: ObservableObject {
             }
             // init collections
             self.collections = [basic, cinematic, film, selfie]
+
+            // Build identifier lookup for O(1) cube access
+            rebuildCubeLookup()
         }
     }
-    
-    
-    
+
     var neutralLUT: UIImage!
-    
+
     var neutralCube: FilterColorCube!
-    var collections:[Collection]!
-    
-    
-    
-    // Cube by collection
-    func cubeBy(identifier:String) -> FilterColorCube?{
-        for e in self.collections {
-            for cube in e.cubeInfos{
-                if(cube.identifier == identifier){
-                    return cube.getFilter()
-                }
+    var collections: [Collection]!
+
+    /// Fast O(1) lookup of cube info by identifier.
+    private var cubeLookup: [String: FilterColorCubeInfo] = [:]
+
+    /// Rebuild the identifier-to-cube-info dictionary from current collections.
+    private func rebuildCubeLookup() {
+        var lookup: [String: FilterColorCubeInfo] = [:]
+        for collection in (collections ?? []) {
+            for cube in collection.cubeInfos {
+                lookup[cube.identifier] = cube
             }
         }
-        return nil;
+        cubeLookup = lookup
+    }
+
+    /// Look up a cube by identifier in O(1) time.
+    func cubeBy(identifier: String) -> FilterColorCube? {
+        guard !identifier.isEmpty,
+              let info = cubeLookup[identifier] else {
+            return nil
+        }
+        return info.getFilter()
     }
 }

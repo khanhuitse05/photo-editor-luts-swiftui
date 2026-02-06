@@ -8,12 +8,13 @@
 import Foundation
 import PixelEnginePackage
 import UIKit
-import Foundation
 import Combine
 import SwiftUI
-import PixelEnginePackage
 import QCropper
 import CoreData
+import os
+
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful-room", category: "RecipeUtils")
 
 public class RecipeUtils {
     
@@ -30,14 +31,12 @@ public class RecipeUtils {
             let result:[RecipeObject] = try container.viewContext.fetch(fetchRequest) as! [RecipeObject]
             return result
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            logger.error("Could not fetch recipes: \(error), \(error.userInfo)")
         }
         return []
     }
     
     static func applyRecipe(_ data:RecipeObject, colorCube:FilterColorCube?) ->  (inout EditingStack.Edit.Filters) -> Void{
-        
-        print(data)
         
         var contrast = FilterContrast()
         contrast.value = data.contrast
@@ -149,7 +148,7 @@ public class RecipeUtils {
           try container.viewContext.save()
             return item
         } catch let error as NSError {
-          print("Could not save. \(error), \(error.userInfo)")
+          logger.error("Could not save recipe: \(error), \(error.userInfo)")
         }
         return nil
     }
@@ -162,9 +161,63 @@ public class RecipeUtils {
           try container.viewContext.save()
             return true
         } catch let error as NSError {
-          print("Could not save. \(error), \(error.userInfo)")
+          logger.error("Could not delete recipe: \(error), \(error.userInfo)")
         }
         return false
+    }
+
+    /// Renames an existing recipe.
+    static func renameRecipe(_ item: RecipeObject, to newName: String) -> Bool {
+        item.recipeName = newName
+        do {
+            try container.viewContext.save()
+            return true
+        } catch let error as NSError {
+            logger.error("Could not rename recipe: \(error), \(error.userInfo)")
+        }
+        return false
+    }
+
+    /// Duplicates an existing recipe with a new name.
+    static func duplicateRecipe(_ item: RecipeObject, name: String) -> RecipeObject? {
+        let newItem = RecipeObject(context: container.viewContext)
+        newItem.recipeName = name
+        // Simple filters
+        newItem.contrast = item.contrast
+        newItem.saturation = item.saturation
+        newItem.exposure = item.exposure
+        newItem.highlights = item.highlights
+        newItem.shadows = item.shadows
+        newItem.temperature = item.temperature
+        newItem.gaussianBlur = item.gaussianBlur
+        newItem.vignette = item.vignette
+        newItem.fade = item.fade
+        // White balance
+        newItem.whiteBalanceTemperature = item.whiteBalanceTemperature
+        newItem.whiteBalanceTint = item.whiteBalanceTint
+        // Color cube / LUT
+        newItem.lutIdentifier = item.lutIdentifier
+        newItem.lutAmount = item.lutAmount
+        // Color
+        newItem.colorValueSaturation = item.colorValueSaturation
+        newItem.colorValueBrightness = item.colorValueBrightness
+        newItem.colorValueContrast = item.colorValueContrast
+        // Sharpen
+        newItem.sharpenSharpness = item.sharpenSharpness
+        newItem.sharpenRadius = item.sharpenRadius
+        // Unsharp mask
+        newItem.unsharpMaskIntensity = item.unsharpMaskIntensity
+        newItem.unsharpMaskRadius = item.unsharpMaskRadius
+        // HLS
+        newItem.hls = item.hls
+
+        do {
+            try container.viewContext.save()
+            return newItem
+        } catch let error as NSError {
+            logger.error("Could not duplicate recipe: \(error), \(error.userInfo)")
+        }
+        return nil
     }
 
     ///

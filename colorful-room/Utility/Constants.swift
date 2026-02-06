@@ -7,14 +7,48 @@
 
 import Foundation
 
-public class Constants{
-    static var supportFilters:[FilterModel] = [
-        FilterModel("Brightness", edit: EditMenu.exposure),
-        FilterModel("Contrast", edit: EditMenu.contrast),
-        FilterModel("Saturation", edit: EditMenu.saturation),
-        FilterModel("White Blance",image:"temperature", edit: EditMenu.white_balance),
-        FilterModel("Tone",image: "tone", edit: EditMenu.tone),
-        FilterModel("HSL",image: "hls", edit: EditMenu.hls),
-        FilterModel("Fade", edit: EditMenu.fade),
+public enum Constants {
+    static let supportFilters: [FilterModel] = [
+        FilterModel("Brightness", edit: .exposure),
+        FilterModel("Contrast", edit: .contrast),
+        FilterModel("Saturation", edit: .saturation),
+        FilterModel("White Balance", image: "temperature", edit: .white_balance),
+        FilterModel("Tone", image: "tone", edit: .tone),
+        FilterModel("HSL", image: "hls", edit: .hls),
+        FilterModel("Fade", edit: .fade),
+        FilterModel("Highlights", image: "highlights", edit: .highlights),
+        FilterModel("Shadows", image: "shadows", edit: .shadows),
+        FilterModel("Sharpen", image: "sharpen", edit: .sharpen),
+        FilterModel("Vignette", image: "vignette", edit: .vignette),
+        FilterModel("Blur", image: "gaussianblur", edit: .gaussianBlur),
+        FilterModel("Clarity", image: "clarity", edit: .clarity),
     ]
+}
+
+/// Centralized design tokens to replace magic numbers across the codebase.
+public enum DesignTokens {
+    // MARK: - Preview & Image Sizes
+    static let previewSize: CGFloat = 512
+    static let thumbnailScale: CGFloat = 128
+
+    // MARK: - Timing
+    static let filterDebounceNanoseconds: UInt64 = 300_000_000 // 0.3s
+    static let initialLoadDelayNanoseconds: UInt64 = 300_000_000 // 0.3s
+
+    // MARK: - Corner Radii
+    static let cornerRadiusSmall: CGFloat = 8
+    static let cornerRadiusMedium: CGFloat = 12
+    static let cornerRadiusLarge: CGFloat = 16
+    static let cornerRadiusXLarge: CGFloat = 20
+
+    // MARK: - Component Heights
+    static let toolbarHeight: CGFloat = 50
+    static let lutButtonHeight: CGFloat = 92
+    static let editMenuHeight: CGFloat = 250
+    static let exportPreviewHeight: CGFloat = 400
+
+    // MARK: - Button & Icon Sizes
+    static let iconSizeSmall: CGFloat = 32
+    static let iconSizeMedium: CGFloat = 36
+    static let lutThumbnailSize: CGFloat = 68
 }

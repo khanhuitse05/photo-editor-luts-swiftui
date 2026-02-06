@@ -9,28 +9,34 @@
 import SwiftUI
 
 struct ListTitle: View {
-    
-    var title:String
-    var supTitle:String
-    var leadingImage:String
-    var highlight:String
-    
-    init(title:String?, supTitle:String?, leadingImage:String?, highlight:String? = "") {
+
+    var title: String
+    var subTitle: String
+    var leadingImage: String
+    var highlight: String
+
+    init(title: String?, subTitle: String?, leadingImage: String?, highlight: String? = "") {
         self.title = title ?? ""
-        self.supTitle = supTitle ?? ""
+        self.subTitle = subTitle ?? ""
         self.leadingImage = leadingImage ?? ""
         self.highlight = highlight ?? ""
     }
-    
+
+    // Keep backward-compatible initializer with old parameter name
+    init(title: String?, supTitle: String?, leadingImage: String?, highlight: String? = "") {
+        self.init(title: title, subTitle: supTitle, leadingImage: leadingImage, highlight: highlight)
+    }
+
     var body: some View {
-        HStack(alignment: .top, spacing: 0){
+        HStack(alignment: .top, spacing: 0) {
             Image(leadingImage)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 32, height: 32)
+                .frame(width: DesignTokens.iconSizeSmall, height: DesignTokens.iconSizeSmall)
                 .padding(.trailing, 20)
-            VStack(alignment: .leading, spacing: 4){
-                HStack(spacing: 8){
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
                     Text(title)
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -45,23 +51,25 @@ struct ListTitle: View {
                     }
                     Spacer()
                 }
-                
-                Text(supTitle)
+
+                Text(subTitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
         }
         .padding(.horizontal, 16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title). \(subTitle)")
     }
 }
 
 struct ListTitle_Previews: PreviewProvider {
     static var previews: some View {
-        Group{
+        Group {
             ListTitle(
                 title: "Free and Premium Filters",
-                supTitle: "Export your picture, Lookup image, all effects, and more",
+                subTitle: "Export your picture, Lookup image, all effects, and more",
                 leadingImage: "edit-lut",
                 highlight: "AR filter"
             )

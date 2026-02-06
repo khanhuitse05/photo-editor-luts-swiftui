@@ -11,18 +11,18 @@ import UIKit
 import PixelEnginePackage
 
 struct ContentView: View {
-    
+
     @State private var showSheet = false
-    
+
     @State private var showImageEdit = false
     // for pick view
     @State private var pickImage: UIImage?
     // for edit view
     @State private var inputImage: UIImage?
-    
-    
+
+
     var body: some View {
-        
+
         NavigationStack {
             GeometryReader { geometry in
                 ZStack(alignment: .center) {
@@ -32,11 +32,12 @@ struct ContentView: View {
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .clipped()
                         .ignoresSafeArea(.all)
-                    
-                    
+                        .accessibilityHidden(true)
+
+
                     VStack {
                         Spacer()
-                        
+
                         VStack(alignment: .center, spacing: 24) {
                             Text("Make It Pop")
                                 .font(.system(size: 40, weight: .bold, design: .rounded))
@@ -64,21 +65,24 @@ struct ContentView: View {
                                         )
                                         .blendMode(.overlay)
                                 }
+                                .accessibilityLabel("Make It Pop")
+                                .accessibilityAddTraits(.isHeader)
                             VStack(spacing: 4) {
-                                ForEach(K.introContent, id: \.["title"]) { item in
+                                ForEach(AppContent.introContent) { item in
                                     ListTitle(
-                                        title: item["title"],
-                                        supTitle: item["supTitle"],
-                                        leadingImage: item["leadingImage"],
-                                        highlight: item["highlight"]
+                                        title: item.title,
+                                        subTitle: item.subTitle,
+                                        leadingImage: item.leadingImage,
+                                        highlight: item.highlight ?? ""
                                     )
                                     .padding(.vertical, 8)
-                                    .glassCard(cornerRadius: 12)
+                                    .glassCard(cornerRadius: DesignTokens.cornerRadiusMedium)
+                                    .accessibilityElement(children: .combine)
                                 }
                             }
                             .padding(.horizontal, 16)
                             Spacer().frame(height: 0)
-                            
+
                             Button {
                                 showSheet = true
                                 showImageEdit = false
@@ -91,9 +95,9 @@ struct ContentView: View {
                             }
                             .padding(.horizontal, 32)
                             .padding(.vertical, 16)
-                            .glassEffect(.regular.tint(Color.myAccent.opacity(0.6)).interactive(), in: .rect(cornerRadius: 16))
+                            .glassEffect(.regular.tint(Color.myAccent.opacity(0.6)).interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusLarge))
                             .overlay {
-                                RoundedRectangle(cornerRadius: 16)
+                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadiusLarge)
                                     .stroke(
                                         LinearGradient(
                                             colors: [.white.opacity(0.3), .clear],
@@ -105,7 +109,9 @@ struct ContentView: View {
                             }
                             .shadow(color: Color.myAccent.opacity(0.2), radius: 12, x: 0, y: 4)
                             .padding(.horizontal, 30)
-                            
+                            .accessibilityLabel("Choose Your Picture")
+                            .accessibilityHint("Opens the photo library to select a picture to edit")
+
                             Spacer().frame(height: 0)
                         }
                         .padding(.vertical, 24)
@@ -120,18 +126,13 @@ struct ContentView: View {
                 PhotoEditView(image: inputImage)
             }
         }
-        .sheet(isPresented: $showSheet, onDismiss: loadImage){
+        .sheet(isPresented: $showSheet, onDismiss: loadImage) {
             ImagePicker(image: self.$pickImage)
-        }.onAppear(perform: {
-            // self.pickImage = UIImage(named: "carem")
-            // self.loadImage()
-            
-        })
-        
+        }
+
     }
-    
-    func loadImage(){
-        print("loadImage: \(pickImage != nil)")
+
+    func loadImage() {
         guard self.pickImage != nil else {
             return
         }
@@ -147,7 +148,7 @@ struct ContentView_Previews: PreviewProvider {
                 .background(Color(UIColor.systemBackground))
                 .environment(\.colorScheme, .dark)
                 .environment(PECtl.shared)
-                .environmentObject(Data.shared)
+                .environment(Data.shared)
         }
     }
 }

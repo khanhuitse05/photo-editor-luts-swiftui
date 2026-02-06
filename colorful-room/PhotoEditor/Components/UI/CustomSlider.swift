@@ -55,6 +55,9 @@ struct FilterSlider : View {
                 }
             }.frame(height: 20)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(lable.isEmpty ? "Adjustment" : lable)
+        .accessibilityValue(displayValue(self.value))
     }
     
     func displayValue(_ value:Double) -> String{

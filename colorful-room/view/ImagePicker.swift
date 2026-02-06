@@ -40,7 +40,6 @@ class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImageP
         if let uiImage = info[.originalImage] as? UIImage {
             parent.image = uiImage
         }
-        print("picker image dismiss")
         parent.dismiss()
     }
     

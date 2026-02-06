@@ -16,10 +16,11 @@ struct ButtonView: View {
     
     var body: some View {
         Button(action: {
+            HapticManager.selection()
             self.shared.currentFilter = self.action
         }){
             VStack(spacing: 0){
-                IconButton(self.action.image, size: 36)
+                IconButton(self.action.image, size: DesignTokens.iconSizeMedium)
                 Text(self.action.name)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
@@ -27,8 +28,10 @@ struct ButtonView: View {
             }
             .frame(minWidth: 75)
             .padding(8)
-            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 12))
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusMedium))
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(self.action.name)
+        .accessibilityHint("Opens the \(self.action.name) adjustment control")
     }
 }

@@ -30,24 +30,29 @@ struct LUTButton: View {
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 68, height: 68)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
                     .clipped()
                 Text(cube.filter.name)
                     .font(.caption)
-                    .frame(width: 68, height: 24)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: 24)
                     .foregroundStyle(.primary)
-                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusSmall))
             }
-            .frame(width: 68)
+            .frame(width: DesignTokens.lutThumbnailSize)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(cube.filter.name) filter")
+        .accessibilityHint(on ? "Tap to adjust intensity" : "Tap to apply this LUT filter")
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
     
     func valueChanged() {
+        HapticManager.selection()
         shared.lutsCtrl.currentCube = cube.filter.identifier
         shared.didReceive(action: PECtlAction.applyFilter({ $0.colorCube = self.cube.filter }))
     }
     func editAmong(){
+        HapticManager.impact(.light)
         self.shared.lutsCtrl.onSetEditingMode(true)
     }
 }
@@ -66,20 +71,24 @@ struct NeutralButton: View {
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 68, height: 68)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
                     .clipped()
-                
+
                 Text("Original")
                     .font(.caption)
-                    .frame(width: 68, height: 24)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: 24)
                     .foregroundStyle(.primary)
-                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusSmall))
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Original")
+        .accessibilityHint("Removes all LUT filters and shows the original image")
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
     
     func valueChanged() {
+        HapticManager.selection()
         shared.lutsCtrl.selectCube("")
         shared.didReceive(action: PECtlAction.applyFilter({ $0.colorCube = nil }))
     }
@@ -97,7 +106,7 @@ struct LutLoadingButton: View {
         VStack(spacing: 0) {
             Rectangle()
                 .fill(Color(uiColor: .tertiarySystemFill))
-                .frame(width: 68, height: 68)
+                .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
                 .opacity(isAnimating ? 0.4 : 0.8)
                 .animation(
                     .easeInOut(duration: 0.8)
@@ -107,14 +116,15 @@ struct LutLoadingButton: View {
                 .onAppear {
                     isAnimating = true
                 }
-            
+
             Text(name)
                 .font(.caption)
-                .frame(width: 68, height: 24)
+                .frame(width: DesignTokens.lutThumbnailSize, height: 24)
                 .foregroundStyle(.primary)
-                .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
+                .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusSmall))
                 .redacted(reason: .placeholder)
         }
+        .accessibilityLabel("Loading \(name)")
     }
 
 }

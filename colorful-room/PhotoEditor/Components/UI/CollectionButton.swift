@@ -17,5 +17,7 @@ struct CollectionButton: View {
         Text(name)
             .font(.subheadline)
             .foregroundStyle(.secondary)
+            .accessibilityLabel("\(name) collection")
+            .accessibilityHint("Scrolls to the \(name) LUT filters")
     }
 }

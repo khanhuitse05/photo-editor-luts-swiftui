@@ -11,40 +11,43 @@ import SwiftUI
 
 struct PhotoEditView: View {
     private let initialImage: UIImage?
-    
+
     @State private var didLoadInitialImage = false
     @State private var showImagePicker = false
     @State private var pickImage: UIImage?
     @Environment(PECtl.self) var shared: PECtl
     @Environment(\.dismiss) var dismiss
-    
+
     init(image initImage: UIImage?) {
-        print("Photo edit: init")
         self.initialImage = initImage
     }
-    
-    
+
+
     var body: some View {
         NavigationStack {
-            ZStack{
+            ZStack {
                 Color(uiColor: .systemBackground)
                     .ignoresSafeArea(.all)
-                VStack{
-                    HStack{
-                        Button(action:{
+                VStack {
+                    HStack {
+                        Button(action: {
                             self.showImagePicker = true
-                        }){
+                        }) {
                             Label("Library", systemImage: "photo.on.rectangle.angled")
                                 .font(.subheadline)
                         }
                         .buttonStyle(.glass)
+                        .accessibilityLabel("Photo Library")
+                        .accessibilityHint("Opens photo library to pick a different image")
                         Spacer()
                         if shared.previewImage != nil {
-                            NavigationLink(destination: ExportView()){
+                            NavigationLink(destination: ExportView()) {
                                 Label("Export", systemImage: "square.and.arrow.up")
                                     .font(.subheadline)
                             }
                             .buttonStyle(.glass)
+                            .accessibilityLabel("Export")
+                            .accessibilityHint("Opens the export screen to save your edited photo")
                         }
                     }
                     .padding(.horizontal)
@@ -56,32 +59,30 @@ struct PhotoEditView: View {
             }
             .toolbar(.hidden, for: .navigationBar)
         }
-        .sheet(isPresented: $showImagePicker, onDismiss: self.loadImage){
-            ZStack{
+        .sheet(isPresented: $showImagePicker, onDismiss: self.loadImage) {
+            ZStack {
                 ImagePicker(image: self.$pickImage)
-            }   
+            }
         }
         .task {
             guard !didLoadInitialImage else { return }
             didLoadInitialImage = true
             guard let image = initialImage else { return }
             do {
-                try await Task.sleep(nanoseconds: 300_000_000) // 300ms
+                try await Task.sleep(nanoseconds: DesignTokens.initialLoadDelayNanoseconds)
             } catch {
-                print("PhotoEditView initial sleep error: \(error)")
+                // Task cancelled — proceed immediately
             }
             shared.setImage(image: image)
         }
     }
-    
-    
-    func loadImage(){
-        print("Photo edit: pick image finish")
+
+
+    func loadImage() {
         guard let image = self.pickImage else {
             return
         }
         self.pickImage = nil
-        print("Photo edit: pick then setImage")
         self.shared.setImage(image: image)
     }
 }
@@ -90,7 +91,7 @@ struct PhotoEditView: View {
 
 
 struct PhotoEditView_Previews: PreviewProvider {
-    
+
     static var previews: some View {
         Group {
             PhotoEditView(image: UIImage(named: "carem"))

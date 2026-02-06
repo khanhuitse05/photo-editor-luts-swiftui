@@ -41,7 +41,7 @@ class LutsController {
         collections = collectionsSnapshot
         
         Task.detached(priority: .background) {
-            print("init Cube")
+            // Prepare cube previews in background
             guard let newCubeSourceCG = sharedContext.createCGImage(image, from: image.extent) else {
                 await MainActor.run {
                     self.loadingLut = false

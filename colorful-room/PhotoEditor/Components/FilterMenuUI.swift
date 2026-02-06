@@ -32,6 +32,8 @@ struct FilterMenuUI: View {
                         Spacer().frame(width: 0)
                     }
                 }
+                .disabled(shared.currentFilter.edit != .none)
+                .opacity(shared.currentFilter.edit != .none ? 0.4 : 1)
                 Spacer()
                 Text("Edit Color")
                     .font(.subheadline)
@@ -39,38 +41,41 @@ struct FilterMenuUI: View {
                     .padding(.bottom, 8)
             }
             if shared.currentFilter.edit != .none {
-                VStack (){
+                VStack {
                     Spacer()
-                    if index == .color {
+                    switch index {
+                    case .color:
                         ColorControl()
-                    }else if index == .contrast {
+                    case .contrast:
                         ContrastControl()
-                    }else if index == .vignette {
+                    case .vignette:
                         VignetteControl()
-                    }else if index == .fade {
+                    case .fade:
                         FadeControl()
-                    }else if index == .highlights {
+                    case .highlights:
                         HighlightsControl()
-                    }else if index == .hls {
+                    case .hls:
                         HLSControl()
-                    }else if index == .exposure {
+                    case .exposure:
                         ExposureControl()
-                    }else if index == .saturation {
+                    case .saturation:
                         SaturationControl()
-                    }else if index == .shadows {
+                    case .shadows:
                         ShadowsControl()
-                    }else if index == .sharpen {
+                    case .sharpen:
                         SharpenControl()
-                    }else if index == .temperature {
+                    case .temperature:
                         TemperatureControl()
-                    }else if index == .vignette {
-                        VignetteControl()
-                    }else if index == .tone {
+                    case .tone:
                         ToneControl()
-                    }else if index == .white_balance {
+                    case .white_balance:
                         WhiteBalanceControl()
-                    }else{
-                        Text("Todo")
+                    case .gaussianBlur:
+                        GaussianBlurControl()
+                    case .clarity:
+                        ClarityControl()
+                    case .none:
+                        EmptyView()
                     }
                     
                     Spacer()
@@ -82,6 +87,8 @@ struct FilterMenuUI: View {
                             Image(systemName: "xmark")
                         }
                         .buttonStyle(.glass)
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Reverts the current filter change")
                         Spacer()
                         Text(shared.currentFilter.name)
                             .font(.subheadline)
@@ -94,6 +101,8 @@ struct FilterMenuUI: View {
                             Image(systemName: "checkmark")
                         }
                         .buttonStyle(.glass)
+                        .accessibilityLabel("Apply")
+                        .accessibilityHint("Applies the current filter change")
                     }.padding(.bottom, 8)
                 }
                 .padding(.horizontal)

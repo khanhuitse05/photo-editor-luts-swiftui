@@ -19,7 +19,6 @@ class PECtl {
     static var shared = PECtl()
     
     init() {
-        print("init PECtl")
     }
     
     // origin image: pick from gallery or camera
@@ -44,6 +43,9 @@ class PECtl {
     
     // Image preview: will update after edited
     var previewImage: UIImage?
+    
+    // Original preview rendered through the same pipeline (for before/after comparison)
+    var originalPreview: UIImage?
     
     // Getter
     var currentRecipe: RecipeObject?
@@ -71,21 +73,27 @@ class PECtl {
         
         self.editState = EditingStack.init(
             source: StaticImageSource(source: self.originCI!),
-            // todo: need more code to caculator adjust with scale image
-            previewSize: CGSize(width: 512, height: 512 * self.originUI.size.width / self.originUI.size.height)
+            previewSize: CGSize(width: DesignTokens.previewSize, height: DesignTokens.previewSize * self.originUI.size.width / self.originUI.size.height)
             // previewSize: CGSize(width: self.originUI.size.width, height: self.originUI.size.height)
         )
        
         
-        if let smallImage = resizedImage(at: originCI, scale: 128 / self.originUI.size.height, aspectRatio: 1){
+        if let smallImage = resizedImage(at: originCI, scale: DesignTokens.thumbnailScale / self.originUI.size.height, aspectRatio: 1){
             lutsCtrl.setImage(image: smallImage)
             recipesCtrl.setImage(image: smallImage)
         }
         
         cropperCtrl = CropperController()
+        originalPreview = nil
 
         Task.detached(priority: .background) {
             await self.apply()
+            // Capture the first render (no edits) as the comparison baseline
+            await MainActor.run {
+                if self.originalPreview == nil {
+                    self.originalPreview = self.previewImage
+                }
+            }
         }
     }
     
@@ -139,7 +147,7 @@ class PECtl {
         self.editState.set(filters: filters)
         Task.detached(priority: .background) { [weak self] in
             guard let self = self else { return }
-            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+            try? await Task.sleep(nanoseconds: DesignTokens.filterDebounceNanoseconds)
             // Check if this is still the latest request by accessing count on MainActor
             let isLatestRequest = await MainActor.run {
                 if self.count == currentCount {
@@ -165,6 +173,58 @@ class PECtl {
         }
         if let cgimg = sharedContext.createCGImage(preview, from: preview.extent) {
             self.previewImage = UIImage(cgImage: cgimg)
+        }
+    }
+    
+    /// Called after the user confirms or clears a crop/rotation in the cropper.
+    /// Rebuilds the editing stack using the cropped source while preserving current filter edits.
+    func onCropStateChanged() {
+        guard let originUI = originUI else { return }
+        
+        // Determine the source: cropped or original
+        let sourceUI: UIImage
+        if let cropperState = cropperCtrl.state,
+           let croppedImage = originUI.cropped(withCropperState: cropperState) {
+            sourceUI = croppedImage
+        } else {
+            sourceUI = originUI
+        }
+        
+        let sourceCI = convertUItoCI(from: sourceUI)
+        
+        // Save current filter state before rebuilding
+        let savedFilters = editState?.currentEdit.filters
+        
+        // Rebuild editing stack with the (possibly cropped) source
+        self.editState = EditingStack(
+            source: StaticImageSource(source: sourceCI),
+            previewSize: CGSize(
+                width: DesignTokens.previewSize,
+                height: DesignTokens.previewSize * sourceUI.size.width / sourceUI.size.height
+            )
+        )
+        
+        // Update LUT and recipe thumbnails with the new source
+        if let smallImage = resizedImage(at: sourceCI, scale: DesignTokens.thumbnailScale / sourceUI.size.height, aspectRatio: 1) {
+            lutsCtrl.setImage(image: smallImage)
+            recipesCtrl.setImage(image: smallImage)
+        }
+        
+        Task.detached(priority: .background) {
+            // 1. Render without filters → capture as originalPreview
+            await self.apply()
+            await MainActor.run {
+                self.originalPreview = self.previewImage
+            }
+            
+            // 2. Re-apply saved filters and render again
+            if let filters = savedFilters {
+                await MainActor.run {
+                    self.editState.set(filters: { $0 = filters })
+                    self.editState.commit()
+                }
+                await self.apply()
+            }
         }
     }
     

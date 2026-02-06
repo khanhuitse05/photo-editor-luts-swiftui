@@ -9,7 +9,7 @@
 import SwiftUI
 import PixelEnginePackage
 
-struct ClarityCode: View {
+struct ClarityControl: View {
     @State var filterIntensity:Double = 0
     
     var body: some View {

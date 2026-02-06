@@ -10,57 +10,99 @@ import SwiftUI
 import CoreData
 
 struct RecipeButton: View {
-    var data:Recipe
-    var on:Bool
-    var index:Int
-    
-    
+    var data: Recipe
+    var on: Bool
+    var index: Int
+    var onRename: () -> Void
+
     @Environment(PECtl.self) var shared: PECtl
-    
+    @State private var showDeleteConfirmation = false
+
+    private var recipeName: String {
+        data.data.recipeName ?? "Recipe \(index)"
+    }
+
     var body: some View {
-        return Button(action: valueChanged){
-            ZStack{
-                VStack(spacing: 0){
-                    if(data.preview == nil){
-                    Rectangle()
-                        .fill(Color(uiColor: .tertiarySystemFill))
-                        .frame(width: 68, height: 60)
-                    }else{
-                    Image(uiImage: data.preview!)
+        Button(action: valueChanged) {
+            VStack(spacing: 0) {
+                if let preview = data.preview {
+                    Image(uiImage: preview)
                         .renderingMode(.original)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 68, height: 68)
+                        .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
                         .clipped()
-                    }
-                    
-                    Text(data.data.recipeName ?? "Recipe \(index)")
-                        .font(.caption)
-                        .frame(width: 68, height: 24)
-                        .foregroundStyle(.primary)
-                        .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
+                } else {
+                    Rectangle()
+                        .fill(Color(uiColor: .tertiarySystemFill))
+                        .frame(width: DesignTokens.lutThumbnailSize, height: 60)
                 }
-                Button(action: deleteItem){
-                    Image(systemName: "xmark")
-                        .font(.system(size: 12, weight: .semibold))
-                }
-                .buttonStyle(.glass)
-                .frame(width: 60, height: 76, alignment: .topTrailing)
+
+                Text(recipeName)
+                    .font(.caption)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: 24)
+                    .foregroundStyle(.primary)
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusSmall))
             }
         }
+        .buttonStyle(.plain)
+        .contextMenu {
+            Button {
+                onRename()
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+
+            Button {
+                duplicateItem()
+            } label: {
+                Label("Duplicate", systemImage: "doc.on.doc")
+            }
+
+            Divider()
+
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .confirmationDialog(
+            "Delete \"\(recipeName)\"?",
+            isPresented: $showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                deleteItem()
+            }
+        } message: {
+            Text("This recipe will be permanently deleted.")
+        }
+        .accessibilityLabel("\(recipeName) recipe")
+        .accessibilityHint(on ? "Currently applied. Long press for options." : "Tap to apply this recipe. Long press for options.")
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
+
     func valueChanged() {
+        HapticManager.selection()
         shared.didReceive(action: PECtlAction.applyRecipe(shared.recipesCtrl.recipes[index].data))
     }
+
     func deleteItem() {
+        HapticManager.notification(.warning)
         shared.recipesCtrl.deleteRecipe(index)
+    }
+
+    func duplicateItem() {
+        HapticManager.impact(.medium)
+        shared.recipesCtrl.duplicateRecipe(index)
     }
 }
 
 
 struct RecipeEmptyButton: View {
-    var name:String
-    var on:Bool
+    var name: String
+    var on: Bool
     var action: () -> Void
     
     var body: some View {
@@ -68,13 +110,13 @@ struct RecipeEmptyButton: View {
             VStack(spacing: 0){
                 Rectangle()
                     .fill(Color(uiColor: .tertiarySystemFill))
-                    .frame(width: 68, height: 68)
-                
+                    .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
+
                 Text(name)
                     .font(.caption)
-                    .frame(width: 68, height: 24)
+                    .frame(width: DesignTokens.lutThumbnailSize, height: 24)
                     .foregroundStyle(.primary)
-                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: 8))
+                    .glassEffect(on ? .regular.tint(.accentColor).interactive() : .regular.interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusSmall))
             }
         }
         .buttonStyle(.plain)
