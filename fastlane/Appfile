@@ -1,7 +1,7 @@
-app_identifier("com.marustudio.luts") # The bundle identifier of your app
+app_identifier("com.khanhuitse05.snaptune") # The bundle identifier of your app
 apple_id("khanhuitse05@gmail.com") # Your Apple email address
-team_id("") // TODO
-itc_team_id("") // TODO
+team_id("N8L3QK9894") # Developer Portal Team ID
+itc_team_id("126848075") # App Store Connect Team ID
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile

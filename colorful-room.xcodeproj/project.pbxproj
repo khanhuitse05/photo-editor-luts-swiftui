@@ -887,6 +887,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "colorful-room/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
+				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access your LIBRARY to save or pick your photo";
@@ -902,9 +904,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pingak9.luts-test";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanhuitse05.snaptune;
+				PRODUCT_NAME = "SnapTune - Photo Editor & LUT";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -926,6 +928,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "colorful-room/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
+				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access your LIBRARY to save or pick your photo";
@@ -941,9 +945,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pingak9.luts-test";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanhuitse05.snaptune;
+				PRODUCT_NAME = "SnapTune - Photo Editor & LUT";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

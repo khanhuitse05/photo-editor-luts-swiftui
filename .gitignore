@@ -80,4 +80,6 @@ iOSInjectionProject/
 Resources/MetaData
 
 fastlane/.env
+fastlane/report.xml
+fastlane/README.md
 .cursor
