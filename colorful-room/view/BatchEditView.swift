@@ -33,7 +33,8 @@ class BatchEditController {
         state = .processing(current: 0, total: total)
         processedImages = []
 
-        Task.detached(priority: .userInitiated) {
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             var succeeded = 0
             let failed = 0
 
@@ -45,20 +46,15 @@ class BatchEditController {
                     stack.commit()
 
                     let rendered = stack.makeRenderer().render(resolution: .full)
-                    Task { @MainActor in
-                        self.processedImages.append(rendered)
-                    }
+                    self.processedImages.append(rendered)
                     succeeded += 1
                 }
 
-                await MainActor.run {
-                    self.state = .processing(current: index + 1, total: total)
-                }
+                self.state = .processing(current: index + 1, total: total)
+                await Task.yield()
             }
 
-            await MainActor.run {
-                self.state = .complete(succeeded: succeeded, failed: failed)
-            }
+            self.state = .complete(succeeded: succeeded, failed: failed)
         }
     }
 

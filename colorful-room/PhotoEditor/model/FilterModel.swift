@@ -8,9 +8,7 @@
 
 import Foundation
 
-
-
-public enum EditMenu {
+public enum EditMenu: Sendable {
     case none
     case exposure
     case contrast
@@ -29,19 +27,19 @@ public enum EditMenu {
     case white_balance
 }
 
-class FilterModel{
+public struct FilterModel: Sendable, Equatable {
     
-    var name:String
-    var image:String
-    var edit:EditMenu
+    var name: String
+    var image: String
+    var edit: EditMenu
     
-    static var noneFilterModel = FilterModel("", edit: EditMenu.none)
+    static let noneFilterModel = FilterModel("", edit: EditMenu.none)
     
-    init(_ name:String, image:String = "", edit:EditMenu) {
+    init(_ name: String, image: String = "", edit: EditMenu) {
         self.name = name
-        if(image.isEmpty){
+        if image.isEmpty {
             self.image = name.lowercased()
-        }else{
+        } else {
             self.image = image
         }
         self.edit = edit

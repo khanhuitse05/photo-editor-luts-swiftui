@@ -12,6 +12,7 @@ import os
 
 private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful-room", category: "StorageUtils")
 
+@MainActor
 class StorageUtils{
     
     // save image to gallery

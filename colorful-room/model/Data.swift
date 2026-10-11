@@ -16,7 +16,7 @@ private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful
 @Observable
 class Data {
 
-    static var shared = Data()
+    nonisolated(unsafe) static let shared = Data()
 
     init() {
         autoreleasepool {

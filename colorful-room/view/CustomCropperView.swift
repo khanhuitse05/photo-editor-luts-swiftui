@@ -33,7 +33,8 @@ struct CustomCropperView: UIViewControllerRepresentable {
     }
 }
 
-class CropperViewCoordinator: NSObject, UINavigationControllerDelegate, CropperViewControllerDelegate{
+@MainActor
+class CropperViewCoordinator: NSObject, UINavigationControllerDelegate, @preconcurrency CropperViewControllerDelegate {
     
     let parent: CustomCropperView
     

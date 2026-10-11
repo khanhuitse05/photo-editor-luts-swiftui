@@ -7,11 +7,11 @@
 //
 
 import SwiftUI
-import PixelEnginePackage
+@preconcurrency import PixelEnginePackage
 
 struct HLSControl: View {
     
-    static var colors:[Color] = [
+    static let colors:[Color] = [
         Color(red: 0.8980392156862745, green: 0, blue: 0),
         Color(red: 0.9764705882352941, green: 0.45098039215686275, blue: 0.023529411764705882),
         Color(red: 1, green: 1, blue: 0.0784313725490196),

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PixelEnginePackage
+@preconcurrency import PixelEnginePackage
 import UIKit
 import Combine
 import SwiftUI
@@ -18,7 +18,9 @@ private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful
 
 public class RecipeUtils {
     
-    private static var container = PersistenceController.shared.container;
+    private static var container: NSPersistentContainer {
+        PersistenceController.shared.container
+    }
     
     // Load recipe from locale
     static func loadRecipe() -> [RecipeObject]{

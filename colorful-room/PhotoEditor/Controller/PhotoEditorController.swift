@@ -171,22 +171,14 @@ class PECtl {
         self.count = self.count + 1
         let currentCount = self.count
         self.editState.set(filters: filters)
-        Task.detached(priority: .background) { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             try? await Task.sleep(nanoseconds: DesignTokens.filterDebounceNanoseconds)
-            // Check if this is still the latest request by accessing count on MainActor
-            let isLatestRequest = await MainActor.run {
-                if self.count == currentCount {
-                    self.count = 0
-                    return true
-                }
-                return false
-            }
-            
-            if isLatestRequest {
-                await self.apply()
+            if self.count == currentCount {
+                self.count = 0
+                self.apply()
             } else if currentCount % 20 == 0 {
-                await self.apply()
+                self.apply()
             }
         }
     }
@@ -236,20 +228,17 @@ class PECtl {
             recipesCtrl.setImage(image: smallImage)
         }
         
-        Task.detached(priority: .background) {
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
             // 1. Render without filters → capture as originalPreview
-            await self.apply()
-            await MainActor.run {
-                self.originalPreview = self.previewImage
-            }
+            self.apply()
+            self.originalPreview = self.previewImage
             
             // 2. Re-apply saved filters and render again
             if let filters = savedFilters {
-                await MainActor.run {
-                    self.editState.set(filters: { $0 = filters })
-                    self.editState.commit()
-                }
-                await self.apply()
+                self.editState.set(filters: { $0 = filters })
+                self.editState.commit()
+                self.apply()
             }
         }
     }

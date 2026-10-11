@@ -7,11 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BB0001FA00000201000001A1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000001A1 /* FavoritesManager.swift */; };
-		BB0001FA00000201000005A5 /* BatchEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000005A5 /* BatchEditView.swift */; };
-		BB0001FA00000201000006A1 /* RecentEditsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000006A1 /* RecentEditsManager.swift */; };
-		BB0001FA00000201000007A1 /* RecentEditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000007A1 /* RecentEditsView.swift */; };
-		AA00010220260206000UX001 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010120260206000UX001 /* HapticManager.swift */; };
 		5909A0BD2792CADF00431609 /* RecipeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5909A0BC2792CADF00431609 /* RecipeUtils.swift */; };
 		5924F5122794062C00BE7705 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924F5112794062C00BE7705 /* Constants.swift */; };
 		5924F515279408AE00BE7705 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924F514279408AE00BE7705 /* Action.swift */; };
@@ -80,10 +75,15 @@
 		59B31A92271DA892002DADE8 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A83271DA892002DADE8 /* ExportView.swift */; };
 		59B31A94271DA892002DADE8 /* MyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A85271DA892002DADE8 /* MyWebView.swift */; };
 		59B31A95271DA892002DADE8 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A87271DA892002DADE8 /* AppTheme.swift */; };
-		59B31A98271DA892002DADF0 /* GlassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A98271DA892002DADF1 /* GlassHelpers.swift */; };
 		59B31A96271DA892002DADE8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A88271DA892002DADE8 /* Utils.swift */; };
 		59B31A97271DA892002DADE8 /* AppContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A89271DA892002DADE8 /* AppContent.swift */; };
+		59B31A98271DA892002DADF0 /* GlassHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B31A98271DA892002DADF1 /* GlassHelpers.swift */; };
+		AA00010220260206000UX001 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00010120260206000UX001 /* HapticManager.swift */; };
 		B99615FFF8B1F2C3A8EE01C7 /* Pods_colorful_room.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2ED19D827B9DE0F5467A29B /* Pods_colorful_room.framework */; };
+		BB0001FA00000201000001A1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000001A1 /* FavoritesManager.swift */; };
+		BB0001FA00000201000005A5 /* BatchEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000005A5 /* BatchEditView.swift */; };
+		BB0001FA00000201000006A1 /* RecentEditsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000006A1 /* RecentEditsManager.swift */; };
+		BB0001FA00000201000007A1 /* RecentEditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0001FA00000101000007A1 /* RecentEditsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,18 +104,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AA00010120260206000UX001 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		17E3225507F432BBE67DCA2C /* Pods-colorful-room.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-colorful-room.debug.xcconfig"; path = "Target Support Files/Pods-colorful-room/Pods-colorful-room.debug.xcconfig"; sourceTree = "<group>"; };
 		5909A0BC2792CADF00431609 /* RecipeUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUtils.swift; sourceTree = "<group>"; };
-		BB0001FA00000101000001A1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
-		BB0001FA00000101000005A5 /* BatchEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchEditView.swift; sourceTree = "<group>"; };
-		BB0001FA00000101000006A1 /* RecentEditsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsManager.swift; sourceTree = "<group>"; };
-		BB0001FA00000101000007A1 /* RecentEditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsView.swift; sourceTree = "<group>"; };
 		5924F5112794062C00BE7705 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5924F514279408AE00BE7705 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		5924F516279408BC00BE7705 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
 		5924F518279413EA00BE7705 /* StorageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUtils.swift; sourceTree = "<group>"; };
-		592B4E4D27132BF400BBF5BA /* colorful-room.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "colorful-room.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		592B4E4D27132BF400BBF5BA /* SnapTune - Photo Editor & LUT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SnapTune - Photo Editor & LUT.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		592B4E5027132BF400BBF5BA /* colorful_roomApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colorful_roomApp.swift; sourceTree = "<group>"; };
 		592B4E5227132BF400BBF5BA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		592B4E5427132BF500BBF5BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -181,10 +176,15 @@
 		59B31A83271DA892002DADE8 /* ExportView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
 		59B31A85271DA892002DADE8 /* MyWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebView.swift; sourceTree = "<group>"; };
 		59B31A87271DA892002DADE8 /* AppTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
-		59B31A98271DA892002DADF1 /* GlassHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlassHelpers.swift; sourceTree = "<group>"; };
 		59B31A88271DA892002DADE8 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		59B31A89271DA892002DADE8 /* AppContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppContent.swift; sourceTree = "<group>"; };
+		59B31A98271DA892002DADF1 /* GlassHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlassHelpers.swift; sourceTree = "<group>"; };
 		91676B46D8DB0C5B8B5F9F42 /* Pods-colorful-room.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-colorful-room.release.xcconfig"; path = "Target Support Files/Pods-colorful-room/Pods-colorful-room.release.xcconfig"; sourceTree = "<group>"; };
+		AA00010120260206000UX001 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000001A1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000005A5 /* BatchEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchEditView.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000006A1 /* RecentEditsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsManager.swift; sourceTree = "<group>"; };
+		BB0001FA00000101000007A1 /* RecentEditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentEditsView.swift; sourceTree = "<group>"; };
 		C2ED19D827B9DE0F5467A29B /* Pods_colorful_room.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_colorful_room.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -271,7 +271,7 @@
 		592B4E4E27132BF400BBF5BA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				592B4E4D27132BF400BBF5BA /* colorful-room.app */,
+				592B4E4D27132BF400BBF5BA /* SnapTune - Photo Editor & LUT.app */,
 				592B4E6227132BF600BBF5BA /* colorful-roomTests.xctest */,
 				592B4E6C27132BF600BBF5BA /* colorful-roomUITests.xctest */,
 			);
@@ -494,7 +494,7 @@
 				59B31A1C271DA5B2002DADE8 /* PixelEnginePackage */,
 			);
 			productName = "colorful-room";
-			productReference = 592B4E4D27132BF400BBF5BA /* colorful-room.app */;
+			productReference = 592B4E4D27132BF400BBF5BA /* SnapTune - Photo Editor & LUT.app */;
 			productType = "com.apple.product-type.application";
 		};
 		592B4E6127132BF600BBF5BA /* colorful-roomTests */ = {
@@ -636,9 +636,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-colorful-room/Pods-colorful-room-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-colorful-room/Pods-colorful-room-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -890,6 +894,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -909,7 +914,7 @@
 				PRODUCT_NAME = "SnapTune - Photo Editor & LUT";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -931,6 +936,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access your LIBRARY to save or pick your photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -950,7 +956,7 @@
 				PRODUCT_NAME = "SnapTune - Photo Editor & LUT";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -974,7 +980,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.marustudio.colorful-roomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/colorful-room.app/colorful-room";
 			};
@@ -999,7 +1005,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.marustudio.colorful-roomTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/colorful-room.app/colorful-room";
 			};
@@ -1022,7 +1028,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.marustudio.colorful-roomUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "colorful-room";
 			};
@@ -1045,7 +1051,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.marustudio.colorful-roomUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "colorful-room";
 			};

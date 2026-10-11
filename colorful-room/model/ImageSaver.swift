@@ -12,6 +12,7 @@ import os
 
 private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "colorful-room", category: "ImageSaver")
 
+@MainActor
 class ImageSaver: NSObject {
 
     var successHandler: (() -> Void)?

@@ -39,8 +39,8 @@ class RecipeController {
         // Work on a snapshot of the recipes array off the main actor to
         // avoid touching main-actor-isolated state from a detached task.
         let recipesSnapshot = self.recipes
-        Task.detached(priority: .background) {
-            // Prepare recipe previews in background
+        Task { @MainActor in
+            // Prepare recipe previews
             for e in recipesSnapshot {
                 e.setImage(image: image)
             }

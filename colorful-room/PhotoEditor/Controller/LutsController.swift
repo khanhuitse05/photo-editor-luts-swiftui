@@ -40,12 +40,11 @@ class LutsController {
         }
         collections = collectionsSnapshot
         
-        Task.detached(priority: .background) {
-            // Prepare cube previews in background
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            // Prepare cube previews
             guard let newCubeSourceCG = sharedContext.createCGImage(image, from: image.extent) else {
-                await MainActor.run {
-                    self.loadingLut = false
-                }
+                self.loadingLut = false
                 return
             }
             
@@ -53,10 +52,8 @@ class LutsController {
                 collection.setImage(image: image)
             }
             
-            await MainActor.run {
-                self.cubeSourceCG = newCubeSourceCG
-                self.loadingLut = false
-            }
+            self.cubeSourceCG = newCubeSourceCG
+            self.loadingLut = false
         }
     }
     
