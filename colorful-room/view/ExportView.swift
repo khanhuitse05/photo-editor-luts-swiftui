@@ -66,27 +66,27 @@ struct ExportView: View {
                 Spacer()
 
                 // MARK: - Preview
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 24) {
-                        Spacer().frame(width: 8)
-                        VStack {
-                            if let origin = self.shared.originExport {
-                                Image(uiImage: origin)
-                                    .resizable()
-                                    .modifier(ImageBorder())
-                                    .accessibilityLabel("Edited photo preview")
-                            } else {
-                                Rectangle()
-                                    .fill(Color(uiColor: .tertiarySystemFill))
-                                    .frame(width: self.shared.originRatio * 320)
-                                    .accessibilityLabel("Loading photo preview")
-                            }
+                ZStack {
+                    if let origin = self.shared.originExport {
+                        Image(uiImage: origin)
+                            .resizable()
+                            .scaledToFit()
+                            .modifier(ImageBorder())
+                            .accessibilityLabel("Edited photo preview")
+                    } else {
+                        ZStack {
+                            Rectangle()
+                                .fill(Color(uiColor: .tertiarySystemFill))
+                            ProgressView()
+                                .controlSize(.regular)
                         }
-                        Spacer().frame(width: 8)
+                        .aspectRatio(self.shared.originRatio > 0 ? self.shared.originRatio : 1, contentMode: .fit)
+                        .accessibilityLabel("Loading photo preview")
                     }
                 }
-                .frame(height: DesignTokens.exportPreviewHeight)
-                .clipped()
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: DesignTokens.exportPreviewHeight)
+                .padding(.horizontal, 16)
 
                 Spacer()
 

@@ -18,9 +18,27 @@ class colorful_roomTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testSliderValueConversion() throws {
+        // Range -1 to 1 (like Shadows)
+        let range = (-1.0, 1.0)
+        let display = (-100.0, 100.0)
+        
+        // Min value
+        XCTAssertEqual((-1.0).convert(fromRange: range, toRange: display), -100.0)
+        // Mid value
+        XCTAssertEqual((0.0).convert(fromRange: range, toRange: display), 0.0)
+        // Max value
+        XCTAssertEqual((1.0).convert(fromRange: range, toRange: display), 100.0)
+        
+        // Dragging left (lower pixel X) must yield lower value
+        let leftPixelX = 50.0
+        let rightPixelX = 250.0
+        let pixelRange = (10.0, 290.0) // 10 to 290 travel
+        
+        let leftVal = leftPixelX.convert(fromRange: pixelRange, toRange: range)
+        let rightVal = rightPixelX.convert(fromRange: pixelRange, toRange: range)
+        
+        XCTAssertLessThan(leftVal, rightVal, "Dragging left must yield smaller value than dragging right")
     }
 
     func testPerformanceExample() throws {
