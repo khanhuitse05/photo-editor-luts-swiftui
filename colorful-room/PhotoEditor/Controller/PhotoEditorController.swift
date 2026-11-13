@@ -69,24 +69,23 @@ class PECtl {
     
     func setImage(image:UIImage) {
         
-        /// resetUI
-        if(lutsCtrl.loadingLut == true){
-            return
-        }
         redoStack.removeAll()
         currentFilter = FilterModel.noneFilterModel
         self.originUI = image
         
         self.originCI = convertUItoCI(from: image)
         
+        let previewHeight = self.originUI.size.width > 0
+            ? DesignTokens.previewSize * self.originUI.size.height / self.originUI.size.width
+            : DesignTokens.previewSize
+            
         self.editState = EditingStack.init(
             source: StaticImageSource(source: self.originCI!),
-            previewSize: CGSize(width: DesignTokens.previewSize, height: DesignTokens.previewSize * self.originUI.size.width / self.originUI.size.height)
-            // previewSize: CGSize(width: self.originUI.size.width, height: self.originUI.size.height)
+            previewSize: CGSize(width: DesignTokens.previewSize, height: previewHeight)
         )
        
-        
-        if let smallImage = resizedImage(at: originCI, scale: DesignTokens.thumbnailScale / self.originUI.size.height, aspectRatio: 1){
+        if self.originUI.size.height > 0,
+           let smallImage = resizedImage(at: originCI, scale: DesignTokens.thumbnailScale / self.originUI.size.height, aspectRatio: 1){
             lutsCtrl.setImage(image: smallImage)
             recipesCtrl.setImage(image: smallImage)
         }
@@ -94,15 +93,8 @@ class PECtl {
         cropperCtrl = CropperController()
         originalPreview = nil
 
-        Task.detached(priority: .background) {
-            await self.apply()
-            // Capture the first render (no edits) as the comparison baseline
-            await MainActor.run {
-                if self.originalPreview == nil {
-                    self.originalPreview = self.previewImage
-                }
-            }
-        }
+        self.apply()
+        self.originalPreview = self.previewImage
     }
     
     
@@ -214,11 +206,15 @@ class PECtl {
         let savedFilters = editState?.currentEdit.filters
         
         // Rebuild editing stack with the (possibly cropped) source
+        let previewHeight = sourceUI.size.width > 0
+            ? DesignTokens.previewSize * sourceUI.size.height / sourceUI.size.width
+            : DesignTokens.previewSize
+
         self.editState = EditingStack(
             source: StaticImageSource(source: sourceCI),
             previewSize: CGSize(
                 width: DesignTokens.previewSize,
-                height: DesignTokens.previewSize * sourceUI.size.width / sourceUI.size.height
+                height: previewHeight
             )
         )
         

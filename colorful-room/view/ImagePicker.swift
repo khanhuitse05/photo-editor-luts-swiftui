@@ -11,8 +11,7 @@ import SwiftUI
 struct ImagePicker: UIViewControllerRepresentable {
     
     @Environment(\.dismiss) var dismiss
-    @Binding var image:UIImage?
-    
+    @Binding var image: UIImage?
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
@@ -21,7 +20,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
-        
+        context.coordinator.parent = self
     }
     
     func makeCoordinator() -> ImagePickerCoordinator {
@@ -29,19 +28,22 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 }
 
-class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
-    let parent: ImagePicker
+class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    var parent: ImagePicker
     
-    init(_ parent:ImagePicker) {
+    init(_ parent: ImagePicker) {
         self.parent = parent
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let uiImage = info[.originalImage] as? UIImage {
+        let selectedImage = (info[.editedImage] as? UIImage) ?? (info[.originalImage] as? UIImage)
+        if let uiImage = selectedImage {
             parent.image = uiImage
         }
         parent.dismiss()
     }
     
-    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        parent.dismiss()
+    }
 }

@@ -87,8 +87,14 @@ public class RecipeUtils {
         unsharpMask.intensity = data.unsharpMaskIntensity
         unsharpMask.radius = data.unsharpMaskRadius
         
-        var hls = FilterHLS()
-        hls.inputShift = RecipeUtils.stringToArrayVector(data.hls ?? "")
+        let hls: FilterHLS?
+        if RecipeUtils.hasCustomHLS(data.hls) {
+            var customHLS = FilterHLS()
+            customHLS.inputShift = RecipeUtils.stringToArrayVector(data.hls ?? "")
+            hls = customHLS
+        } else {
+            hls = nil
+        }
         
         return {
             $0.contrast = contrast
@@ -220,6 +226,20 @@ public class RecipeUtils {
             logger.error("Could not duplicate recipe: \(error), \(error.userInfo)")
         }
         return nil
+    }
+
+    /// Checks whether an HLS string contains custom (non-default) shifts.
+    static func hasCustomHLS(_ value: String?) -> Bool {
+        guard let value = value, !value.isEmpty else { return false }
+        let vectors = stringToArrayVector(value)
+        let defaults = FilterHLS.defaultValue
+        guard vectors.count == defaults.count else { return true }
+        for (v, d) in zip(vectors, defaults) {
+            if abs(v.x - d.x) > 0.001 || abs(v.y - d.y) > 0.001 || abs(v.z - d.z) > 0.001 {
+                return true
+            }
+        }
+        return false
     }
 
     ///

@@ -19,6 +19,7 @@ struct ContentView: View {
     @State private var pickImage: UIImage?
     // for edit view
     @State private var inputImage: UIImage?
+    @State private var selectedRecentEntry: RecentEditEntry?
 
 
     var body: some View {
@@ -84,6 +85,7 @@ struct ContentView: View {
                             Spacer().frame(height: 0)
 
                             Button {
+                                selectedRecentEntry = nil
                                 showSheet = true
                                 showImageEdit = false
                                 inputImage = nil
@@ -117,6 +119,8 @@ struct ContentView: View {
                                 Button {
                                     if let mostRecent = RecentEditsManager.shared.entries.first,
                                        let continueImage = RecentEditsManager.shared.loadImage(for: mostRecent) {
+                                        selectedRecentEntry = mostRecent
+                                        PECtl.shared.setImage(image: continueImage)
                                         inputImage = continueImage
                                         showImageEdit = true
                                     }
@@ -142,7 +146,7 @@ struct ContentView: View {
             .navigationDestination(isPresented: $showImageEdit) {
                 PhotoEditView(
                     image: inputImage,
-                    recentEditEntry: RecentEditsManager.shared.hasRecent ? RecentEditsManager.shared.entries.first : nil
+                    recentEditEntry: selectedRecentEntry
                 )
             }
         }
@@ -153,10 +157,12 @@ struct ContentView: View {
     }
 
     func loadImage() {
-        guard self.pickImage != nil else {
+        guard let pick = self.pickImage else {
             return
         }
-        self.inputImage = self.pickImage
+        selectedRecentEntry = nil
+        PECtl.shared.setImage(image: pick)
+        self.inputImage = pick
         self.showImageEdit = true
     }
 }

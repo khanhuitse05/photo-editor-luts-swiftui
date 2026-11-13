@@ -12,7 +12,10 @@ import Foundation
 import UIKit
 import CoreImage
 
-let sharedContext = CIContext(options: [.useSoftwareRenderer : false])
+let sharedContext: CIContext = {
+    MetalDriverCompatibility.install()
+    return CIContext(options: [.useSoftwareRenderer : false])
+}()
 
 
 func resizedImage(at image: CIImage, scale: CGFloat, aspectRatio: CGFloat) -> CIImage? {
@@ -26,10 +29,22 @@ func resizedImage(at image: CIImage, scale: CGFloat, aspectRatio: CGFloat) -> CI
 }
 
 
-func convertUItoCI(from:UIImage) -> CIImage{
-    let image = CIImage(image: from)!
-    let fixedOriantationImage = image.oriented(forExifOrientation: imageOrientationToTiffOrientation(from.imageOrientation))
-    return fixedOriantationImage
+func convertUItoCI(from: UIImage) -> CIImage {
+    let ciImage: CIImage
+    if let ci = from.ciImage {
+        ciImage = ci
+    } else if let cg = from.cgImage {
+        ciImage = CIImage(cgImage: cg)
+    } else if let ci = CIImage(image: from) {
+        ciImage = ci
+    } else {
+        ciImage = CIImage()
+    }
+    var orientedImage = ciImage.oriented(forExifOrientation: imageOrientationToTiffOrientation(from.imageOrientation))
+    if orientedImage.extent.origin != .zero {
+        orientedImage = orientedImage.transformed(by: CGAffineTransform(translationX: -orientedImage.extent.origin.x, y: -orientedImage.extent.origin.y))
+    }
+    return orientedImage
 }
 
 func imageOrientationToTiffOrientation(_ value: UIImage.Orientation) -> Int32 {

@@ -272,8 +272,14 @@ class RecentEditsManager {
         unsharpMask.intensity = entry.unsharpMaskIntensity
         unsharpMask.radius = entry.unsharpMaskRadius
         
-        var hls = FilterHLS()
-        hls.inputShift = RecipeUtils.stringToArrayVector(entry.hls)
+        let hls: FilterHLS?
+        if RecipeUtils.hasCustomHLS(entry.hls) {
+            var customHLS = FilterHLS()
+            customHLS.inputShift = RecipeUtils.stringToArrayVector(entry.hls)
+            hls = customHLS
+        } else {
+            hls = nil
+        }
         
         return {
             $0.contrast = contrast

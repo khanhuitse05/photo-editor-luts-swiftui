@@ -13,7 +13,6 @@ struct PhotoEditView: View {
     private let initialImage: UIImage?
     private let recentEditEntry: RecentEditEntry?
 
-    @State private var didLoadInitialImage = false
     @State private var showImagePicker = false
     @State private var showBatchEdit = false
     @State private var showHistory = false
@@ -113,16 +112,11 @@ struct PhotoEditView: View {
                 }
             }
         }
-        .task {
-            guard !didLoadInitialImage else { return }
-            didLoadInitialImage = true
+        .task(id: initialImage) {
             guard let image = initialImage else { return }
-            do {
-                try await Task.sleep(nanoseconds: DesignTokens.initialLoadDelayNanoseconds)
-            } catch {
-                // Task cancelled — proceed immediately
+            if shared.originUI !== image {
+                shared.setImage(image: image)
             }
-            shared.setImage(image: image)
             
             // If we have a recentEditEntry, restore filters after image loads
             if let entry = recentEditEntry {

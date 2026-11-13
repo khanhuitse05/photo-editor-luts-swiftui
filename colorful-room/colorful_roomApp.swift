@@ -11,6 +11,10 @@ import SwiftUI
 struct colorful_roomApp: App {
     let persistenceController = PersistenceController.shared
 
+    init() {
+        MetalDriverCompatibility.install()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
