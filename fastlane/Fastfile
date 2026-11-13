@@ -14,6 +14,20 @@ platform :ios do
   
   before_all do
     ENV['FASTLANE_APP_IDENTIFIER'] = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+
+    asc_issuer_id = ENV['APP_STORE_CONNECT_ISSUER_ID'] || ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID']
+    if asc_issuer_id && !asc_issuer_id.strip.empty?
+      key_id = ENV.fetch('APP_STORE_CONNECT_KEY_ID', 'R989J5VADS')
+      key_path = ENV.fetch('APP_STORE_CONNECT_KEY_FILEPATH', '../khanhuitse05_AuthKey_R989J5VADS.p8')
+      resolved_key_path = File.expand_path(key_path, __dir__)
+
+      app_store_connect_api_key(
+        key_id: key_id,
+        issuer_id: asc_issuer_id.strip,
+        key_filepath: resolved_key_path,
+        in_house: false
+      )
+    end
   end
 
   desc "Setup and Build for Appstore"
