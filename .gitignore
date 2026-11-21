@@ -84,3 +84,4 @@ fastlane/report.xml
 fastlane/README.md
 *.p8
 .cursor
+apple-review/

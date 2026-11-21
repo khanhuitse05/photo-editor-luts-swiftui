@@ -2,7 +2,7 @@ platform :ios, '17.6'
 
 target 'colorful-room' do
   use_frameworks!
-  pod 'QCropper'
+  pod 'QCropper', :path => 'LocalPods/QCropper'
 end
 
 post_install do |installer|

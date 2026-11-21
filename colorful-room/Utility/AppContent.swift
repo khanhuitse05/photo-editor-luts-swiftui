@@ -28,28 +28,28 @@ enum AppContent {
 
     static let introContent: [IntroItem] = [
         IntroItem(
-            title: "Free and Premium Filters",
-            subTitle: "A lot of filter you can use for your picture",
+            title: "One-Tap LUT Filters",
+            subTitle: "Cinematic, film and selfie looks, all free",
             leadingImage: "edit-lut",
             highlight: nil
         ),
         IntroItem(
-            title: "Selective Color",
-            subTitle: "Freedom to custom your filter",
+            title: "Selective Color (HSL)",
+            subTitle: "Fine-tune each color in your photo",
             leadingImage: "hls",
             highlight: nil
         ),
         IntroItem(
-            title: "Many Effects are available",
-            subTitle: "Freedom to custom your filter",
-            leadingImage: "edit-effect",
+            title: "13 Pro Adjustments",
+            subTitle: "Light, color, detail, vignette and more",
+            leadingImage: "edit-color",
             highlight: nil
         ),
         IntroItem(
-            title: "Get all your resources",
-            subTitle: "Export your picture, Lookup image, all effects, and more",
-            leadingImage: "icon-lut",
-            highlight: "AR filter"
+            title: "Recipes & Batch Edit",
+            subTitle: "Save your look and apply it to many photos",
+            leadingImage: "edit-recipe",
+            highlight: nil
         )
     ]
 

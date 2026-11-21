@@ -36,98 +36,39 @@ struct ExportView: View {
         ZStack {
             Color(uiColor: .systemBackground)
                 .ignoresSafeArea(.all)
-            VStack(spacing: 0) {
-                // MARK: - Title & Close
-                HStack {
-                    Spacer().frame(width: 24)
-                    Spacer()
-                    Text("Export your photo")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Button(action: {
-                        self.shared.resetExport()
-                        self.dismiss()
-                    }) {
-                        Image(systemName: "xmark")
-                    }
-                    .buttonStyle(.glass)
-                    .accessibilityLabel("Close")
-                    .accessibilityHint("Closes the export screen")
-                }
-                .padding()
-                .padding(.horizontal)
-                Text("Download or share your edited photo.\nAlways for FREE")
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 4)
-
-                Spacer()
-
-                // MARK: - Preview
-                ZStack {
-                    if let origin = self.shared.originExport {
-                        Image(uiImage: origin)
-                            .resizable()
-                            .scaledToFit()
-                            .modifier(ImageBorder())
-                            .accessibilityLabel("Edited photo preview")
-                    } else {
-                        ZStack {
-                            Rectangle()
-                                .fill(Color(uiColor: .tertiarySystemFill))
-                            ProgressView()
-                                .controlSize(.regular)
+            GeometryReader { geometry in
+                // Wide windows (e.g. iPhone Duo unfolded in landscape) put the preview beside the controls.
+                if geometry.size.width > geometry.size.height {
+                    HStack(spacing: 0) {
+                        preview
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding(16)
+                        VStack(spacing: 0) {
+                            header
+                            Spacer()
+                            actionButtons
+                            Spacer().frame(height: 16)
                         }
-                        .aspectRatio(self.shared.originRatio > 0 ? self.shared.originRatio : 1, contentMode: .fit)
-                        .accessibilityLabel("Loading photo preview")
+                        .frame(width: DesignTokens.editSidePanelWidth)
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        header
+
+                        Spacer()
+
+                        preview
+                            .frame(maxWidth: .infinity)
+                            .frame(maxHeight: DesignTokens.exportPreviewHeight)
+                            .padding(.horizontal, 16)
+
+                        Spacer()
+
+                        actionButtons
+
+                        Spacer().frame(height: 16)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .frame(maxHeight: DesignTokens.exportPreviewHeight)
-                .padding(.horizontal, 16)
-
-                Spacer()
-
-                // MARK: - Action Buttons
-                HStack(spacing: 16) {
-                    // Share button
-                    Button {
-                        showShareSheet = true
-                        HapticManager.impact(.medium)
-                    } label: {
-                        Label("Share", systemImage: "square.and.arrow.up")
-                            .font(.subheadline)
-                    }
-                    .frame(minWidth: 120, minHeight: 48)
-                    .buttonStyle(.glass)
-                    .disabled(shared.originExport == nil)
-                    .accessibilityLabel("Share photo")
-                    .accessibilityHint("Opens the share sheet to share the edited photo")
-
-                    // Save button
-                    Button {
-                        self.shared.exportOrigin()
-                        HapticManager.impact(.medium)
-                    } label: {
-                        if shared.exportState == .exporting {
-                            ProgressView()
-                                .frame(minWidth: 120, minHeight: 48)
-                        } else {
-                            Label("Save", systemImage: "arrow.down.to.line")
-                                .font(.subheadline)
-                        }
-                    }
-                    .frame(minWidth: 120, minHeight: 48)
-                    .buttonStyle(.glassProminent)
-                    .disabled(shared.exportState == .exporting || shared.originExport == nil)
-                    .accessibilityLabel("Save picture")
-                    .accessibilityHint("Saves the edited photo to your photo library")
-                }
-                .padding(.top, 16)
-
-                Spacer().frame(height: 16)
             }
         }
         .toolbar(.hidden, for: .navigationBar)
@@ -154,6 +95,98 @@ struct ExportView: View {
         .onAppear {
             shared.prepareExport()
         }
+    }
+
+    // MARK: - Title & Close
+
+    private var header: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Spacer().frame(width: 24)
+                Spacer()
+                Text("Export your photo")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Spacer()
+                Button(action: {
+                    self.shared.resetExport()
+                    self.dismiss()
+                }) {
+                    Image(systemName: "xmark")
+                }
+                .buttonStyle(.glass)
+                .accessibilityLabel("Close")
+                .accessibilityHint("Closes the export screen")
+            }
+            .padding()
+            .padding(.horizontal)
+            Text("Download or share your edited photo.\nAlways for FREE")
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+        }
+    }
+
+    private var preview: some View {
+        ZStack {
+            if let origin = self.shared.originExport {
+                Image(uiImage: origin)
+                    .resizable()
+                    .scaledToFit()
+                    .modifier(ImageBorder())
+                    .accessibilityLabel("Edited photo preview")
+            } else {
+                ZStack {
+                    Rectangle()
+                        .fill(Color(uiColor: .tertiarySystemFill))
+                    ProgressView()
+                        .controlSize(.regular)
+                }
+                .aspectRatio(self.shared.originRatio > 0 ? self.shared.originRatio : 1, contentMode: .fit)
+                .accessibilityLabel("Loading photo preview")
+            }
+        }
+    }
+
+    // MARK: - Action Buttons
+
+    private var actionButtons: some View {
+        HStack(spacing: 16) {
+            // Share button
+            Button {
+                showShareSheet = true
+                HapticManager.impact(.medium)
+            } label: {
+                Label("Share", systemImage: "square.and.arrow.up")
+                    .font(.subheadline)
+            }
+            .frame(minWidth: 120, minHeight: 48)
+            .buttonStyle(.glass)
+            .disabled(shared.originExport == nil)
+            .accessibilityLabel("Share photo")
+            .accessibilityHint("Opens the share sheet to share the edited photo")
+
+            // Save button
+            Button {
+                self.shared.exportOrigin()
+                HapticManager.impact(.medium)
+            } label: {
+                if shared.exportState == .exporting {
+                    ProgressView()
+                        .frame(minWidth: 120, minHeight: 48)
+                } else {
+                    Label("Save", systemImage: "arrow.down.to.line")
+                        .font(.subheadline)
+                }
+            }
+            .frame(minWidth: 120, minHeight: 48)
+            .buttonStyle(.glassProminent)
+            .disabled(shared.exportState == .exporting || shared.originExport == nil)
+            .accessibilityLabel("Save picture")
+            .accessibilityHint("Saves the edited photo to your photo library")
+        }
+        .padding(.top, 16)
     }
 }
 

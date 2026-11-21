@@ -2,15 +2,15 @@ PODS:
   - QCropper (0.1.7)
 
 DEPENDENCIES:
-  - QCropper
+  - QCropper (from `LocalPods/QCropper`)
 
-SPEC REPOS:
-  trunk:
-    - QCropper
+EXTERNAL SOURCES:
+  QCropper:
+    :path: LocalPods/QCropper
 
 SPEC CHECKSUMS:
-  QCropper: aef6bad1e683e62b501fb8258359ccd10c68b4f2
+  QCropper: 5bc3d837cbba2e4172d77b24a0a98465eb32f820
 
-PODFILE CHECKSUM: c449da41c3fc0a12085075fb0c09384023349e6a
+PODFILE CHECKSUM: f2a7ccbea833a801af2503504ddd2a4bf8b93b1b
 
 COCOAPODS: 1.16.2

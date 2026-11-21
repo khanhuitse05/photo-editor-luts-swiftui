@@ -45,6 +45,8 @@ public enum DesignTokens {
     static let toolbarHeight: CGFloat = 50
     static let lutButtonHeight: CGFloat = 92
     static let editMenuHeight: CGFloat = 250
+    /// Width of the edit menu when it sits beside the photo in a wide window.
+    static let editSidePanelWidth: CGFloat = 360
     static let exportPreviewHeight: CGFloat = 400
 
     // MARK: - Button & Icon Sizes

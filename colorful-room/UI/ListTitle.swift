@@ -68,10 +68,10 @@ struct ListTitle_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ListTitle(
-                title: "Free and Premium Filters",
-                subTitle: "Export your picture, Lookup image, all effects, and more",
+                title: "One-Tap LUT Filters",
+                subTitle: "Cinematic, film and selfie looks, all free",
                 leadingImage: "edit-lut",
-                highlight: "AR filter"
+                highlight: ""
             )
                 .background(Color(UIColor.systemBackground))
                 .environment(\.colorScheme, .dark)

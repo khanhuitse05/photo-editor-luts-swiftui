@@ -25,123 +25,24 @@ struct ContentView: View {
     var body: some View {
 
         NavigationStack {
-            GeometryReader { geometry in
-                ZStack(alignment: .center) {
-                    SwiftUI.Image("intro-image")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped()
-                        .ignoresSafeArea(.all)
-                        .accessibilityHidden(true)
-
-
-                    VStack {
-                        Spacer()
-
-                        VStack(alignment: .center, spacing: 24) {
-                            Text("Make It Pop")
-                                .font(.system(size: 40, weight: .bold, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [Color.myAccent.opacity(0.6), Color.myAccent.opacity(0.2)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .padding(.horizontal, 16)
-                                .shadow(color: Color.myAccent.opacity(0.3), radius: 8, x: 0, y: 4)
-                                .overlay {
-                                    Text("Make It Pop")
-                                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                                        .foregroundStyle(
-                                            LinearGradient(
-                                                colors: [.white.opacity(0.4), .clear],
-                                                startPoint: .top,
-                                                endPoint: .center
-                                            )
-                                        )
-                                        .blendMode(.overlay)
-                                }
-                                .accessibilityLabel("Make It Pop")
-                                .accessibilityAddTraits(.isHeader)
-                            VStack(spacing: 4) {
-                                ForEach(AppContent.introContent) { item in
-                                    ListTitle(
-                                        title: item.title,
-                                        subTitle: item.subTitle,
-                                        leadingImage: item.leadingImage,
-                                        highlight: item.highlight ?? ""
-                                    )
-                                    .padding(.vertical, 8)
-                                    .glassCard(cornerRadius: DesignTokens.cornerRadiusMedium)
-                                    .accessibilityElement(children: .combine)
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            Spacer().frame(height: 0)
-
-                            Button {
-                                selectedRecentEntry = nil
-                                showSheet = true
-                                showImageEdit = false
-                                inputImage = nil
-                            } label: {
-                                Label("Choose Your Picture", systemImage: "photo.badge.plus")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(Color.white)
-                            }
-                            .padding(.horizontal, 32)
-                            .padding(.vertical, 16)
-                            .glassEffect(.regular.tint(Color.myAccent.opacity(0.6)).interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusLarge))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: DesignTokens.cornerRadiusLarge)
-                                    .stroke(
-                                        LinearGradient(
-                                            colors: [.white.opacity(0.3), .clear],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 1
-                                    )
-                            }
-                            .shadow(color: Color.myAccent.opacity(0.2), radius: 12, x: 0, y: 4)
-                            .padding(.horizontal, 30)
-                            .accessibilityLabel("Choose Your Picture")
-                            .accessibilityHint("Opens the photo library to select a picture to edit")
-
-                            // Continue Editing button
-                            if RecentEditsManager.shared.hasRecent {
-                                Button {
-                                    if let mostRecent = RecentEditsManager.shared.entries.first,
-                                       let continueImage = RecentEditsManager.shared.loadImage(for: mostRecent) {
-                                        selectedRecentEntry = mostRecent
-                                        PECtl.shared.setImage(image: continueImage)
-                                        inputImage = continueImage
-                                        showImageEdit = true
-                                    }
-                                } label: {
-                                    Label("Continue Editing", systemImage: "arrow.clockwise")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .foregroundStyle(Color.white.opacity(0.9))
-                                }
-                                .padding(.horizontal, 32)
-                            }
-
-                            Spacer().frame(height: 0)
-                        }
-                        .padding(.vertical, 24)
-                        .frame(width: geometry.size.width)
-                    }
+            // Scroll only when the intro doesn't fit the window (e.g. short landscape windows on iPhone Duo).
+            ViewThatFits(in: .vertical) {
+                introContent
+                ScrollView {
+                    introContent
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .ignoresSafeArea(.all)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                SwiftUI.Image("intro-image")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .clipped()
+                    .ignoresSafeArea()
+                    .accessibilityHidden(true)
+            }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showImageEdit) {
                 PhotoEditView(
@@ -154,6 +55,111 @@ struct ContentView: View {
             ImagePicker(image: self.$pickImage)
         }
 
+    }
+
+    private var introContent: some View {
+        VStack {
+            Spacer()
+
+            VStack(alignment: .center, spacing: 24) {
+                Text("Make It Pop")
+                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.myAccent.opacity(0.6), Color.myAccent.opacity(0.2)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 16)
+                    .shadow(color: Color.myAccent.opacity(0.3), radius: 8, x: 0, y: 4)
+                    .overlay {
+                        Text("Make It Pop")
+                            .font(.system(size: 32, weight: .bold, design: .rounded))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.white.opacity(0.4), .clear],
+                                    startPoint: .top,
+                                    endPoint: .center
+                                )
+                            )
+                            .blendMode(.overlay)
+                    }
+                    .accessibilityLabel("Make It Pop")
+                    .accessibilityAddTraits(.isHeader)
+                VStack(spacing: 4) {
+                    ForEach(AppContent.introContent) { item in
+                        ListTitle(
+                            title: item.title,
+                            subTitle: item.subTitle,
+                            leadingImage: item.leadingImage,
+                            highlight: item.highlight ?? ""
+                        )
+                        .padding(.vertical, 8)
+                        .glassCard(cornerRadius: DesignTokens.cornerRadiusMedium)
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .padding(.horizontal, 16)
+                Spacer().frame(height: 0)
+
+                Button {
+                    selectedRecentEntry = nil
+                    showSheet = true
+                    showImageEdit = false
+                    inputImage = nil
+                } label: {
+                    Label("Choose Your Picture", systemImage: "photo.badge.plus")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.white)
+                }
+                .padding(.horizontal, 32)
+                .padding(.vertical, 16)
+                .glassEffect(.regular.tint(Color.myAccent.opacity(0.6)).interactive(), in: .rect(cornerRadius: DesignTokens.cornerRadiusLarge))
+                .overlay {
+                    RoundedRectangle(cornerRadius: DesignTokens.cornerRadiusLarge)
+                        .stroke(
+                            LinearGradient(
+                                colors: [.white.opacity(0.3), .clear],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1
+                        )
+                }
+                .shadow(color: Color.myAccent.opacity(0.2), radius: 12, x: 0, y: 4)
+                .padding(.horizontal, 30)
+                .accessibilityLabel("Choose Your Picture")
+                .accessibilityHint("Opens the photo library to select a picture to edit")
+
+                // Continue Editing button
+                if RecentEditsManager.shared.hasRecent {
+                    Button {
+                        if let mostRecent = RecentEditsManager.shared.entries.first,
+                           let continueImage = RecentEditsManager.shared.loadImage(for: mostRecent) {
+                            selectedRecentEntry = mostRecent
+                            PECtl.shared.setImage(image: continueImage)
+                            inputImage = continueImage
+                            showImageEdit = true
+                        }
+                    } label: {
+                        Label("Continue Editing", systemImage: "arrow.clockwise")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color.white.opacity(0.9))
+                    }
+                    .padding(.horizontal, 32)
+                }
+
+                Spacer().frame(height: 0)
+            }
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity)
+        }
     }
 
     func loadImage() {

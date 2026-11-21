@@ -84,4 +84,4 @@ Welcome to SnapTune! Color grade your photos with one-tap LUT filters, fine-tune
 | Sign-in required | No |
 | Demo account | Not needed |
 | Contact email | khanhuitse05@gmail.com |
-| Notes for reviewer | "SnapTune is a fully offline photo editor — no account, sign-in, or network connection is required. DEMO MODE: on the home screen, tap 'Try a Sample Photo' to open the editor with a built-in sample photo (no photo library access needed). From there every feature is reachable with real content: LUT filter collections, the 13 adjustment tools, crop, Export (save/share), History (Recent Edits — pre-populated with a sample session on first launch), and Batch Edit (tap the stack icon, then 'Use Sample Photos'). The 'Continue Editing' button on the home screen reopens the most recent session." |
+| Notes for reviewer | See `apple-review/app-review-notes.txt` (source of truth — paste it verbatim into App Store Connect). |
