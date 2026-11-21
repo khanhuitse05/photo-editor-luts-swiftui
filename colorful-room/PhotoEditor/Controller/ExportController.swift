@@ -60,6 +60,7 @@ class ExportController {
     var exportState: ExportState = .idle
     var exportFormat: ExportFormat = .jpeg
     var exportQuality: ExportQuality = .high
+    private var activeSaver: ImageSaver?
 
     var originRatio: Double {
         PECtl.shared.originUI.size.width / PECtl.shared.originUI.size.height
@@ -97,9 +98,12 @@ class ExportController {
     func resetExport() {
         originExport = nil
         exportState = .idle
+        activeSaver = nil
     }
 
     func exportOrigin() {
+        guard exportState != .exporting else { return }
+
         guard let origin = originExport else {
             exportState = .error("No image available to save.")
             return
@@ -114,18 +118,17 @@ class ExportController {
         exportState = .exporting
 
         let saver = ImageSaver()
+        activeSaver = saver
         saver.successHandler = { [weak self] in
-            Task { @MainActor in
-                self?.exportState = .success
-                HapticManager.notification(.success)
-            }
+            self?.activeSaver = nil
+            self?.exportState = .success
+            HapticManager.notification(.success)
         }
         saver.errorHandler = { [weak self] error in
-            Task { @MainActor in
-                logger.error("Export failed: \(error.localizedDescription)")
-                self?.exportState = .error(error.localizedDescription)
-                HapticManager.notification(.error)
-            }
+            logger.error("Export failed: \(error.localizedDescription)")
+            self?.activeSaver = nil
+            self?.exportState = .error(error.localizedDescription)
+            HapticManager.notification(.error)
         }
         saver.writeDataToPhotoAlbum(imageData: imageData)
     }
