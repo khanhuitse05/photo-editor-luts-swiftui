@@ -887,7 +887,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "colorful-room/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
+				INFOPLIST_KEY_CFBundleDisplayName = SnapTune;
 				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
@@ -930,7 +930,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "colorful-room/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "SnapTune - Photo Editor & LUT";
+				INFOPLIST_KEY_CFBundleDisplayName = SnapTune;
 				INFOPLIST_KEY_CFBundleName = "SnapTune - Photo Editor & LUT";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
