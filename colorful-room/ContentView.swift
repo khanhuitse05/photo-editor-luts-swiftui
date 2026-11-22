@@ -62,34 +62,40 @@ struct ContentView: View {
             Spacer()
 
             VStack(alignment: .center, spacing: 24) {
-                Text("Make It Pop")
-                    .font(.system(size: 40, weight: .bold, design: .rounded))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Color.myAccent.opacity(0.6), Color.myAccent.opacity(0.2)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                    .shadow(color: Color.myAccent.opacity(0.3), radius: 8, x: 0, y: 4)
-                    .overlay {
-                        Text("Make It Pop")
-                            .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [.white.opacity(0.4), .clear],
-                                    startPoint: .top,
-                                    endPoint: .center
-                                )
+                VStack(spacing: 8) {
+                    Text("SNAPTUNE")
+                        .font(.caption.weight(.semibold))
+                        .tracking(4)
+                        .foregroundStyle(.white.opacity(0.7))
+
+                    Text("Tune Every Shot")
+                        .font(.system(size: 44, weight: .black, design: .rounded))
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [
+                                    Color.myAccent,
+                                    Color(red: 0.55, green: 0.45, blue: 1.0),
+                                    Color(red: 1.0, green: 0.45, blue: 0.65)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
                             )
-                            .blendMode(.overlay)
-                    }
-                    .accessibilityLabel("Make It Pop")
-                    .accessibilityAddTraits(.isHeader)
+                        )
+                        .shadow(color: .black.opacity(0.35), radius: 10, x: 0, y: 4)
+
+                    Text("Pro color grading in one tap")
+                        .font(.title3.weight(.medium))
+                        .foregroundStyle(.white.opacity(0.85))
+                        .shadow(color: .black.opacity(0.3), radius: 6, x: 0, y: 2)
+                }
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .padding(.horizontal, 16)
+                .accessibilityElement(children: .combine)
+                .accessibilityAddTraits(.isHeader)
                 VStack(spacing: 4) {
                     ForEach(AppContent.introContent) { item in
                         ListTitle(
