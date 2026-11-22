@@ -39,54 +39,97 @@ public class RecipeUtils {
     }
     
     static func applyRecipe(_ data:RecipeObject, colorCube:FilterColorCube?) ->  (inout EditingStack.Edit.Filters) -> Void{
-        
-        var contrast = FilterContrast()
-        contrast.value = data.contrast
-        
-        var saturation = FilterSaturation()
-        saturation.value = data.saturation
-        
-        var exposure = FilterExposure()
-        exposure.value = data.exposure
-        
-        var highlights = FilterHighlights()
-        highlights.value = data.highlights
-        
-        var shadows = FilterShadows()
-        shadows.value = data.shadows
-        
-        var temperature = FilterTemperature()
-        temperature.value = data.temperature
-        
-        var gaussianBlur = FilterGaussianBlur()
-        gaussianBlur.value = data.gaussianBlur
-        
-        var vignette = FilterVignette()
-        vignette.value = data.vignette
-        
-        var fade = FilterFade()
-        fade.intensity = data.fade
-        
-        var whiteBalance = FilterWhiteBalance()
-        whiteBalance.valueTemperature = data.whiteBalanceTemperature
-        whiteBalance.valueTint = data.whiteBalanceTint
+        let contrast: FilterContrast? = data.contrast != 0 ? {
+            var f = FilterContrast()
+            f.value = data.contrast
+            return f
+        }() : nil
 
-        var colorCube:FilterColorCube? = colorCube
-        colorCube?.amount = data.lutAmount
-        
-        var color = FilterColor()
-        color.valueSaturation = data.colorValueSaturation
-        color.valueBrightness = data.colorValueBrightness
-        color.valueContrast = data.colorValueContrast
-        
-        var sharpen = FilterSharpen()
-        sharpen.sharpness = data.sharpenSharpness
-        sharpen.radius = data.sharpenRadius
-        
-        var unsharpMask = FilterUnsharpMask()
-        unsharpMask.intensity = data.unsharpMaskIntensity
-        unsharpMask.radius = data.unsharpMaskRadius
-        
+        let saturation: FilterSaturation? = data.saturation != 0 ? {
+            var f = FilterSaturation()
+            f.value = data.saturation
+            return f
+        }() : nil
+
+        let exposure: FilterExposure? = data.exposure != 0 ? {
+            var f = FilterExposure()
+            f.value = data.exposure
+            return f
+        }() : nil
+
+        let highlights: FilterHighlights? = data.highlights != 0 ? {
+            var f = FilterHighlights()
+            f.value = data.highlights
+            return f
+        }() : nil
+
+        let shadows: FilterShadows? = data.shadows != 0 ? {
+            var f = FilterShadows()
+            f.value = data.shadows
+            return f
+        }() : nil
+
+        let temperature: FilterTemperature? = data.temperature != 0 ? {
+            var f = FilterTemperature()
+            f.value = data.temperature
+            return f
+        }() : nil
+
+        let gaussianBlur: FilterGaussianBlur? = data.gaussianBlur != 0 ? {
+            var f = FilterGaussianBlur()
+            f.value = data.gaussianBlur
+            return f
+        }() : nil
+
+        let vignette: FilterVignette? = data.vignette != 0 ? {
+            var f = FilterVignette()
+            f.value = data.vignette
+            return f
+        }() : nil
+
+        let fade: FilterFade? = data.fade != 0 ? {
+            var f = FilterFade()
+            f.intensity = data.fade
+            return f
+        }() : nil
+
+        let whiteBalance: FilterWhiteBalance? = (data.whiteBalanceTemperature != 0 || data.whiteBalanceTint != 0) ? {
+            var f = FilterWhiteBalance()
+            f.valueTemperature = data.whiteBalanceTemperature
+            f.valueTint = data.whiteBalanceTint
+            return f
+        }() : nil
+
+        var appliedColorCube: FilterColorCube? = colorCube
+        appliedColorCube?.amount = data.lutAmount
+
+        // CoreData defaults leave colorValueSaturation and colorValueContrast at 0.0 when unset.
+        // Treat (0, 0, 0) as unset rather than applying a zero-contrast solid-gray filter.
+        let hasCustomColor = data.colorValueBrightness != 0
+            || (data.colorValueSaturation != 0 && data.colorValueSaturation != 1)
+            || (data.colorValueContrast != 0 && data.colorValueContrast != 1)
+        let color: FilterColor? = hasCustomColor ? {
+            var f = FilterColor()
+            f.valueSaturation = data.colorValueSaturation == 0 ? 1 : data.colorValueSaturation
+            f.valueBrightness = data.colorValueBrightness
+            f.valueContrast = data.colorValueContrast == 0 ? 1 : data.colorValueContrast
+            return f
+        }() : nil
+
+        let sharpen: FilterSharpen? = (data.sharpenSharpness != 0 || data.sharpenRadius != 0) ? {
+            var f = FilterSharpen()
+            f.sharpness = data.sharpenSharpness
+            f.radius = data.sharpenRadius
+            return f
+        }() : nil
+
+        let unsharpMask: FilterUnsharpMask? = (data.unsharpMaskIntensity != 0 || data.unsharpMaskRadius != 0) ? {
+            var f = FilterUnsharpMask()
+            f.intensity = data.unsharpMaskIntensity
+            f.radius = data.unsharpMaskRadius
+            return f
+        }() : nil
+
         let hls: FilterHLS?
         if RecipeUtils.hasCustomHLS(data.hls) {
             var customHLS = FilterHLS()
@@ -95,7 +138,7 @@ public class RecipeUtils {
         } else {
             hls = nil
         }
-        
+
         return {
             $0.contrast = contrast
             $0.saturation = saturation
@@ -107,7 +150,7 @@ public class RecipeUtils {
             $0.vignette = vignette
             $0.fade = fade
             $0.whiteBalance = whiteBalance
-            $0.colorCube = colorCube
+            $0.colorCube = appliedColorCube
             $0.color = color
             $0.sharpen = sharpen
             $0.unsharpMask = unsharpMask
@@ -247,23 +290,24 @@ public class RecipeUtils {
         if(value.isEmpty){
             return FilterHLS.defaultValue;
         }
-        // vectorFromString
+        // vectorFromString — parse with locale-independent Double() since arrayVectorToString uses "."
         func vectorFromString(_ text:String)-> CIVector{
-            // floatFromString
             func floatOf(_ text:String)-> CGFloat{
-                guard let number = NumberFormatter().number(from: text) else {
+                guard let number = Double(text.trimmingCharacters(in: .whitespaces)) else {
                     return 0
                 }
-                return CGFloat(number.floatValue)
+                return CGFloat(number)
             }
             let items = text.components(separatedBy: ",")
-            let result = CIVector(x: floatOf(items[0]), y: floatOf(items[1]), z: floatOf(items[2]))
-            return result
+            guard items.count >= 3 else {
+                return CIVector(x: 0, y: 1, z: 1)
+            }
+            return CIVector(x: floatOf(items[0]), y: floatOf(items[1]), z: floatOf(items[2]))
         }
         //
         var result:[CIVector] = FilterHLS.defaultValue
         let vectors = value.components(separatedBy: ";")
-        vectors.enumerated().forEach { (i, text) in
+        for (i, text) in vectors.enumerated() where i < result.count {
             result[i] = vectorFromString(text)
         }
         return result

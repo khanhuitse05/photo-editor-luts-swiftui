@@ -61,16 +61,15 @@ class PECtl {
     var currentFilter: FilterModel = FilterModel.noneFilterModel
     
     // Check to show save recipe button
-    var hasRecipeToSave: Bool{
-        get{
-            return editState.canUndo && currentRecipe == nil
-        }
+    var hasRecipeToSave: Bool {
+        editState?.canUndo == true && currentRecipe == nil
     }
     
     func setImage(image:UIImage) {
         
         redoStack.removeAll()
         currentFilter = FilterModel.noneFilterModel
+        currentRecipe = nil
         self.originUI = image
         
         self.originCI = convertUItoCI(from: image)
@@ -84,8 +83,7 @@ class PECtl {
             previewSize: CGSize(width: DesignTokens.previewSize, height: previewHeight)
         )
        
-        if self.originUI.size.height > 0,
-           let smallImage = resizedImage(at: originCI, scale: DesignTokens.thumbnailScale / self.originUI.size.height, aspectRatio: 1){
+        if let smallImage = makeThumbnailImage(from: originCI, fallbackHeight: self.originUI.size.height) {
             lutsCtrl.setImage(image: smallImage)
             recipesCtrl.setImage(image: smallImage)
         }
@@ -178,10 +176,14 @@ class PECtl {
     
     @MainActor
     func apply() {
-        guard let preview:CIImage = self.editState.previewImage else{
+        guard let preview:CIImage = self.editState?.previewImage else{
             return
         }
-        if let cgimg = sharedContext.createCGImage(preview, from: preview.extent) {
+        let extent = preview.extent.isInfinite
+            ? (self.editState.originalPreviewImage?.extent ?? preview.extent)
+            : preview.extent
+        guard !extent.isEmpty, !extent.isInfinite else { return }
+        if let cgimg = sharedContext.createCGImage(preview, from: extent) {
             self.previewImage = UIImage(cgImage: cgimg)
         }
     }
@@ -219,7 +221,7 @@ class PECtl {
         )
         
         // Update LUT and recipe thumbnails with the new source
-        if let smallImage = resizedImage(at: sourceCI, scale: DesignTokens.thumbnailScale / sourceUI.size.height, aspectRatio: 1) {
+        if let smallImage = makeThumbnailImage(from: sourceCI, fallbackHeight: sourceUI.size.height) {
             lutsCtrl.setImage(image: smallImage)
             recipesCtrl.setImage(image: smallImage)
         }
@@ -244,12 +246,18 @@ class PECtl {
         
         let colorCube:FilterColorCube? = Data.shared.cubeBy(identifier: data.lutIdentifier ?? "")
         self.currentRecipe = data
+        self.lutsCtrl.selectCube(data.lutIdentifier ?? "")
         
         self.editState.set(filters: RecipeUtils.applyRecipe(data, colorCube: colorCube))
         self.editState.commit()
-        Task { @MainActor in
-            self.apply()
-        }
+        self.apply()
+    }
+
+    private func makeThumbnailImage(from ciImage: CIImage, fallbackHeight: CGFloat) -> CIImage? {
+        let height = ciImage.extent.height > 0 ? ciImage.extent.height : fallbackHeight
+        guard height > 0 else { return nil }
+        let thumbScale = min(1.0, DesignTokens.thumbnailScale / height)
+        return resizedImage(at: ciImage, scale: thumbScale, aspectRatio: 1) ?? ciImage
     }
     
 }

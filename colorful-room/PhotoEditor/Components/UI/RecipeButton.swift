@@ -35,7 +35,7 @@ struct RecipeButton: View {
                 } else {
                     Rectangle()
                         .fill(Color(uiColor: .tertiarySystemFill))
-                        .frame(width: DesignTokens.lutThumbnailSize, height: 60)
+                        .frame(width: DesignTokens.lutThumbnailSize, height: DesignTokens.lutThumbnailSize)
                 }
 
                 Text(recipeName)
@@ -85,17 +85,21 @@ struct RecipeButton: View {
 
     func valueChanged() {
         HapticManager.selection()
-        shared.didReceive(action: PECtlAction.applyRecipe(shared.recipesCtrl.recipes[index].data))
+        shared.didReceive(action: PECtlAction.applyRecipe(data.data))
     }
 
     func deleteItem() {
         HapticManager.notification(.warning)
-        shared.recipesCtrl.deleteRecipe(index)
+        if let currentIndex = shared.recipesCtrl.recipes.firstIndex(where: { $0.data.objectID == data.data.objectID }) {
+            shared.recipesCtrl.deleteRecipe(currentIndex)
+        }
     }
 
     func duplicateItem() {
         HapticManager.impact(.medium)
-        shared.recipesCtrl.duplicateRecipe(index)
+        if let currentIndex = shared.recipesCtrl.recipes.firstIndex(where: { $0.data.objectID == data.data.objectID }) {
+            shared.recipesCtrl.duplicateRecipe(currentIndex)
+        }
     }
 }
 

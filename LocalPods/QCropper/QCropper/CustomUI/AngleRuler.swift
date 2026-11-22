@@ -189,7 +189,11 @@ public class AngleRuler: UIControl {
 
         // Scale lines are pixel-aligned for the current display scale; realign them when it changes.
         registerForTraitChanges([UITraitDisplayScale.self]) { (self: Self, _) in
+            let currentValue = self.value
+            // Rebuilding the scale must not report a new angle.
+            self.scrollView.delegate = nil
             self.updatePixelAlignment()
+            self.setValue(currentValue, sendEvent: false) // Also reattaches the delegate.
         }
     }
 
@@ -203,12 +207,14 @@ public class AngleRuler: UIControl {
         laidOutSize = bounds.size
 
         let currentValue = value
+        // Resizing the scroll view moves its content offset; that must not report a new angle.
+        scrollView.delegate = nil
         scrollView.frame = bounds.insetBy(dx: margin, dy: 0)
         scrollViewContentInset = scrollView.frame.size.width / 2.0
         maskLayer.frame = bounds
         updatePixelAlignment()
         valueLabel.center = CGPoint(x: midScaleLine.center.x, y: midScaleLine.frame.origin.y - 18)
-        setValue(currentValue, sendEvent: false)
+        setValue(currentValue, sendEvent: false) // Also reattaches the delegate.
     }
 
     private func updatePixelAlignment() {

@@ -50,7 +50,7 @@ struct RecipeMenuUI: View {
                                 .frame(width: 1, height: DesignTokens.lutButtonHeight)
                                 .accessibilityHidden(true)
                         }
-                        ForEach(Array(shared.recipesCtrl.recipes.enumerated()), id: \.offset) { index, item in
+                        ForEach(Array(shared.recipesCtrl.recipes.enumerated()), id: \.element.data.objectID) { index, item in
                             RecipeButton(
                                 data: item,
                                 on: item.data.objectID == shared.currentRecipe?.objectID,

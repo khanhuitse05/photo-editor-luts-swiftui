@@ -13,6 +13,18 @@ struct LutMenuUI: View {
     
     @Environment(PECtl.self) var shared: PECtl
     
+    @State private var selectedCategory: String = ""
+    @State private var scrollRequest: ScrollRequest? = nil
+    @State private var isProgrammaticScroll: Bool = false
+    @State private var programmaticScrollTask: Task<Void, Never>? = nil
+    @State private var sectionMinX: [String: CGFloat] = [:]
+    @State private var isScrolledToEnd: Bool = false
+
+    private struct ScrollRequest: Equatable {
+        let targetID: String
+        let nonce: Int
+    }
+
     private var favManager: FavoritesManager { FavoritesManager.shared }
     
     /// Gather all cube previews from all collections that match the given identifiers.
@@ -21,13 +33,24 @@ struct LutMenuUI: View {
         let lookup = Dictionary(allPreviews.map { ($0.filter.identifier, $0) }, uniquingKeysWith: { first, _ in first })
         return Array(favManager.favoriteIdentifiers).compactMap { lookup[$0] }
     }
+
+    private var visibleCategoryKeys: [String] {
+        var keys: [String] = [""]
+        if !favoriteCubes.isEmpty {
+            keys.append("favorites")
+        }
+        for collection in shared.lutsCtrl.collections where !collection.cubePreviews.isEmpty {
+            keys.append(collection.identifier)
+        }
+        return keys
+    }
     
     var body: some View {
         ZStack{
-            ScrollViewReader{ reader in
-                VStack{
-                    Spacer()
-                    
+            VStack{
+                Spacer()
+
+                ScrollViewReader { lutReader in
                     ScrollView(.horizontal, showsIndicators: false) {
                         if shared.lutsCtrl.showLoading || shared.lutsCtrl.cubeSourceCG == nil {
                             // Still preparing the neutral cube image or collections – show placeholders.
@@ -36,80 +59,166 @@ struct LutMenuUI: View {
                             HStack(spacing: 12) {
                                 Spacer().frame(width: 0)
                                 // neutral
-                                NeutralButton(image: UIImage(cgImage: cubeSourceCG)).id("neutral")
+                                NeutralButton(image: UIImage(cgImage: cubeSourceCG))
+                                    .id("neutral")
+                                    .onGeometryChange(for: CGFloat.self) { proxy in
+                                        proxy.frame(in: .named("lutScroll")).minX
+                                    } action: { minX in
+                                        updateSectionMinX(key: "", minX: minX)
+                                    }
 
                                 // Favorites section
                                 if !favoriteCubes.isEmpty {
                                     HStack(spacing: 12) {
-                                        Rectangle()
-                                            .fill(Color(uiColor: .separator))
-                                            .frame(width: 1, height: DesignTokens.lutButtonHeight)
-                                            .accessibilityHidden(true)
+                                        lutDivider
                                         ForEach(favoriteCubes, id: \.filter.identifier) { cube in
                                             LUTButton(cube: cube)
                                         }
                                     }
-                                    .id("favorites-cube")
+                                    .id("favorites")
+                                    .onGeometryChange(for: CGFloat.self) { proxy in
+                                        proxy.frame(in: .named("lutScroll")).minX
+                                    } action: { minX in
+                                        updateSectionMinX(key: "favorites", minX: minX)
+                                    }
                                 }
 
                                 // cube by collections
                                 ForEach(shared.lutsCtrl.collections, id: \.identifier) { collection in
-                                    HStack(spacing: 12) {
-                                        if collection.cubePreviews.isEmpty == false {
-                                            Rectangle()
-                                                .fill(Color(uiColor: .separator))
-                                                .frame(width: 1, height: DesignTokens.lutButtonHeight)
-                                                .accessibilityHidden(true)
+                                    if !collection.cubePreviews.isEmpty {
+                                        HStack(spacing: 12) {
+                                            lutDivider
+                                            ForEach(collection.cubePreviews, id: \.filter.identifier) { cube in
+                                                LUTButton(cube: cube)
+                                            }
                                         }
-                                        ForEach(collection.cubePreviews, id: \.filter.identifier) { cube in
-                                            LUTButton(cube: cube)
+                                        .onGeometryChange(for: CGFloat.self) { proxy in
+                                            proxy.frame(in: .named("lutScroll")).minX
+                                        } action: { minX in
+                                            updateSectionMinX(key: collection.identifier, minX: minX)
                                         }
                                     }
-                                    .id("\(collection.identifier)-cube")
                                 }
                                 Spacer().frame(width: 0)
                             }
                         }
                     }
-                    Spacer()
+                    .coordinateSpace(name: "lutScroll")
+                    .onScrollPhaseChange { _, newPhase in
+                        if newPhase == .interacting || newPhase == .decelerating {
+                            programmaticScrollTask?.cancel()
+                            isProgrammaticScroll = false
+                        } else if newPhase == .idle && isProgrammaticScroll {
+                            programmaticScrollTask?.cancel()
+                            isProgrammaticScroll = false
+                        }
+                    }
+                    .onScrollGeometryChange(for: Bool.self) { geo in
+                        let maxOffset = max(0, geo.contentSize.width - geo.containerSize.width)
+                        return maxOffset > 0 && geo.contentOffset.x >= maxOffset - 4
+                    } action: { _, atEnd in
+                        isScrolledToEnd = atEnd
+                        if !isProgrammaticScroll {
+                            recomputeSelectedCategory()
+                        }
+                    }
+                    .onChange(of: scrollRequest) { _, request in
+                        guard let request else { return }
+                        withAnimation {
+                            lutReader.scrollTo(request.targetID, anchor: .leading)
+                        }
+                    }
+                }
+                Spacer()
+                ScrollViewReader { categoryReader in
                     ScrollView(.horizontal, showsIndicators: false){
-                        HStack(spacing: 16){
-                            Spacer().frame(width: 0)
+                        HStack(spacing: 8){
+                            Spacer().frame(width: 4)
                         
-                            collectionButtonView(key: "", name: "All Luts", reader:reader)
+                            collectionButtonView(key: "", name: "All Luts")
 
                             if !favoriteCubes.isEmpty {
-                                collectionButtonView(key: "favorites", name: "Favorites", reader: reader)
+                                collectionButtonView(key: "favorites", name: "Favorites")
                             }
                             //
                             ForEach(shared.lutsCtrl.collections, id: \.identifier) { collection in
-                                collectionButtonView(key: collection.identifier, name: collection.name,reader:reader)
+                                collectionButtonView(key: collection.identifier, name: collection.name)
                             }
-                            Spacer().frame(width: 0)
+                            Spacer().frame(width: 4)
                         }
-                    }.padding(.bottom, 8)
+                    }
+                    .onChange(of: selectedCategory) { _, newCategory in
+                        withAnimation {
+                            categoryReader.scrollTo(newCategory, anchor: .center)
+                        }
+                    }
                 }
-                
-            } // ScrollViewReader
+                .padding(.bottom, 8)
+            }
             if(self.shared.lutsCtrl.editingLut){
                 LutMenuUIEdit()
             }
         }
     }
+
+    private var lutDivider: some View {
+        Rectangle()
+            .fill(Color(uiColor: .separator))
+            .frame(width: 1, height: DesignTokens.lutButtonHeight)
+            .accessibilityHidden(true)
+    }
+
+    private func updateSectionMinX(key: String, minX: CGFloat) {
+        sectionMinX[key] = minX
+        if !isProgrammaticScroll {
+            recomputeSelectedCategory()
+        }
+    }
+
+    private func recomputeSelectedCategory() {
+        let keys = visibleCategoryKeys
+        guard !keys.isEmpty else { return }
+
+        if isScrolledToEnd, let lastKey = keys.last {
+            if selectedCategory != lastKey {
+                selectedCategory = lastKey
+            }
+            return
+        }
+
+        // Highlight the rightmost section whose leading edge has entered near the viewport leading edge.
+        let threshold: CGFloat = 44
+        var active = ""
+        for key in keys where !key.isEmpty {
+            if let minX = sectionMinX[key], minX <= threshold {
+                active = key
+            }
+        }
+        if selectedCategory != active {
+            selectedCategory = active
+        }
+    }
     
     @ViewBuilder
-    func collectionButtonView(key:String, name: String, reader:ScrollViewProxy) -> some View {
+    func collectionButtonView(key: String, name: String) -> some View {
         Button(action:{
-            withAnimation{
-                if(key.isEmpty){
-                    reader.scrollTo("neutral")
-                }else{
-                    reader.scrollTo("\(key)-cube", anchor: .leading)
+            HapticManager.selection()
+            programmaticScrollTask?.cancel()
+            isProgrammaticScroll = true
+            selectedCategory = key
+            let targetID = key.isEmpty ? "neutral" : key
+            scrollRequest = ScrollRequest(targetID: targetID, nonce: (scrollRequest?.nonce ?? 0) + 1)
+            programmaticScrollTask = Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 600_000_000)
+                if !Task.isCancelled {
+                    isProgrammaticScroll = false
                 }
             }
         }){
-            CollectionButton(name: name)
+            CollectionButton(name: name, isSelected: selectedCategory == key)
         }
+        .buttonStyle(.plain)
+        .id(key)
     }
 }
 

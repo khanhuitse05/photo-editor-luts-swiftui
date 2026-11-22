@@ -17,7 +17,8 @@ class RecipeController {
     // Recipe
     var recipes: [Recipe] = []
     
-    var sourceImage:CIImage?
+    var sourceImage: CIImage?
+    private var previewTask: Task<Void, Never>?
     
     var controller: PECtl {
         get {
@@ -34,14 +35,16 @@ class RecipeController {
         }
     }
     
-    func setImage(image:CIImage){
+    func setImage(image: CIImage) {
+        previewTask?.cancel()
         self.sourceImage = image
-        // Work on a snapshot of the recipes array off the main actor to
-        // avoid touching main-actor-isolated state from a detached task.
         let recipesSnapshot = self.recipes
-        Task { @MainActor in
-            // Prepare recipe previews
+        for e in recipesSnapshot {
+            e.preview = nil
+        }
+        previewTask = Task { @MainActor in
             for e in recipesSnapshot {
+                guard !Task.isCancelled else { return }
                 e.setImage(image: image)
             }
         }
@@ -61,8 +64,13 @@ class RecipeController {
      
      ///
      func deleteRecipe(_ index:Int){
-         let result = RecipeUtils.deleteRecipe(recipes[index].data)
+         guard index >= 0, index < recipes.count else { return }
+         let target = recipes[index].data
+         let result = RecipeUtils.deleteRecipe(target)
          if(result){
+             if controller.currentRecipe?.objectID == target.objectID {
+                 controller.currentRecipe = nil
+             }
              recipes.remove(at: index)
          }
      }

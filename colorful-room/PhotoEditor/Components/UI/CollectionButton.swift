@@ -10,14 +10,22 @@ import SwiftUI
 
 struct CollectionButton: View {
     var name: String
-    
-    @Environment(PECtl.self) var shared: PECtl
-    
+    var isSelected: Bool = false
+
     var body: some View {
         Text(name)
             .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .fontWeight(isSelected ? .semibold : .regular)
+            .foregroundStyle(isSelected ? .primary : .secondary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .contentShape(Capsule())
+            .glassEffect(
+                isSelected ? .regular.tint(.accentColor).interactive() : .clear,
+                in: .capsule
+            )
             .accessibilityLabel("\(name) collection")
             .accessibilityHint("Scrolls to the \(name) LUT filters")
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

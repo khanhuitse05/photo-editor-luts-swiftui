@@ -6,6 +6,7 @@
 //
 
 import ObjectiveC.runtime
+@preconcurrency import PixelEnginePackage
 import XCTest
 @testable import colorful_room
 
@@ -113,6 +114,115 @@ class colorful_roomTests: XCTestCase {
 
         let customStr = "0.2,1,1;0,1,1;0,1,1;0,1,1;0,1,1;0,1,1;0,1,1;0,1,1"
         XCTAssertTrue(RecipeUtils.hasCustomHLS(customStr), "modified shift must be detected as custom")
+    }
+
+    @MainActor
+    func testRecipeAllFilterTypesAndEdgeCases() throws {
+        guard let sample = UIImage(named: "sample-image") ?? UIImage(named: "carem") else {
+            XCTFail("Expected sample-image or carem in bundle")
+            return
+        }
+
+        // Verify decimal HLS vector parsing works regardless of device locale
+        let parsed = RecipeUtils.stringToArrayVector("0.1,1.2,1.0;0.0,1.0,1.0")
+        XCTAssertEqual(Double(parsed[0].x), 0.1, accuracy: 0.001)
+        XCTAssertEqual(Double(parsed[0].y), 1.2, accuracy: 0.001)
+        XCTAssertEqual(Double(parsed[0].z), 1.0, accuracy: 0.001)
+        XCTAssertEqual(Double(parsed[1].y), 1.0, accuracy: 0.001)
+
+        let ctl = PECtl()
+        ctl.setImage(image: sample)
+        XCTAssertNotNil(ctl.previewImage)
+
+        // 1. Recipe with NO LUT, only Exposure +0.5
+        ctl.didReceive(action: .applyFilter({
+            var exp = FilterExposure()
+            exp.value = 0.5
+            $0.exposure = exp
+        }))
+        let expRecipe = try XCTUnwrap(RecipeUtils.addRecipe("ExpOnly", filters: ctl.editState.currentEdit.filters))
+
+        // 2. Recipe with HLS
+        var hls = FilterHLS()
+        var shifts = FilterHLS.defaultValue
+        shifts[0] = CIVector(x: 0.1, y: 1.2, z: 1.0)
+        hls.inputShift = shifts
+        ctl.didReceive(action: .applyFilter({ $0.hls = hls }))
+        let hlsRecipe = try XCTUnwrap(RecipeUtils.addRecipe("HLSOnly", filters: ctl.editState.currentEdit.filters))
+
+        // 3. Recipe with raw CoreData defaults (colorValueContrast=0, colorValueSaturation=0)
+        let ctx = PersistenceController.shared.container.viewContext
+        let rawDefaultRecipe = RecipeObject(context: ctx)
+        rawDefaultRecipe.recipeName = "RawDefault"
+        try ctx.save()
+
+        let smallCI = resizedImage(at: ctl.originCI, scale: DesignTokens.thumbnailScale / sample.size.height, aspectRatio: 1)
+
+        // Apply each to fresh controller and verify both main preview and recipe thumbnail
+        for (name, obj) in [("ExpOnly", expRecipe), ("HLSOnly", hlsRecipe), ("RawDefault", rawDefaultRecipe)] {
+            let recipeModel = Recipe(data: obj)
+            recipeModel.setImage(image: smallCI)
+            XCTAssertNotNil(recipeModel.preview, "\(name) thumbnail preview should not be nil")
+
+            let fresh = PECtl()
+            fresh.setImage(image: sample)
+            fresh.onApplyRecipe(obj)
+            XCTAssertNotNil(fresh.currentRecipe)
+            XCTAssertEqual(fresh.lutsCtrl.currentCube, obj.lutIdentifier ?? "")
+
+            let img = try XCTUnwrap(fresh.previewImage, "\(name) previewImage should not be nil")
+            let cg = try XCTUnwrap(img.cgImage)
+            let data = try XCTUnwrap(cg.dataProvider?.data)
+            let ptr = CFDataGetBytePtr(data)!
+            let len = CFDataGetLength(data)
+            var minByte: UInt8 = 255
+            var maxByte: UInt8 = 0
+            for i in stride(from: 0, to: min(len, 4000), by: 4) {
+                minByte = min(minByte, ptr[i], ptr[i+1], ptr[i+2])
+                maxByte = max(maxByte, ptr[i], ptr[i+1], ptr[i+2])
+            }
+            XCTAssertGreaterThan(maxByte - minByte, 20, "\(name) should preserve visible image detail rather than rendering flat/black")
+
+            // Selecting a new photo clears currentRecipe
+            fresh.setImage(image: sample)
+            XCTAssertNil(fresh.currentRecipe, "setImage should clear currentRecipe for the new photo")
+
+            _ = RecipeUtils.deleteRecipe(obj)
+        }
+    }
+
+    @MainActor
+    func testRecipePreviewAndApply() throws {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 200, height: 200))
+        let testImage = renderer.image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 200, height: 200))
+        }
+
+        let ctl = PECtl()
+        ctl.setImage(image: testImage)
+
+        // Apply a LUT filter
+        let lut = Data.shared.cubeBy(identifier: "Cinematic-1")
+        XCTAssertNotNil(lut, "Cinematic-1 LUT should load")
+        ctl.didReceive(action: .applyFilter({ $0.colorCube = lut }))
+
+        // Save recipe
+        let recipeObj = try XCTUnwrap(RecipeUtils.addRecipe("TestCinematic", filters: ctl.editState.currentEdit.filters))
+        let recipe = Recipe(data: recipeObj)
+        let smallCI = resizedImage(at: ctl.originCI, scale: DesignTokens.thumbnailScale / testImage.size.height, aspectRatio: 1)
+        XCTAssertNotNil(smallCI)
+        recipe.setImage(image: smallCI)
+        XCTAssertNotNil(recipe.preview, "Recipe thumbnail preview should not be nil")
+
+        // Reset to a fresh image and apply the saved recipe
+        let ctl2 = PECtl()
+        ctl2.setImage(image: testImage)
+        ctl2.onApplyRecipe(recipeObj)
+        XCTAssertNotNil(ctl2.previewImage, "previewImage should be updated immediately upon onApplyRecipe")
+        XCTAssertEqual(ctl2.lutsCtrl.currentCube, "Cinematic-1")
+
+        _ = RecipeUtils.deleteRecipe(recipeObj)
     }
 
     func testPerformanceExample() throws {
